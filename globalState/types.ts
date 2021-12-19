@@ -1,4 +1,4 @@
-export type SizeUnits = 'cm' | 'inch';
+export enum SizeUnits { CM, Inch };
 
 export enum VolumeUnits { Gallon, Liter, Ounce, ML };
 
@@ -35,9 +35,14 @@ export type SolutionInput = {
   ec: number;
 };
 
+export type FractionalInput = {
+  solution: SolutionInput;
+  frac: number;
+};
+
 export type Solution = {
   name: string;
-  inputs: SolutionInput[];
+  inputs: FractionalInput[];
   targetNpk: NPK;
 };
 

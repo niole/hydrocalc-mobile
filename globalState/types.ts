@@ -1,17 +1,17 @@
 export type SizeUnits = 'cm' | 'inch';
 
-export type VolumeUnits = 'gallon' | 'liter' | 'ounce' | 'ml';
+export enum VolumeUnits { Gallon, Liter, Ounce, ML };
 
 export type LWH = {
   length: number;
   width: number;
   height: number;
-  units: SizeUnits;
+  unit: SizeUnits;
 }
 
 export type Volume = {
   total: number;
-  units: VolumeUnits;
+  unit: VolumeUnits;
 };
 
 export type BucketSize = {

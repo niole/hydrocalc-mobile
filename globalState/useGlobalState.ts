@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GlobalState } from '.';
+import { VolumeUnits, GlobalState } from '.';
 
 const _213Solution = {
   name: '2-1-3 solution',
@@ -26,7 +26,7 @@ const defaultState = {
   recipes: [{
     name: 'yellow bucket',
     solution: _213Solution,
-    bucketSize: { volume: { total: 16, unit: 'gallon' } },
+    bucketSize: { volume: { total: 16, unit: VolumeUnits.Gallon } },
     ec: 1000
   }],
   solutions: [_213Solution],

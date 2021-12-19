@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 
 type Props = {
   title: string;
@@ -8,19 +8,8 @@ type Props = {
 
 export function Screen({ title, children }: Props) {
   return (
-    <View style={styles.container}>
-      <View>
-        {children}
-      </View>
+    <View>
+      {children}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-

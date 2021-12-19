@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Picker, Text, View } from 'react-native';
+import { StyleSheet, Picker, Text, View } from 'react-native';
 import { Recipe } from '../globalState';
 import { RecipeInstructions } from './RecipeInstructions';
 
@@ -16,7 +16,7 @@ export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({ defa
   }, [defaultRecipe]);
 
   return (
-    <View>
+    <View style={styles.container}>
       <View>
         <Text>Create or </Text>
           <Picker selectedValue={selectedRecipe ? selectedRecipe.name : ""} onValueChange={selectRecipe(setRecipe, recipes)}>
@@ -25,9 +25,7 @@ export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({ defa
           </Picker>
           <Text> a recipe</Text>
         </View>
-        <View>
-          {selectedRecipe ? <RecipeInstructions recipe={selectedRecipe} /> : <Text>...</Text>}
-        </View>
+        <View>{selectedRecipe ? <RecipeInstructions recipe={selectedRecipe} /> : <Text>...</Text>}</View>
     </View>
   );
 };
@@ -35,3 +33,9 @@ export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({ defa
 const selectRecipe = (setRecipe: (r: Recipe | undefined) => void, recipes: Recipe[]) => (name: string): void => {
   setRecipe(recipes.find(r => r.name === name));
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+  },
+});

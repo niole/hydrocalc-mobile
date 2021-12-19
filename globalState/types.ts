@@ -1,3 +1,5 @@
+export enum SolutionInputMeasurement { Liter, Cup, FluidOunce };
+
 export enum SizeUnits { CM, Inch };
 
 export enum VolumeUnits { Gallon, Liter, Ounce, ML };

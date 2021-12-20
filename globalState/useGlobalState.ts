@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { SizeUnits, VolumeUnits, GlobalState } from '.';
 
+/**
+ * The global state hooks and default data or data that is read into memory on
+ * app start lives in here
+ */
+
 const _213Solution = {
   name: '2-1-3 solution',
   inputs: [{

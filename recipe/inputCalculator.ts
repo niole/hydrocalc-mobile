@@ -1,7 +1,11 @@
 import { SizeUnits, VolumeUnits, BucketSize, SolutionInputMeasurement } from '../globalState';
 
+/**
+ * The conversion constants in here are use with multiplication if they are applied to do what the label says
+ * or they are applied using division if you want to undo a conversion.
+ */
 const UNSUPPORTED_UNIT_MSG = 'unit not supported';
-const TSPS_PER_GALLON_1K_EC = 1.95;
+const TSPS_PER_GALLON_1K_EC = 1.95; // TODO support more than just general hydroponics
 const ML_P_TSP = 4.92892;
 const CUBIC_INCH_TO_GALLON = 0.004329;
 const OUNCE_TO_GALLON = 1/128.0;
@@ -12,6 +16,11 @@ const OUNCES_TO_QUARTER_CUPS = 1/2.0;
 const OUNCES_TO_EIGTH_CUPS = 1.0;
 const OUNCES_TO_TBSPS = 2.0;
 const OUNCES_TO_TSPS = 6.0;
+
+/**
+ * The US conversions are the most annoying and then need help mapping from conversion to label to use
+ * TODO add half and quarter tsp
+ */
 const US_CONVERSIONS_MAPPER = [
   { conversion: OUNCES_TO_CUPS, label: "cups" },
   { conversion: OUNCES_TO_HALF_CUPS, label: "half cups" },
@@ -21,6 +30,9 @@ const US_CONVERSIONS_MAPPER = [
   { conversion: OUNCES_TO_TSPS, label: "tsps" },
 ];
 
+/**
+ * Outputs human readable recipe instructions for the specified inputs
+ */
 export const getInputVolumeInstructions = (
   unit: SolutionInputMeasurement,
   gallons: number,
@@ -76,7 +88,10 @@ const getFluidOunceInstruction = (tsps: number): string => {
 
 const getFluidOunces = (tsps: number):number => tsps/OUNCES_TO_TSPS;
 
-// TODO test this and everything in this file
+/**
+ * Calculates the number of gallons specified by the bucketSize specification
+ * TODO test this and everything in this file
+ */
 export const getGallonsFromSize = (bucketSize: BucketSize): number => {
   if (bucketSize.volume) {
     const { volume: { unit, total } } = bucketSize;

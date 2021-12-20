@@ -3,6 +3,11 @@ import { StyleSheet, Picker, Text, View } from 'react-native';
 import { Recipe } from '../globalState';
 import { RecipeInstructions } from './RecipeInstructions';
 
+/**
+ * Renders a provided recipe or renders a recipe selected from all recipes that a user has created
+ * TODO limit number of recipes to like 100
+ */
+
 type CalculatedRecipeViewProps = {
   recipes: Recipe[];
   defaultRecipe?: Recipe;

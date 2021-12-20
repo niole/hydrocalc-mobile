@@ -4,6 +4,10 @@ import { SolutionInputMeasurement, Recipe } from '../globalState';
 import { BucketSizeLabel } from '../components';
 import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 
+/**
+ * Renders a recipe so that a user can follow the recipe, know what recipe they are looking at, know what
+ * the recipe creates, i.e. a 16 gallon bucket with ec 1.1 millisiemens/cm with npk 213.
+ */
 type RecipeInstructionsProps = {
   recipe: Recipe;
 };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SolutionInputMeasurement, Recipe } from '../globalState';
 import { BucketSizeLabel } from '../components';
-import { getInputVolumeInstructions } from './inputCalculator';
+import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 
 type RecipeInstructionsProps = {
   recipe: Recipe;
@@ -17,7 +17,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({ recipe: 
     {solution.inputs.map(input => (
       <View style={styles.label}>
         <Text>{input.solution.name}: </Text>
-        <Text>{getInputVolumeInstructions(SolutionInputMeasurement.Cup, 16, input.frac, ec)}</Text>
+        <Text>{getInputVolumeInstructions(SolutionInputMeasurement.Cup, getGallonsFromSize(bucketSize), input.frac, ec)}</Text>
       </View>
     ))}
   </View>

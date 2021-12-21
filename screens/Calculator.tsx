@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { TextInput, Picker, Button, Text, View } from 'react-native';
+import { Picker, View } from 'react-native';
 
 import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
+import { ValidatedTextInput } from '../components/ValidatedTextInput';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
 import { RootTabScreenProps } from '../types';
@@ -38,7 +39,7 @@ export default function Calculator({ solutions, recipes, navigation }: RootTabSc
     <Screen title="calculator">
       <View>
         <CalculatedRecipeView recipes={recipes} defaultRecipe={wipRecipe} />
-        <TextInput placeholder="EC (millisiemens/cm)" onChangeText={handleSetEc(setEc)} />
+        <ValidatedTextInput label="ec" placeholder="EC (millisiemens/cm)" onChangeText={handleSetEc(setEc)} />
         <Picker onValueChange={handleSetSolution(setSolution, solutions)}>
           <Picker.Item label="none" value={undefined} />
           {solutions.map(s => <Picker.Item label={s.name} value={s.name}/>)}

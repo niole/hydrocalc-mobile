@@ -20,9 +20,10 @@ export const ValidatedTextInput: React.FC<Props> = ({
   onChangeNumber,
   onValidationFail,
 }) => (
-  <View>
-    {label && <Text>{label}</Text>}
+  <View style={{ display: "flex", flexDirection: "row" }}>
+    {label && <Text style={{ fontWeight: "bold" }}>{`${label} `}</Text>}
     <TextInput
+      style={{ marginBottom: 10 }}
       placeholder={placeholder}
       onChangeText={onChangeText ? handleOnChange(validation, onChangeText, onValidationFail) : onChangeNumber ? handleOnChangeNumber(validation, onChangeNumber, onValidationFail) : undefined}
     />

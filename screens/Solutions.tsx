@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { Text, View } from 'react-native';
 
 import { SetSolutions, Solution } from '../globalState';
-import { View } from '../components/Themed';
+import { SolutionCard } from '../solutions';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 
@@ -10,10 +11,12 @@ type Props = {
   setSolutions: SetSolutions;
 };
 
-export default function Solutions({ navigation }: RootTabScreenProps<'Solutions'> & Props) {
+export default function Solutions({ solutions, navigation }: RootTabScreenProps<'Solutions'> & Props) {
   return (
     <Screen title="solutions">
-      <View />
+      <View>
+        {solutions.map(s => <SolutionCard solution={s} />)}
+      </View>
     </Screen>
   );
 }

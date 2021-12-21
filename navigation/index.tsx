@@ -96,12 +96,13 @@ function BottomTabNavigator() {
       </BottomTab.Screen>
       <BottomTab.Screen
         name="Solutions"
-        component={Solutions}
         options={{
           title: 'solutions',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
-      />
+      >
+        {props => <Solutions solutions={solutions} setSolutions={setSolutions} {...props} />}
+      </BottomTab.Screen>
       <BottomTab.Screen
         name="MyRecipes"
         component={MyRecipes}

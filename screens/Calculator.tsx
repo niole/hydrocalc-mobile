@@ -3,6 +3,8 @@ import { TextInput, Picker, Button, Text, View } from 'react-native';
 
 import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
+import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
+import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { CalculatedRecipeView } from '../recipe';
@@ -43,10 +45,10 @@ export default function Calculator({ solutions, recipes, navigation }: RootTabSc
         </Picker>
         <Tabs defaultKey="volume">
           <Tab title="Volume" id="volume">
-            <Text>volume</Text>
+            <ValidatedVolumeForm onChange={setBucketSize} />
           </Tab>
           <Tab title="Size" id="size">
-            <Text>size</Text>
+            <ValidatedSizeForm onChange={setBucketSize} />
           </Tab>
         </Tabs>
       </View>

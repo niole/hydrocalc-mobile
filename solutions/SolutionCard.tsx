@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import { NPK, Solution } from '../globalState';
-import { LabelValue, Card, NpkLabel } from '../components';
+import { Subtitle, LabelValue, Card, NpkLabel } from '../components';
 
 type Props = {
   solution: Solution;
@@ -23,7 +23,7 @@ const InputCard: React.FC<{ name: string, brand?: string, npk: NPK, ec: number, 
   name, brand, npk, ec, frac
 }) => (
   <View key={name}>
-    <Text>{name} </Text>
+    <Subtitle>{name}</Subtitle>
     {brand && <LabelValue label="brand" value={brand} />}
     <NpkLabel npk={npk} />
     <LabelValue label="ec" value={`${ec}`} />

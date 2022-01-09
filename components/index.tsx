@@ -4,3 +4,4 @@ export * from './Card';
 export * from './Modal';
 export * from './ConfirmationModal';
 export * from './LabelValue';
+export * from './Title';

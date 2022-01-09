@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { ConfirmationModal } from './ConfirmationModal';
 import { Title } from '.';
 
@@ -25,7 +25,7 @@ export function Card<SD>({ removeConfirmationMsg, title, children, onChange, onR
   };
 
   return (
-    <View>
+    <View style={styles.card}>
       {title && <Title>{title}</Title>}
       {children && React.Children.map(children, (child: JSX.Element) => (
         React.cloneElement(child, {...child.props, onChange, onRemove: requestRemove })
@@ -41,3 +41,16 @@ export function Card<SD>({ removeConfirmationMsg, title, children, onChange, onR
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 2,
+    marginTop: 14,
+    marginBottom: 14,
+    marginLeft: 7,
+    marginRight: 7,
+    padding: 7,
+  }
+});

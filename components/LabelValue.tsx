@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 type Props = {
   label?: string;
-  value?: string;
+  value?: React.ReactNode;
 };
 
 export const LabelValue: React.FC<Props> = ({ label, value }) => (

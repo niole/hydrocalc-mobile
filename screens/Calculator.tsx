@@ -6,6 +6,7 @@ import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
 import { ValidatedTextInput } from '../components/ValidatedTextInput';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
+import { LabelValue } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { CalculatedRecipeView } from '../recipe';
@@ -40,10 +41,15 @@ export default function Calculator({ solutions, recipes, navigation }: RootTabSc
       <View>
         <CalculatedRecipeView recipes={recipes} defaultRecipe={wipRecipe} />
         <ValidatedTextInput label="ec" placeholder="EC (millisiemens/cm)" onChangeText={handleSetEc(setEc)} />
-        <Picker onValueChange={handleSetSolution(setSolution, solutions)}>
-          <Picker.Item label="none" value={undefined} />
-          {solutions.map(s => <Picker.Item label={s.name} value={s.name}/>)}
-        </Picker>
+        <LabelValue
+          label="solution"
+          value={
+            <Picker onValueChange={handleSetSolution(setSolution, solutions)}>
+              <Picker.Item label="none" value={undefined} />
+              {solutions.map(s => <Picker.Item label={s.name} value={s.name}/>)}
+            </Picker>
+          }
+        />
         <Tabs defaultKey="volume">
           <Tab title="Volume" id="volume">
             <ValidatedVolumeForm onChange={setBucketSize} />

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { ConfirmationModal } from './ConfirmationModal';
+import { Title } from '.';
 
 type TriggerProps = { onPress?: (e: any) => void };
 const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
@@ -25,7 +26,7 @@ export function Card<SD>({ removeConfirmationMsg, title, children, onChange, onR
 
   return (
     <View>
-      {title && <Text style={styles.title}>{title}</Text>}
+      {title && <Title>{title}</Title>}
       {children && React.Children.map(children, (child: JSX.Element) => (
         React.cloneElement(child, {...child.props, onChange, onRemove: requestRemove })
       ))}
@@ -40,11 +41,3 @@ export function Card<SD>({ removeConfirmationMsg, title, children, onChange, onR
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    paddingBottom: 7
-  }
-});

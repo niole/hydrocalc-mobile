@@ -32,7 +32,7 @@ export type NPK = { n: number, p: number, k: number };
 
 export type SolutionInput = {
   name: string;
-  brand: string;
+  brand?: string;
   npk: NPK;
   ec: number;
 };

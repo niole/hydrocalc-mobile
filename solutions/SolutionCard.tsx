@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import { NPK, Solution } from '../globalState';
-import { NpkLabel } from '../components';
+import { Card, NpkLabel } from '../components';
 
 type Props = {
   solution: Solution;
 };
 
 export const SolutionCard: React.FC<Props> = ({ solution }) => (
-  <View key={solution.name}>
-    <Text>{solution.name}</Text>
+  <Card
+    key={solution.name}
+    title={solution.name}
+    onRemove={() => undefined}
+  >
     {solution.inputs.map((i, index) =>
       <InputCard key={`${i.solution.name}-${i.frac}-${index}`} frac={i.frac} {...i.solution} />
     )}
-  </View>
+  </Card>
 );
 
 const InputCard: React.FC<{ name: string, brand?: string, npk: NPK, ec: number, frac: number }> = ({

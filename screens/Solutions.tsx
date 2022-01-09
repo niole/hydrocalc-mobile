@@ -15,7 +15,7 @@ export default function Solutions({ solutions, navigation }: RootTabScreenProps<
   return (
     <Screen title="solutions">
       <View>
-        {solutions.map(s => <SolutionCard solution={s} />)}
+        {solutions.map(s => <SolutionCard key={s.name} solution={s} />)}
       </View>
     </Screen>
   );

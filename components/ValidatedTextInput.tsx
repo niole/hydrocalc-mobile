@@ -10,6 +10,8 @@ type Props = {
   onChangeNumber?: (t: number) => void; // executes if valid
   onValidationFail?: (errorMessage: string) => void; // lets you do something on validation fail
   placeholder?: string;
+  maxSize?: number;
+  defaultValue?: string;
 };
 
 export const ValidatedTextInput: React.FC<Props> = ({
@@ -19,11 +21,13 @@ export const ValidatedTextInput: React.FC<Props> = ({
   onChangeText,
   onChangeNumber,
   onValidationFail,
+  maxSize,
+  defaultValue,
 }) => (
-  <View style={{ display: "flex", flexDirection: "row" }}>
+  <View style={{ display: "flex", flexDirection: "row", maxWidth: maxSize }}>
     {label && <Text style={{ fontWeight: "bold" }}>{`${label} `}</Text>}
     <TextInput
-      style={{ marginBottom: 10 }}
+      defaultValue={defaultValue}
       placeholder={placeholder}
       onChangeText={onChangeText ? handleOnChange(validation, onChangeText, onValidationFail) : onChangeNumber ? handleOnChangeNumber(validation, onChangeNumber, onValidationFail) : undefined}
     />

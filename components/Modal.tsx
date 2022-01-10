@@ -56,12 +56,12 @@ export function Modal({
             {title && <Text>{title}</Text>}
             {children}
             <View style={styles.actionBar}>
-              {onCancel && <Pressable
+              <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={handleCancel}
               >
                 {cancelLabel || <Text style={styles.textStyle}>cancel</Text>}
-                  </Pressable>}
+              </Pressable>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={handleSubmit}

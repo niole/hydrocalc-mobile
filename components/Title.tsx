@@ -13,7 +13,7 @@ export const Title: React.FC<Props> = ({ subTitle, children }) => (
   </View>
 );
 
-export const Subtitle: React.FC<{ children?: string }> = ({ children }) => (
+export const Subtitle: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <Text style={styles.subTitle}>
     {children}
   </Text>

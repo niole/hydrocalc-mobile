@@ -6,3 +6,4 @@ export * from './ConfirmationModal';
 export * from './LabelValue';
 export * from './Title';
 export * from './Section';
+export * from './ValidatedTextInput';

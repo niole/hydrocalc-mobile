@@ -8,39 +8,28 @@ const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
   <Pressable onPress={onPress}><Text>x</Text></Pressable>
 );
 
-type Props<S=undefined> = {
+type Props = {
   title?: React.ReactNode;
   children?: JSX.Element[] | JSX.Element;
-  onChange?: (data?: S) => void;
+  onChange?: () => void;
   onRemove?: () => void;
   removeConfirmationMsg?: React.ReactNode;
 };
 
-export function Card<SD>({ removeConfirmationMsg, title, children, onChange, onRemove }: Props<SD>) {
-  const [confirmRemove, setConfirmRemove] = React.useState<boolean>(false);
-  const requestRemove = () => setConfirmRemove(true);
-  const handleRemove = () => {
-    onRemove ? onRemove() : undefined;
-    setConfirmRemove(false);
-  };
-
+export function Card({ removeConfirmationMsg, title, children, onChange, onRemove }: Props) {
   return (
     <View style={styles.card}>
       {title && <Title>{title}</Title>}
-      {children && React.Children.map(children, (child: JSX.Element) => (
-        React.cloneElement(child, {...child.props, onChange, onRemove: requestRemove })
-      ))}
+      {children}
       <View style={styles.actionBar}>
-        <Pressable onPress={() => console.log('edit')}>
+        {onChange && <Pressable onPress={onChange}>
           <Text>edit</Text>
-        </Pressable>
+        </Pressable>}
         <ConfirmationModal
-          onCancel={() => setConfirmRemove(false)}
-          onConfirm={handleRemove}
-          show={confirmRemove}
+          onConfirm={onRemove}
           Trigger={Trigger}
         >
-            {removeConfirmationMsg}
+          {removeConfirmationMsg}
         </ConfirmationModal>
       </View>
     </View>

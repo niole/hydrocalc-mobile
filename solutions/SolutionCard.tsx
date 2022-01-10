@@ -25,7 +25,7 @@ const InputCard: React.FC<{ name: string, brand?: string, npk: NPK, ec: number, 
   <Section key={name}>
     <Subtitle>{name}</Subtitle>
     {brand && <LabelValue label="brand" value={brand} />}
-    <NpkLabel npk={npk} />
+    <LabelValue label="npk" value={<NpkLabel npk={npk} />} />
     <LabelValue label="ec" value={`${ec}`} />
     <LabelValue label="frac" value={`${frac}`} />
   </Section>

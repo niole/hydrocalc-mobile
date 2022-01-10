@@ -7,4 +7,4 @@ type Props = {
 
 export const Section: React.FC<Props> = ({ children }) => <View style={styles.section}>{children}</View>;
 
-const styles = StyleSheet.create({ section: { padding: '12 0' }});
+const styles = StyleSheet.create({ section: { padding: 5 }});

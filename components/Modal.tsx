@@ -42,7 +42,7 @@ export function Modal({
   const triggerText = triggerLabel || <Text style={styles.textStyle}>Show Modal</Text>;
 
   return (
-    <View style={styles.centeredView}>
+    <View>
       <ReactModal
         animationType="slide"
         transparent={true}
@@ -55,18 +55,20 @@ export function Modal({
           <View style={styles.modalView}>
             {title && <Text>{title}</Text>}
             {children}
-            {onCancel && <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={handleCancel}
-            >
-              {cancelLabel || <Text style={styles.textStyle}>cancel</Text>}
-                </Pressable>}
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={handleSubmit}
-            >
-              {submitLabel || <Text style={styles.textStyle}>submit</Text>}
-            </Pressable>
+            <View style={styles.actionBar}>
+              {onCancel && <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={handleCancel}
+              >
+                {cancelLabel || <Text style={styles.textStyle}>cancel</Text>}
+                  </Pressable>}
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={handleSubmit}
+              >
+                {submitLabel || <Text style={styles.textStyle}>submit</Text>}
+              </Pressable>
+            </View>
           </View>
         </View>
       </ReactModal>
@@ -82,6 +84,10 @@ export function Modal({
 }
 
 const styles = StyleSheet.create({
+  actionBar: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",

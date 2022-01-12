@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput, View, Text } from 'react-native';
+import { StyleSheet, TextInput, View, Text } from 'react-native';
 
 const NUMBER_PARSE_FAIL_MSG = "can't parse input as number";
 
@@ -23,16 +23,38 @@ export const ValidatedTextInput: React.FC<Props> = ({
   onValidationFail,
   maxSize,
   defaultValue,
-}) => (
-  <View style={{ display: "flex", flexDirection: "row", maxWidth: maxSize }}>
-    {label && <Text style={{ fontWeight: "bold" }}>{`${label} `}</Text>}
-    <TextInput
-      defaultValue={defaultValue}
-      placeholder={placeholder}
-      onChangeText={onChangeText ? handleOnChange(validation, onChangeText, onValidationFail) : onChangeNumber ? handleOnChangeNumber(validation, onChangeNumber, onValidationFail) : undefined}
-    />
-  </View>
-);
+}) => {
+  const [errorMsg, setErrorMsg] = React.useState<string | undefined>();
+  const handleShowValidationFailure = (errorMsg: string) => {
+    setErrorMsg(errorMsg);
+    onValidationFail ? onValidationFail(errorMsg) : null;
+  };
+
+  const handleValidationStringSuccess = (t: string) => {
+    setErrorMsg(undefined);
+    onChangeText ? onChangeText(t) : null;
+  };
+
+  const handleValidationNumberSuccess = (t: number) => {
+    setErrorMsg(undefined);
+    onChangeNumber ? onChangeNumber(t) : null;
+  };
+
+  return (
+    <View style={{ maxWidth: maxSize }}>
+      <View style={styles.labelGroup}>
+        {label && <Text style={styles.label}>{`${label} `}</Text>}
+        <TextInput
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          onChangeText={onChangeText ? handleOnChange(validation, onChangeText, handleValidationStringSuccess) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
+        />
+        </View>
+      {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+    </View>
+  );
+};
+
 
 const handleOnChangeNumber = (
   validation: Props['validation'],
@@ -87,4 +109,14 @@ async function handleParseNumber(t: string): Promise<number> {
     }
 };
 
-
+const styles = StyleSheet.create({
+  label: {
+    fontWeight: 'bold',
+  },
+  labelGroup: {
+    flexDirection: 'row'
+  },
+  errorMsg: {
+    color: 'red'
+  }
+});

@@ -40,6 +40,7 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
       title={newSolution.name}
       onRemove={() => onRemove(solution)}
       onChange={handleEdit}
+      toggleActionLabel={editing ? 'done' : 'edit'}
     >
       {editing && <Section>
         <LabelValue

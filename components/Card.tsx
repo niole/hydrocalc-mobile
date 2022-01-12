@@ -14,6 +14,7 @@ type Props = {
   onChange?: () => void;
   onRemove?: () => void;
   removeConfirmationMsg?: React.ReactNode;
+  toggleActionLabel?: React.ReactNode;
 };
 
 export function Card({
@@ -21,15 +22,16 @@ export function Card({
   title,
   children,
   onChange,
-  onRemove
+  onRemove,
+  toggleActionLabel
 }: Props) {
   return (
     <View style={styles.card}>
       {title && <Title>{title}</Title>}
       {children}
       <View style={styles.actionBar}>
-        {onChange && <Pressable onPress={onChange}>
-          <Text>edit</Text>
+        {onChange && toggleActionLabel && <Pressable onPress={onChange}>
+          <Text>{toggleActionLabel}</Text>
         </Pressable>}
         <ConfirmationModal
           onConfirm={onRemove}
@@ -44,6 +46,7 @@ export function Card({
 
 const styles = StyleSheet.create({
   actionBar: {
+    gap: 10,
     flexDirection: 'row-reverse',
     alignItems: 'flex-end',
   },

@@ -1,15 +1,19 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 type Props = {
   title: string;
-  children: React.ReactElement;
+  children: React.ReactNode;
 };
 
 export function Screen({ title, children }: Props) {
   return (
-    <View>
+    <View style={styles.container}>
       {children}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 }
+});

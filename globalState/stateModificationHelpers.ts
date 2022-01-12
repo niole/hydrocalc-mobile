@@ -1,6 +1,6 @@
 import { SetSolutions, Solution, SetRecipes, Recipe } from '.';
 
-function addSolution(setter: SetSolutions, solutions: Solution[], solution: Solution): void {
+export function addSolution(setter: SetSolutions, solutions: Solution[], solution: Solution): void {
   const dupSolutions = solutions.find(s => s.id === solution.id);
   if (!!dupSolutions) {
     throw new Error("This solution's id is already taken.");

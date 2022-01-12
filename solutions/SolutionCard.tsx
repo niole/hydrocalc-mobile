@@ -4,20 +4,14 @@ import { Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { getInputFraction } from '../recipe/inputCalculator';
 
-type NewSolution = {
-  name?: string;
-  inputs?: FractionalInput[];
-  targetNpk?: NPK;
-};
-
 type Props = {
-  solution?: Solution;
+  solution: Solution;
   onChange: (solution: Solution) => void;
   onRemove: (solution?: Solution) => void;
 };
 
 export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) => {
-  const [newSolution, setNewSolution] = React.useState<NewSolution>(solution || {});
+  const [newSolution, setNewSolution] = React.useState<Solution>(solution);
   const [editing, setEditing] = React.useState<boolean>(false);
 
   const handleEdit = () => {
@@ -28,7 +22,7 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
         console.info('Submitted updated solution');
       } else {
         // reset old solution
-        setNewSolution(solution || {});
+        setNewSolution(solution);
         console.info('Solution was incomplete. Not submitting updated solution');
       }
     }
@@ -76,7 +70,7 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
 };
 
 const handleUpdateSolutionInput =
-  (setNewSolution: (s: NewSolution) => void, solution: NewSolution) =>
+  (setNewSolution: (s: Solution) => void, solution: Solution) =>
 (solutionInput: SolutionInput) => {
       const inputs = solution.inputs || [];
       const foundInputIndex = inputs.findIndex(i => i.solution.id === solutionInput.id);

@@ -38,9 +38,9 @@ const handleOnChangeNumber = (
   validation: Props['validation'],
   onChange: (t: number) => void,
   onValidationFail: Props['onValidationFail'] = () => undefined
-) => (t: string) => {
+) => async (t: string) => {
   try {
-    const value = parseFloat(t);
+    const value = await handleParseNumber(t);
     if (!!validation) {
       const msg = validation(value);
       if (!!msg) {
@@ -74,12 +74,16 @@ const handleOnChange = (
   }
 };
 
-const handleParseNumber= (t: string) => {
+async function handleParseNumber(t: string): Promise<number> {
     try {
-      parseFloat(t);
+      const value = parseFloat(t);
+      if (isNaN(value)) {
+        throw new Error(`${value}`);
+      }
+      return value;
     } catch (error) {
       console.error("can't parse input as number", error);
-      return "can't parse input as number";
+      throw new Error("can't parse input as number");
     }
 };
 

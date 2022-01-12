@@ -123,3 +123,5 @@ export const getGallonsFromSize = (bucketSize: BucketSize): number => {
     throw new Error("please input a bucket size");
   }
 };
+
+export const getInputFraction = (): number => 1;

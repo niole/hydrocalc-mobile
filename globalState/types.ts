@@ -22,6 +22,7 @@ export type BucketSize = {
 };
 
 export type Recipe = {
+  id: string;
   name: string;
   solution: Solution;
   bucketSize: BucketSize;
@@ -31,6 +32,7 @@ export type Recipe = {
 export type NPK = { n: number, p: number, k: number };
 
 export type SolutionInput = {
+  id: string;
   name: string;
   brand?: string;
   npk: NPK;
@@ -43,6 +45,7 @@ export type FractionalInput = {
 };
 
 export type Solution = {
+  id: string;
   name: string;
   inputs: FractionalInput[];
   targetNpk: NPK;

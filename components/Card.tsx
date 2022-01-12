@@ -10,13 +10,19 @@ const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
 
 type Props = {
   title?: React.ReactNode;
-  children?: JSX.Element[] | JSX.Element;
+  children?: React.ReactNode;
   onChange?: () => void;
   onRemove?: () => void;
   removeConfirmationMsg?: React.ReactNode;
 };
 
-export function Card({ removeConfirmationMsg, title, children, onChange, onRemove }: Props) {
+export function Card({
+  removeConfirmationMsg,
+  title,
+  children,
+  onChange,
+  onRemove
+}: Props) {
   return (
     <View style={styles.card}>
       {title && <Title>{title}</Title>}

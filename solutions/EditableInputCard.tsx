@@ -3,7 +3,10 @@ import { Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
 import { ValidatedTextInput, Section, Subtitle, LabelValue, NpkLabel } from '../components';
 
+const getId = () => `${Math.random()}`;
+
 type NewsolutionInput = {
+  id: string;
   name?: string,
   brand?: string,
   npk?: NPK,
@@ -14,7 +17,7 @@ type Props = {
   solutionInput?: SolutionInput,
   frac?: number,
   editable?: boolean,
-  onChange?: (newData: NewsolutionInput) => void,
+  onChange?: (newData: SolutionInput) => void,
 };
 
 export const EditableInputCard: React.FC<Props> = ({
@@ -23,7 +26,12 @@ export const EditableInputCard: React.FC<Props> = ({
   editable = false,
   solutionInput,
 }) => {
-  const [newValues, onChangeValues] = React.useState<NewsolutionInput>(solutionInput || {});
+  const [newValues, onChangeValues] = React.useState<NewsolutionInput>(solutionInput || { id: getId() });
+  React.useEffect(() => {
+    if (!!newValues.name && !!newValues.npk && !!newValues.ec && onChange) {
+      onChange(newValues as SolutionInput);
+    }
+  }, [newValues.name, newValues.npk, newValues.brand, newValues.ec]);
   return (
     <Section>
       <Subtitle>

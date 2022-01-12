@@ -12,17 +12,33 @@ type NewSolution = {
 
 type Props = {
   solution?: Solution;
+  onChange: (solution: Solution) => void;
+  onRemove: (solution?: Solution) => void;
 };
 
-export const SolutionCard: React.FC<Props> = ({ solution }) => {
+export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) => {
   const [newSolution, setNewSolution] = React.useState<NewSolution>(solution || {});
   const [editing, setEditing] = React.useState<boolean>(false);
-  const handleEdit = () => setEditing(!editing);
+
+  const handleEdit = () => {
+    if (editing) {
+      if (!!newSolution.name && !!newSolution.inputs && !!newSolution.targetNpk) {
+        // submit changed solution
+        onChange(newSolution as Solution);
+        console.info('Submitted updated solution');
+      } else {
+        // reset old solution
+        setNewSolution(solution || {});
+        console.info('Solution was incomplete. Not submitting updated solution');
+      }
+    }
+    setEditing(!editing);
+  };
 
   return (
     <Card
       title={newSolution.name}
-      onRemove={() => undefined}
+      onRemove={() => onRemove(solution)}
       onChange={handleEdit}
     >
       {editing && <Section>

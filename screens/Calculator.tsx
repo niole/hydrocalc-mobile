@@ -28,6 +28,7 @@ export default function Calculator({ solutions, recipes, navigation }: RootTabSc
   React.useEffect(() => {
     if (ec && solution && bucketSize) {
       setWipRecipe({
+        id: Math.random().toString(),
         name: 'untitled recipe',
         solution,
         bucketSize,

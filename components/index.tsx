@@ -9,3 +9,4 @@ export * from './Section';
 export * from './ValidatedTextInput';
 export * from './AddButton';
 export * from './RemoveButton';
+export * from './CircleButton';

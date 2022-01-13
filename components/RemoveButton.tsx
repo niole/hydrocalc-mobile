@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { GestureResponderEvent, Text, Pressable } from 'react-native';
+import { GestureResponderEvent } from 'react-native';
+import { CircleButtonProps, CircleButton } from './CircleButton';
 
 type Props = {
-  onPress: (e: GestureResponderEvent) => void;
-};
-export const RemoveButton: React.FC<Props> = ({ onPress }) => {
+  onPress?: (e: GestureResponderEvent) => void;
+} & CircleButtonProps;
+export const RemoveButton: React.FC<Props> = ({ size, onPress }) => {
   return (
-    <Pressable onPress={onPress}>
-      <Text>
-        x
-      </Text>
-    </Pressable>
+    <CircleButton size={size} kind="destructive" onPress={onPress}>x</CircleButton>
   );
 }
 

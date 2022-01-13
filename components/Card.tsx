@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { ConfirmationModal } from './ConfirmationModal';
-import { Title } from '.';
+import { RemoveButton, Title } from '.';
 
 type TriggerProps = { onPress?: (e: any) => void };
 const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
-  <Pressable onPress={onPress}><Text>x</Text></Pressable>
+  <RemoveButton onPress={onPress} />
 );
 
 type Props = {

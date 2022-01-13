@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Text, Pressable, Picker, View } from 'react-native';
+import { Picker, View } from 'react-native';
 
 import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
 import { ValidatedTextInput } from '../components/ValidatedTextInput';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
-import { LabelValue } from '../components';
+import { CircleButton, LabelValue } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { CalculatedRecipeView } from '../recipe';
@@ -74,9 +74,7 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
           </Tab>
         </Tabs>
       </View>
-      <Pressable disabled={!wipRecipe} onPress={saveWipRecipe}>
-        <Text>Save Recipe</Text>
-      </Pressable>
+      <CircleButton disabled={!wipRecipe} onPress={saveWipRecipe}>Save Recipe</CircleButton>
     </Screen>
   );
 }

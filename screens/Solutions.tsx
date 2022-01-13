@@ -19,7 +19,7 @@ type Props = {
 export default function Solutions({ setSolutions, solutions }: RootTabScreenProps<'Solutions'> & Props) {
   return (
     <Screen title="solutions">
-      <AddButton onPress={() => addSolution(setSolutions, solutions, createDefaultSolution())} />
+      <AddButton size="big" onPress={() => addSolution(setSolutions, solutions, createDefaultSolution())} />
       <View style={styles.container}>
         <FlatList
           data={solutions.reverse()}

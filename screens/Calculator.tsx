@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Picker, View } from 'react-native';
+import { Text, Pressable, Picker, View } from 'react-native';
 
 import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
@@ -19,11 +19,25 @@ type Props = {
   setRecipes: SetRecipes;
 };
 
-export default function Calculator({ solutions, recipes, navigation }: RootTabScreenProps<'Calculator'> & Props) {
+export default function Calculator({ setRecipes, solutions, recipes, navigation }: RootTabScreenProps<'Calculator'> & Props) {
   const [ec, setEc] = React.useState<number | undefined>();
   const [bucketSize, setBucketSize] = React.useState<BucketSize | undefined>();
   const [solution, setSolution] = React.useState<Solution | undefined>();
   const [wipRecipe, setWipRecipe] = React.useState<Recipe | undefined>();
+
+  const saveWipRecipe = () => {
+    if (!!wipRecipe) {
+      const i = recipes.findIndex(r => r.id === wipRecipe.id);
+
+      if (i === -1) {
+        setRecipes([...recipes, wipRecipe]);
+      } else {
+        recipes[i] = wipRecipe;
+        setRecipes(recipes.slice());
+      }
+      console.info(`Saved recipe ${wipRecipe.name} to your recipes`);
+    }
+  };
 
   React.useEffect(() => {
     if (ec && solution && bucketSize) {
@@ -60,6 +74,9 @@ export default function Calculator({ solutions, recipes, navigation }: RootTabSc
           </Tab>
         </Tabs>
       </View>
+      <Pressable disabled={!wipRecipe} onPress={saveWipRecipe}>
+        <Text>Save Recipe</Text>
+      </Pressable>
     </Screen>
   );
 }

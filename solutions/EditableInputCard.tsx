@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
-import { ValidatedTextInput, Section, Subtitle, LabelValue, NpkLabel } from '../components';
+import { RemoveButton, ValidatedTextInput, Section, Subtitle, LabelValue, NpkLabel } from '../components';
 
 const getId = () => `${Math.random()}`;
 
@@ -14,19 +14,21 @@ type NewsolutionInput = {
 };
 
 type Props = {
-  solutionInput?: SolutionInput,
+  solutionInput: SolutionInput,
   frac?: number,
   editable?: boolean,
+  onRemove?: (s: SolutionInput) => void,
   onChange?: (newData: SolutionInput) => void,
 };
 
 export const EditableInputCard: React.FC<Props> = ({
+  onRemove,
   onChange,
   frac,
   editable = false,
   solutionInput,
 }) => {
-  const [newValues, onChangeValues] = React.useState<NewsolutionInput>(solutionInput || { id: getId() });
+  const [newValues, onChangeValues] = React.useState<NewsolutionInput>(solutionInput);
   React.useEffect(() => {
     if (!!newValues.name && !!newValues.npk && !!newValues.ec && onChange) {
       onChange(newValues as SolutionInput);
@@ -65,6 +67,7 @@ export const EditableInputCard: React.FC<Props> = ({
         value={newValues.ec}
       />
       <LabelValue label="frac" value={frac} />
+      {onRemove && <RemoveButton onPress={() => onRemove(solutionInput)} /> }
     </Section>
   );
 };

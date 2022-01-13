@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, FlatList, ScrollView, Pressable, Text, View } from 'react-native';
 
+import { AddButton } from '../components';
 import { addSolution, removeSolution, updateSolution, SetSolutions, Solution } from '../globalState';
 import { SolutionCard } from '../solutions';
 import { RootTabScreenProps } from '../types';
@@ -18,14 +19,10 @@ type Props = {
 export default function Solutions({ setSolutions, solutions }: RootTabScreenProps<'Solutions'> & Props) {
   return (
     <Screen title="solutions">
-      <Pressable onPress={() => addSolution(setSolutions, solutions, createDefaultSolution())}>
-        <Text>
-          +
-        </Text>
-      </Pressable>
+      <AddButton onPress={() => addSolution(setSolutions, solutions, createDefaultSolution())} />
       <View style={styles.container}>
         <FlatList
-          data={solutions}
+          data={solutions.reverse()}
           renderItem={({ item }) => (
             <SolutionCard
               onChange={updateSolution(setSolutions, solutions)}

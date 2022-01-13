@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { Section, NpkLabel, LabelValue, Card } from '../components';
+import { Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { getInputFraction } from '../recipe/inputCalculator';
 
@@ -31,19 +31,17 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
 
   return (
     <Card
-      title={newSolution.name}
       onRemove={() => onRemove(solution)}
       onChange={handleEdit}
       toggleActionLabel={editing ? 'done' : 'edit'}
     >
-      {editing && <Section>
+      {editing ? <Section>
         <LabelValue
           editable={true}
-          label="name"
           value={newSolution.name}
           onChange={name => setNewSolution({ ...newSolution, name })}
         />
-      </Section>}
+        </Section> : <Title>{newSolution.name}</Title>}
       <Section>
         <LabelValue
           label="target npk"
@@ -63,8 +61,12 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
           frac={i.frac}
           solutionInput={i.solution}
           onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
+          onRemove={handleRemoveInput(setNewSolution, newSolution, i)}
         />
       )}
+      <AddButton
+        onPress={addInput(newSolution, setNewSolution)}
+      />
     </Card>
   );
 };
@@ -90,4 +92,30 @@ const handleUpdateSolutionInput =
         };
         setNewSolution(updatedNewSolution);
       }
+  };
+
+const addInput = (newSolution: Solution, setNewSolution: (s: Solution) => void) => () => {
+  setNewSolution({
+    ...newSolution,
+    inputs: newSolution.inputs.concat(
+      [{
+        solution: {
+          id: Math.random().toString(),
+          name: 'untitled',
+          npk: {n:0,p:0,k:0},
+          ec: 0
+        },
+        frac: 0,
+      }]
+    )
+  });
 };
+
+const handleRemoveInput = (setNewSolution: (s: Solution) => void, solution: Solution, i: FractionalInput) => () => {
+  const inputIndex = solution.inputs.findIndex(input => input.solution.id === i.solution.id);
+  if (inputIndex > -1) {
+    const newInputs = solution.inputs.slice(0, inputIndex).concat(solution.inputs.slice(inputIndex+1));
+    setNewSolution({...solution, inputs: newInputs });
+  }
+};
+

@@ -27,7 +27,7 @@ export const updateSolution = (setter: SetSolutions, solutions: Solution[]) => (
   }
 }
 
-function addRecipe(setter: SetRecipes, recipes: Recipe[], recipe: Recipe): void {
+export const addRecipe = (setter: SetRecipes, recipes: Recipe[]) => (recipe: Recipe): void => {
   const duprecipes = recipes.find(s => s.id === recipe.id);
   if (!!duprecipes) {
     throw new Error("This recipe's id is already taken.");
@@ -36,7 +36,7 @@ function addRecipe(setter: SetRecipes, recipes: Recipe[], recipe: Recipe): void 
   setter([...recipes, recipe]);
 }
 
-function removeRecipe(setter: SetRecipes, recipes: Recipe[], recipe: Recipe): void {
+export function removeRecipe(setter: SetRecipes, recipes: Recipe[], recipe: Recipe): void {
   setter(recipes.filter(s => s.id !== recipe.id));
 }
 

@@ -5,7 +5,7 @@
  */
 import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
@@ -25,7 +25,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -105,12 +105,13 @@ function BottomTabNavigator() {
       </BottomTab.Screen>
       <BottomTab.Screen
         name="MyRecipes"
-        component={MyRecipes}
         options={{
           title: 'my recipes',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
-      />
+      >
+        {props => <MyRecipes recipes={recipes} setRecipes={setRecipes} {...props} />}
+      </BottomTab.Screen>
     </BottomTab.Navigator>
   );
 }

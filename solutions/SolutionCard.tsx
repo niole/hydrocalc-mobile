@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
+import { EditButton, Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { getInputFraction } from '../recipe/inputCalculator';
 
@@ -33,7 +33,7 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
     <Card
       onRemove={() => onRemove(solution)}
       onChange={handleEdit}
-      toggleActionLabel={editing ? 'done' : 'edit'}
+      ToggleTrigger={({ onPress }) => <EditButton toggled={editing} onPress={onPress!} />}
     >
       {editing ? <Section>
         <LabelValue

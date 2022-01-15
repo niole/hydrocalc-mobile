@@ -2,6 +2,7 @@ import * as React from 'react';
 import { TextStyle, StyleSheet, GestureResponderEvent, Text, Pressable } from 'react-native';
 
 export type CircleButtonProps = {
+  toggled?: boolean;
   disabled?: boolean;
   onPress?: (e: GestureResponderEvent) => void;
   kind?: 'primary' | 'destructive';

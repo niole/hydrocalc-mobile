@@ -3,6 +3,8 @@ import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { ConfirmationModal } from './ConfirmationModal';
 import { RemoveButton, Title } from '.';
 
+export type TriggerType = React.ComponentClass<TriggerProps> | React.FC<TriggerProps>;
+
 type TriggerProps = { onPress?: (e: any) => void };
 const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
   <RemoveButton onPress={onPress} />
@@ -15,6 +17,7 @@ type Props = {
   onRemove?: () => void;
   removeConfirmationMsg?: React.ReactNode;
   toggleActionLabel?: React.ReactNode;
+  ToggleTrigger?: TriggerType;
 };
 
 export function Card({
@@ -23,16 +26,19 @@ export function Card({
   children,
   onChange,
   onRemove,
-  toggleActionLabel
+  toggleActionLabel,
+  ToggleTrigger,
 }: Props) {
   return (
     <View style={styles.card}>
       {title && <Title>{title}</Title>}
       {children}
       <View style={styles.actionBar}>
-        {onChange && toggleActionLabel && <Pressable onPress={onChange}>
+        {onChange && ToggleTrigger ? (
+          <ToggleTrigger onPress={onChange} />
+        ) :  toggleActionLabel ? <Pressable onPress={onChange}>
           <Text>{toggleActionLabel}</Text>
-        </Pressable>}
+        </Pressable> : null}
         <ConfirmationModal
           onConfirm={onRemove}
           Trigger={Trigger}

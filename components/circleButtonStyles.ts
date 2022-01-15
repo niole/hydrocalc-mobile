@@ -6,6 +6,13 @@ export const svgSizes = {
 };
 
 export const styles = StyleSheet.create({
+  toggledPrimaryContainer: {
+    backgroundColor: 'teal',
+    border: '1px solid powderblue',
+  },
+  toggledPrimary: {
+    color: 'powderblue',
+  },
   primary: {
     color: 'teal',
   },
@@ -13,8 +20,9 @@ export const styles = StyleSheet.create({
     color: 'red',
   },
   container: {
-    borderRadius: 100,
+    borderRadius: 3,
     alignContent: 'center',
     width: 'fit-content',
+    border: '1px solid transparent',
   }
 });

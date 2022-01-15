@@ -10,3 +10,4 @@ export * from './ValidatedTextInput';
 export * from './AddButton';
 export * from './RemoveButton';
 export * from './CircleButton';
+export * from './EditButton';

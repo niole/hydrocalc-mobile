@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SizeUnits, VolumeUnits, GlobalState } from '.';
+import { SizeUnits, VolumeUnits, GlobalState } from './types';
 
 const getId = () => `${Math.random()}`;
 

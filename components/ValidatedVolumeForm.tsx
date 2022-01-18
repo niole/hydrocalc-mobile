@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Picker, View } from 'react-native';
+import { View } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
 import { VolumeUnits, BucketSize } from '../globalState';
 import { ValidatedTextInput } from './ValidatedTextInput';
@@ -28,12 +29,13 @@ export const ValidatedVolumeForm: React.FC<Props> = ({ onChange }) => {
       <ValidatedTextInput
         label="total"
         onChangeNumber={setTotal}
+        placeholder="total"
       />
       <Picker onValueChange={setUnit} selectedValue={unit}>
-        <Picker.Item label={VolumeUnits[VolumeUnits.Gallon]} value={VolumeUnits[VolumeUnits.Gallon]}  />
-        <Picker.Item label={VolumeUnits[VolumeUnits.Liter]} value={VolumeUnits[VolumeUnits.Liter]}  />
-        <Picker.Item label={VolumeUnits[VolumeUnits.Ounce]} value={VolumeUnits[VolumeUnits.Ounce]}  />
-        <Picker.Item label={VolumeUnits[VolumeUnits.ML]} value={VolumeUnits[VolumeUnits.ML]}  />
+        <Picker.Item key="gallon" label={VolumeUnits[VolumeUnits.Gallon]} value={VolumeUnits[VolumeUnits.Gallon]}  />
+        <Picker.Item key="liter" label={VolumeUnits[VolumeUnits.Liter]} value={VolumeUnits[VolumeUnits.Liter]}  />
+        <Picker.Item key="ounce" label={VolumeUnits[VolumeUnits.Ounce]} value={VolumeUnits[VolumeUnits.Ounce]}  />
+        <Picker.Item key="ml" label={VolumeUnits[VolumeUnits.ML]} value={VolumeUnits[VolumeUnits.ML]}  />
       </Picker>
     </View>
   );

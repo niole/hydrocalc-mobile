@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Picker, View } from 'react-native';
+import { View } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
 import { SizeUnits, BucketSize } from '../globalState';
 import { ValidatedTextInput } from './ValidatedTextInput';
@@ -42,8 +43,8 @@ export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
         onChangeNumber={setHeight}
       />
       <Picker onValueChange={setUnit} selectedValue={unit}>
-        <Picker.Item label={SizeUnits[SizeUnits.CM]} value={SizeUnits[SizeUnits.CM]}  />
-        <Picker.Item label={SizeUnits[SizeUnits.Inch]} value={SizeUnits[SizeUnits.Inch]}  />
+        <Picker.Item key="cm" label={SizeUnits[SizeUnits.CM]} value={SizeUnits[SizeUnits.CM]}  />
+        <Picker.Item key="inch" label={SizeUnits[SizeUnits.Inch]} value={SizeUnits[SizeUnits.Inch]}  />
       </Picker>
     </View>
   );

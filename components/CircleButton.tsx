@@ -27,7 +27,6 @@ export const CircleButton: React.FC<CircleButtonProps> = ({
 const baseContainerStyles = {
   borderRadius: 100,
   alignContent: 'center',
-  width: 'fit-content',
 } as TextStyle;
 
 const baseTextStyles = {
@@ -37,11 +36,13 @@ const baseTextStyles = {
 const styles = StyleSheet.create({
   primary: {
     backgroundColor: 'teal',
-    border: '1px solid teal',
+    borderColor: 'teal',
+    borderWidth: 1,
   },
   destructive: {
     backgroundColor: 'red',
-    border: '1px solid red',
+    borderColor: 'red',
+    borderWidth: 1,
   },
   bigText: {
     ...baseTextStyles,
@@ -59,8 +60,6 @@ const styles = StyleSheet.create({
     paddingRight: 4,
   },
   big: {
-    ...baseContainerStyles,
-    paddingTop: 0,
     paddingBottom: 5,
     paddingLeft: 15,
     paddingRight: 15,

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { ConfirmationModal } from './ConfirmationModal';
-import { RemoveButton, Title } from '.';
+import { Title } from './Title';
+import { RemoveButton } from './RemoveButton';
 
 export type TriggerType = React.ComponentClass<TriggerProps> | React.FC<TriggerProps>;
 
@@ -52,7 +53,6 @@ export function Card({
 
 const styles = StyleSheet.create({
   actionBar: {
-    gap: 10,
     flexDirection: 'row-reverse',
     alignItems: 'flex-end',
   },

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { NPK } from '../globalState';
-import { ValidatedTextInput } from '../components';
+import { ValidatedTextInput } from '../components/ValidatedTextInput';
 
 type Props = {
   npk?: NPK;

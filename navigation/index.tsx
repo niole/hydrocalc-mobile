@@ -4,11 +4,11 @@
  *
  */
 import { FontAwesome } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { View, ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -40,7 +40,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="Root" component={TabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
@@ -49,70 +49,51 @@ function RootNavigator() {
   );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const Tab = createMaterialTopTabNavigator<RootTabParamList>();
 
-function BottomTabNavigator() {
+function TabNavigator() {
   const colorScheme = useColorScheme();
   const [solutions, setSolutions] = useSolutions();
   const [recipes, setRecipes] = useRecipes();
 
   return (
-    <BottomTab.Navigator
-      initialRouteName="Calculator"
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}>
-      <BottomTab.Screen
-        name="Calculator"
-        options={({ navigation }: RootTabScreenProps<'Calculator'>) => ({
-          title: 'calculator',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
+    <View style={{ flex: 1, paddingTop: 50 }}>
+      <Tab.Navigator
+        initialRouteName="Calculator"
+        screenOptions={{
+          tabBarActiveTintColor: 'darkslategray',
+        }}>
+        <Tab.Screen
+          name="Calculator"
+          options={{
+            title: 'calculator',
+          }}
+          >
+          {props => <Calculator
+            recipes={recipes}
+            setRecipes={setRecipes}
+            solutions={solutions}
+            {...props }
+            />}
+        </Tab.Screen>
+        <Tab.Screen
+          name="Solutions"
+          options={{
+            title: 'solutions',
+          }}
         >
-        {props => <Calculator
-          recipes={recipes}
-          setRecipes={setRecipes}
-          solutions={solutions}
-          {...props }
-          />}
-      </BottomTab.Screen>
-      <BottomTab.Screen
-        name="Solutions"
-        options={{
-          title: 'solutions',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      >
-        {props => <Solutions solutions={solutions} setSolutions={setSolutions} {...props} />}
-      </BottomTab.Screen>
-      <BottomTab.Screen
-        name="MyRecipes"
-        options={{
-          title: 'my recipes',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      >
-        {props => <MyRecipes recipes={recipes} setRecipes={setRecipes} {...props} />}
-      </BottomTab.Screen>
-    </BottomTab.Navigator>
+          {props => <Solutions solutions={solutions} setSolutions={setSolutions} {...props} />}
+        </Tab.Screen>
+        <Tab.Screen
+          name="MyRecipes"
+          options={{
+            title: 'my recipes',
+          }}
+        >
+          {props => <MyRecipes recipes={recipes} setRecipes={setRecipes} {...props} />}
+        </Tab.Screen>
+      </Tab.Navigator>
+    </View>
   );
 }
 

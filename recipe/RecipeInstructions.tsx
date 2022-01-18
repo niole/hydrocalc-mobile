@@ -23,7 +23,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
     <LabelValue label="bucket size" value={<BucketSizeLabel bucketSize={bucketSize} />} />
     <LabelValue label="npk" value={<NpkLabel npk={solution.targetNpk} />} />
     {solution.inputs.map(input => (
-      <LabelValue label={input.solution.name} value={getInputVolumeInstructions(SolutionInputMeasurement.Cup, getGallonsFromSize(bucketSize), input.frac, ec)} />
+      <LabelValue key={input.solution.id} label={input.solution.name} value={getInputVolumeInstructions(SolutionInputMeasurement.Cup, getGallonsFromSize(bucketSize), input.frac, ec)} />
     ))}
   </View>
 );

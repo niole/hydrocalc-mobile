@@ -5,16 +5,21 @@ export const svgSizes = {
   small: 30
 };
 
+export const primaryBackground = 'teal';
+
+export const destructiveBackground = 'red';
+
 export const styles = StyleSheet.create({
   toggledPrimaryContainer: {
-    backgroundColor: 'teal',
-    border: '1px solid powderblue',
+    backgroundColor: primaryBackground,
+    borderColor: 'powderblue',
+    borderWidth: 1,
   },
   toggledPrimary: {
     color: 'powderblue',
   },
   primary: {
-    color: 'teal',
+    color: primaryBackground,
   },
   destructive: {
     color: 'red',
@@ -22,7 +27,7 @@ export const styles = StyleSheet.create({
   container: {
     borderRadius: 3,
     alignContent: 'center',
-    width: 'fit-content',
-    border: '1px solid transparent',
+    borderColor: 'transparent',
+    borderWidth: 1,
   }
 });

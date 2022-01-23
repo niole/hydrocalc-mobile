@@ -12,7 +12,7 @@ const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
 );
 
 type Props = {
-  title?: React.ReactNode;
+  title?: string;
   children?: React.ReactNode;
   onChange?: () => void;
   onRemove?: () => void;
@@ -20,6 +20,7 @@ type Props = {
   toggleActionLabel?: React.ReactNode;
   ToggleTrigger?: TriggerType;
   editable?: boolean;
+  titleElement?: React.ReactNode;
 };
 
 export function Card({
@@ -30,18 +31,14 @@ export function Card({
   onRemove,
   toggleActionLabel,
   ToggleTrigger,
+  titleElement,
   editable = true,
 }: Props) {
   return (
     <View style={styles.card}>
-      {title && <Title>{title}</Title>}
-      {children}
-      <View style={styles.actionBar}>
-        {editable && onChange && ToggleTrigger ? (
-          <ToggleTrigger onPress={onChange} />
-        ) :  editable && toggleActionLabel ? <Pressable onPress={onChange}>
-          <Text>{toggleActionLabel}</Text>
-        </Pressable> : null}
+      <View style={styles.titleBar}>
+        {!titleElement && title && <Title>{title}</Title>}
+        {!title && titleElement}
         {editable && <ConfirmationModal
           onConfirm={onRemove}
           Trigger={Trigger}
@@ -49,11 +46,23 @@ export function Card({
           {removeConfirmationMsg}
         </ConfirmationModal>}
       </View>
+      {children}
+      <View style={styles.actionBar}>
+        {editable && onChange && ToggleTrigger ? (
+          <ToggleTrigger onPress={onChange} />
+        ) :  editable && toggleActionLabel ? <Pressable onPress={onChange}>
+          <Text>{toggleActionLabel}</Text>
+        </Pressable> : null}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  titleBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   actionBar: {
     flexDirection: 'row-reverse',
     alignItems: 'flex-end',

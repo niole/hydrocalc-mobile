@@ -32,17 +32,19 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
 
   return (
     <Card
+      title={!editing ? newSolution.name : undefined }
+      titleElement={editing ? (
+          <ValidatedTextInput
+            defaultValue={newSolution.name}
+            onChangeText={name => setNewSolution({ ...newSolution, name })}
+          />
+        ) : undefined
+      }
       onRemove={() => onRemove(solution)}
       onChange={handleEdit}
       ToggleTrigger={({ onPress }) => <EditButton toggled={editing} onPress={onPress!} />}
     >
       <Section bordered={true}>
-        {editing ?
-          <ValidatedTextInput
-            defaultValue={newSolution.name}
-            onChangeText={name => setNewSolution({ ...newSolution, name })}
-          />
-          : <Title>{newSolution.name}</Title>}
         <LabelValue
           label="target npk"
           value={

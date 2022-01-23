@@ -47,6 +47,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
       <View style={rowStyle ? styles.labelGroupRow : undefined}>
         {label && <Text style={styles.label}>{`${label} `}</Text>}
         <TextInput
+          keyboardType={onChangeNumber ? 'numeric' : undefined}
           style={styles.editingContainer}
           textAlign={rowStyle ? 'right' : undefined}
           defaultValue={defaultValue}
@@ -102,16 +103,21 @@ const handleOnChange = (
   }
 };
 
-async function handleParseNumber(t: string): Promise<number> {
-    try {
-      const value = parseFloat(t);
-      if (isNaN(value)) {
-        throw new Error(`${value}`);
+async function handleParseNumber(uncleanT: string): Promise<number> {
+    const t = uncleanT.trim();
+    if (t !== '') {
+      try {
+        const value = parseFloat(t);
+        if (isNaN(value)) {
+          throw new Error(`${value}`);
+        }
+        return value;
+      } catch (error) {
+        console.error("can't parse input as number", error);
+        throw new Error("can't parse input as number");
       }
-      return value;
-    } catch (error) {
-      console.error("can't parse input as number", error);
-      throw new Error("can't parse input as number");
+    } else {
+      return 0;
     }
 };
 

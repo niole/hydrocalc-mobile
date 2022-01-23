@@ -3,17 +3,16 @@ import Svg, { Path } from 'react-native-svg';
 import { Text, GestureResponderEvent, Pressable } from 'react-native';
 import { CircleButtonProps } from './CircleButton';
 import { primaryBackground, styles, svgSizes } from './circleButtonStyles';
+import { CheckButton } from './CheckButton';
 
 type Props = {
   onPress: (e: GestureResponderEvent) => void;
 } & CircleButtonProps;
 
 export const EditButton: React.FC<Props> = ({ size = 'small', toggled = false, onPress }) => {
-  const containerStyles = toggled ? [styles.container, styles.toggledPrimaryContainer] : styles.container;
-  const kind = toggled ? 'toggledPrimary' : 'primary';
-  return (
-    <Pressable onPress={onPress} style={containerStyles}>
-      <Text style={styles[kind]}><EditSvg size={svgSizes[size]} fill={primaryBackground} /></Text>
+  return toggled ? <CheckButton onPress={onPress} /> : (
+    <Pressable onPress={onPress} style={styles.container}>
+      <Text><EditSvg size={svgSizes[size]} fill={primaryBackground} /></Text>
     </Pressable>
   );
 };

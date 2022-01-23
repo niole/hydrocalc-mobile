@@ -12,6 +12,7 @@ type Props = {
   placeholder?: string;
   maxSize?: number;
   defaultValue?: string;
+  rowStyle?: boolean;
 };
 
 export const ValidatedTextInput: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
   onValidationFail,
   maxSize,
   defaultValue,
+  rowStyle = false
 }) => {
   const [errorMsg, setErrorMsg] = React.useState<string | undefined>();
   const handleShowValidationFailure = (errorMsg: string) => {
@@ -42,14 +44,14 @@ export const ValidatedTextInput: React.FC<Props> = ({
 
   return (
     <View style={{ maxWidth: maxSize }}>
-      <View style={styles.labelGroup}>
-        {label && <Text style={styles.label}>{`${label} `}</Text>}
+      <View style={rowStyle ? styles.labelGroupRow : undefined}>
+        {label && <View><Text style={styles.label}>{`${label} `}</Text></View>}
         <TextInput
           defaultValue={defaultValue}
           placeholder={placeholder}
           onChangeText={onChangeText ? handleOnChange(validation, onChangeText, handleValidationStringSuccess) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
         />
-        </View>
+      </View>
       {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
     </View>
   );
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: 'bold',
   },
-  labelGroup: {
+  labelGroupRow: {
     flexDirection: 'row'
   },
   errorMsg: {

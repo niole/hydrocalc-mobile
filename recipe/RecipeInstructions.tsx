@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import { SolutionInputMeasurement, Recipe } from '../globalState';
-import { LabelValue, NpkLabel, BucketSizeLabel } from '../components';
+import { Subtitle, LabelValue, NpkLabel, BucketSizeLabel } from '../components';
 import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 
 /**
@@ -18,7 +18,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   recipe: { name, ec, bucketSize, solution }
 }) => (
   <View>
-    {showTitle && <Text>{name}</Text>}
+    {showTitle && <Subtitle>{name}</Subtitle>}
     <LabelValue label="ec" value={`${ec} millisiemen/cm`} />
     <LabelValue label="bucket size" value={<BucketSizeLabel bucketSize={bucketSize} />} />
     <LabelValue label="npk" value={<NpkLabel npk={solution.targetNpk} />} />

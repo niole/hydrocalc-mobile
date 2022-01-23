@@ -52,7 +52,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
           textAlign={rowStyle ? 'right' : undefined}
           defaultValue={defaultValue}
           placeholder={placeholder}
-          onChangeText={onChangeText ? handleOnChange(validation, onChangeText, handleValidationStringSuccess) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
+          onChangeText={onChangeText ? handleOnChange(validation, handleValidationStringSuccess, handleShowValidationFailure) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
         />
       </View>
       <View>

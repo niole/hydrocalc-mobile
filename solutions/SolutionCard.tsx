@@ -86,8 +86,7 @@ const handleUpdateSolutionInput =
       if (foundInputIndex > -1) {
         const newFraction = getInputFraction();
         inputs[foundInputIndex] = {
-          ...inputs[foundInputIndex],
-          ...solutionInput,
+          solution: solutionInput,
           frac: newFraction
         };
         setNewSolution(solution);

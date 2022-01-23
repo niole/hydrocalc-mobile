@@ -5,14 +5,6 @@ import { RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel 
 
 const getId = () => `${Math.random()}`;
 
-type NewsolutionInput = {
-  id: string;
-  name?: string,
-  brand?: string,
-  npk?: NPK,
-  ec?: number,
-};
-
 type Props = {
   solutionInput: SolutionInput,
   frac?: number,
@@ -28,9 +20,9 @@ export const EditableInputCard: React.FC<Props> = ({
   editable = false,
   solutionInput,
 }) => {
-  const [newValues, onChangeValues] = React.useState<NewsolutionInput>(solutionInput);
+  const [newValues, onChangeValues] = React.useState<SolutionInput>(solutionInput);
   React.useEffect(() => {
-    if (!!newValues.name && !!newValues.npk && !!newValues.ec && onChange) {
+    if (!!newValues.name && !!newValues.npk && newValues.ec !== undefined && onChange) {
       onChange(newValues as SolutionInput);
     }
   }, [newValues.name, newValues.npk, newValues.brand, newValues.ec]);

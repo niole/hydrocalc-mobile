@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
-import { ConfirmationModal, RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel } from '../components';
+import { Annotation, ConfirmationModal, RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel } from '../components';
 
 const getId = () => `${Math.random()}`;
 
@@ -30,7 +30,7 @@ export const EditableInputCard: React.FC<Props> = ({
     <View>
       <View style={styles.titleBar}>
         <View>
-          <Text style={{color: 'grey'}}>input</Text>
+          <Annotation>input</Annotation>
           {editable ? (
             <ValidatedTextInput
               defaultValue={newValues.name}

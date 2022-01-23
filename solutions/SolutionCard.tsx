@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { ValidatedTextInput, EditButton, Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
+import { Annotation, ValidatedTextInput, EditButton, Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { getInputFraction } from '../recipe/inputCalculator';
 
@@ -71,10 +71,13 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
               onRemove={handleRemoveInput(setNewSolution, newSolution, i)}
             />
           </Section>
-        )}
-      <AddButton
-        onPress={addInput(newSolution, setNewSolution)}
-      />
+      )}
+      <View style={styles.addInputBar}>
+        <AddButton
+          onPress={addInput(newSolution, setNewSolution)}
+        />
+        <Annotation>add an input to your solution</Annotation>
+      </View>
     </Card>
   );
 };
@@ -108,7 +111,7 @@ const addInput = (newSolution: Solution, setNewSolution: (s: Solution) => void) 
       [{
         solution: {
           id: Math.random().toString(),
-          name: 'untitled',
+          name: 'untitled solution',
           npk: {n:0,p:0,k:0},
           ec: 0
         },
@@ -126,3 +129,6 @@ const handleRemoveInput = (setNewSolution: (s: Solution) => void, solution: Solu
   }
 };
 
+const styles = StyleSheet.create({
+  addInputBar: { flexDirection: 'row', alignItems: 'center' }
+});

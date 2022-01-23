@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { ScrollView, View } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { Picker } from '@react-native-picker/picker';
 
 import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
-import { Card, CircleButton, LabelValue } from '../components';
+import { Annotation, Card, AddButton, LabelValue } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { CalculatedRecipeView } from '../recipe';
@@ -32,9 +33,11 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
 
       if (i === -1) {
         setRecipes([...recipes, wipRecipe]);
+        Toast.show({ type: 'success', text1: `Created new recipe, ${wipRecipe.name}`});
       } else {
         recipes[i] = wipRecipe;
         setRecipes(recipes.slice());
+        Toast.show({ type: 'success', text1: `Updated recipe, ${wipRecipe.name}`});
       }
       console.info(`Saved recipe ${wipRecipe.name} to your recipes`);
     }
@@ -72,7 +75,10 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
                 <ValidatedSizeForm onChange={setBucketSize} />
               </Tab>
             </Tabs>
-            <CircleButton disabled={!wipRecipe} onPress={saveWipRecipe}>Save Recipe</CircleButton>
+            <View style={styles.saveActions}>
+              <Annotation>Save recipe</Annotation>
+              <AddButton disabled={!wipRecipe} size="big" onPress={saveWipRecipe} />
+            </View>
           </Card>
         </View>
       </ScrollView>
@@ -91,3 +97,11 @@ const handleSetEc = (setEc: (ec: number) => void) => (t: string) => {
 const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solution[]) => (solutionName?: string) => {
   setSolution(solutions.find(s => s.name === solutionName));
 };
+
+const styles = StyleSheet.create({
+  saveActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end'
+  }
+});

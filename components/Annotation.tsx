@@ -11,6 +11,6 @@ export const Annotation: React.FC<Props> = ({ children }) =>
 const styles = StyleSheet.create({
   container: {
     color: 'grey',
-    fontSize: 12,
+    fontSize: 14,
   }
 });

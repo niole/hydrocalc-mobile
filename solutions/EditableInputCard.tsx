@@ -67,7 +67,6 @@ export const EditableInputCard: React.FC<Props> = ({
         label="ec"
         value={newValues.ec}
       />
-      <LabelValue label="frac" value={frac} />
     </View>
   );
 };

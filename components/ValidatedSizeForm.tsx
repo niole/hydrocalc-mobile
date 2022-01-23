@@ -16,7 +16,7 @@ export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
   const [unit, setUnit] = React.useState<SizeUnits>(SizeUnits.Inch);
 
   React.useEffect(() => {
-    if (!!length && !!width && !!height && !!unit) {
+    if (!!length && !!width && !!height) {
       onChange({
         lwh: {
           length,

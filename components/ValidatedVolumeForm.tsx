@@ -14,7 +14,7 @@ export const ValidatedVolumeForm: React.FC<Props> = ({ onChange }) => {
   const [unit, setUnit] = React.useState<VolumeUnits>(VolumeUnits.Gallon);
 
   React.useEffect(() => {
-    if (!!total && !!unit) {
+    if (!!total) {
       onChange({
         volume: {
           total,

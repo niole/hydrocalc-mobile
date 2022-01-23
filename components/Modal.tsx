@@ -1,5 +1,7 @@
 import React from 'react';
 import { Modal as ReactModal, StyleSheet, Text, Pressable, View } from 'react-native';
+import { RemoveButton } from './RemoveButton';
+import { CheckButton } from './CheckButton';
 
 export type TriggerProps = { onPress?: (e: any) => void, children?: any };
 export type TriggerType = React.ComponentClass<TriggerProps> | React.FC<TriggerProps>;
@@ -39,7 +41,7 @@ export function Modal({
     setModalVisible(false);
   };
 
-  const triggerText = triggerLabel || <Text style={styles.textStyle}>Show Modal</Text>;
+  const triggerText = triggerLabel || <Text>Show Modal</Text>;
 
   return (
     <View>
@@ -56,18 +58,16 @@ export function Modal({
             {title && <Text>{title}</Text>}
             {children}
             <View style={styles.actionBar}>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
+              <RemoveButton
                 onPress={handleCancel}
               >
-                {cancelLabel || <Text style={styles.textStyle}>cancel</Text>}
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
+                {cancelLabel || <Text>cancel</Text>}
+              </RemoveButton>
+              <CheckButton
                 onPress={handleSubmit}
               >
-                {submitLabel || <Text style={styles.textStyle}>submit</Text>}
-              </Pressable>
+                {submitLabel || <Text>submit</Text>}
+              </CheckButton>
             </View>
           </View>
         </View>
@@ -85,8 +85,9 @@ export function Modal({
 
 const styles = StyleSheet.create({
   actionBar: {
+    marginTop: 22,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    justifyContent: "space-between",
   },
   centeredView: {
     flex: 1,
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -120,14 +120,5 @@ const styles = StyleSheet.create({
   buttonClose: {
     backgroundColor: "#2196F3",
   },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center"
-  }
 });
 

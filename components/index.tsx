@@ -13,3 +13,4 @@ export * from './CircleButton';
 export * from './EditButton';
 export * from './FlatList';
 export * from './Annotation';
+export * from './CheckButton';

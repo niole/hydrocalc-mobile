@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Text } from 'react-native';
 import { removeRecipe, SetRecipes, Recipe } from '../globalState';
 import { FlatList, Card } from '../components';
 import { RootTabScreenProps } from '../types';
@@ -16,7 +17,11 @@ export default function MyRecipes({ setRecipes, recipes }: RootTabScreenProps<'M
       <FlatList
         data={recipes}
         renderItem={({ item }) => (
-          <Card title={item.name} onRemove={() => removeRecipe(setRecipes, recipes, item)}>
+          <Card
+            removeConfirmationMsg={<Text>{`Are you sure you want to remove recipe, ${item.name}?`}</Text>}
+            title={item.name}
+            onRemove={() => removeRecipe(setRecipes, recipes, item)}
+          >
             <RecipeInstructions showTitle={false} key={item.id} recipe={item} />
           </Card>
         )}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
-import { RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel } from '../components';
+import { ConfirmationModal, RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel } from '../components';
 
 const getId = () => `${Math.random()}`;
 
@@ -39,7 +39,12 @@ export const EditableInputCard: React.FC<Props> = ({
             ) : <Title>{newValues.name || 'untitled'}</Title>
           }
         </View>
-        {onRemove && <RemoveButton onPress={() => onRemove(solutionInput)} /> }
+        {onRemove && <ConfirmationModal
+          onConfirm={() => onRemove!(solutionInput)}
+          Trigger={RemoveButton}
+        >
+          <Text>Are you sure you want to remove input, {newValues.name}?</Text>
+        </ConfirmationModal>}
       </View>
       <LabelValue
         editable={editable}

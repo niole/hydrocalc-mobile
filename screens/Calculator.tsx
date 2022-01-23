@@ -77,7 +77,7 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
             </Tabs>
             <View style={styles.saveActions}>
               <Annotation>Save recipe</Annotation>
-              <AddButton disabled={!wipRecipe} size="big" onPress={saveWipRecipe} />
+              <AddButton disabled={!wipRecipe} onPress={saveWipRecipe} />
             </View>
           </Card>
         </View>

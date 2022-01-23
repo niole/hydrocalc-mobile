@@ -61,6 +61,7 @@ function TabNavigator() {
       <Tab.Navigator
         initialRouteName="Calculator"
         screenOptions={{
+          tabBarLabelStyle: { textTransform: 'capitalize' },
           tabBarActiveTintColor: 'darkslategray',
         }}>
         <Tab.Screen

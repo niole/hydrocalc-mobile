@@ -23,6 +23,7 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
   const [ec, setEc] = React.useState<number | undefined>();
   const [bucketSize, setBucketSize] = React.useState<BucketSize | undefined>();
   const [solution, setSolution] = React.useState<Solution | undefined>();
+    const [recipeTitle, setRecipeTitle] = React.useState<string | undefined>();
   const [wipRecipe, setWipRecipe] = React.useState<Recipe | undefined>();
 
   const saveWipRecipe = () => {
@@ -40,16 +41,16 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
   };
 
   React.useEffect(() => {
-    if (ec && solution && bucketSize) {
+    if (ec && solution && bucketSize && recipeTitle) {
       setWipRecipe({
         id: Math.random().toString(),
-        name: 'untitled recipe',
+        name: recipeTitle,
         solution,
         bucketSize,
         ec
       });
     }
-  }, [ec, solution, bucketSize]);
+  }, [ec, solution, bucketSize, recipeTitle]);
 
   return (
     <Screen title="calculator">
@@ -57,6 +58,7 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
         <View>
           <CalculatedRecipeView recipes={recipes} defaultRecipe={wipRecipe} />
           <Card title="Create New Recipe" editable={false}>
+            <LabelValue editable={true} label="title" onChange={setRecipeTitle} />
             <LabelValue editable={true} label="ec (millisiemens/cm)" placeholder="--" onChangeNumber={handleSetEc(setEc)} />
             <Picker onValueChange={handleSetSolution(setSolution, solutions)} selectedValue={solution?.name}>
               <Picker.Item key="none" label="Pick a solution" value={undefined} />

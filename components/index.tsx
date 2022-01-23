@@ -11,3 +11,4 @@ export * from './AddButton';
 export * from './RemoveButton';
 export * from './CircleButton';
 export * from './EditButton';
+export * from './FlatList';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
 import { RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel } from '../components';
 
@@ -36,14 +36,19 @@ export const EditableInputCard: React.FC<Props> = ({
   }, [newValues.name, newValues.npk, newValues.brand, newValues.ec]);
   return (
     <View>
-      <Text style={{color: 'grey'}}>input</Text>
-      {editable ? (
-        <ValidatedTextInput
-          defaultValue={newValues.name}
-          onChangeText={name => onChangeValues({ ...newValues, name })}
-        />
-        ) : <Title>{newValues.name || 'untitled'}</Title>
-      }
+      <View style={styles.titleBar}>
+        <View>
+          <Text style={{color: 'grey'}}>input</Text>
+          {editable ? (
+            <ValidatedTextInput
+              defaultValue={newValues.name}
+              onChangeText={name => onChangeValues({ ...newValues, name })}
+            />
+            ) : <Title>{newValues.name || 'untitled'}</Title>
+          }
+        </View>
+        {onRemove && <RemoveButton onPress={() => onRemove(solutionInput)} /> }
+      </View>
       <LabelValue
         editable={editable}
         label="brand"
@@ -66,7 +71,13 @@ export const EditableInputCard: React.FC<Props> = ({
         value={newValues.ec}
       />
       <LabelValue label="frac" value={frac} />
-      {onRemove && <RemoveButton onPress={() => onRemove(solutionInput)} /> }
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  titleBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }
+});

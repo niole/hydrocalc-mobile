@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import { VolumeUnits, BucketSize } from '../globalState';
-import { ValidatedTextInput } from './ValidatedTextInput';
+import { LabelValue }  from './LabelValue';
 
 type Props = {
   onChange: (bs: BucketSize) => void;
@@ -11,14 +11,14 @@ type Props = {
 
 export const ValidatedVolumeForm: React.FC<Props> = ({ onChange }) => {
   const [total, setTotal] = React.useState<number | undefined>();
-  const [unit, setUnit] = React.useState<string>(VolumeUnits[VolumeUnits.Gallon]);
+  const [unit, setUnit] = React.useState<VolumeUnits>(VolumeUnits.Gallon);
 
   React.useEffect(() => {
     if (!!total && !!unit) {
       onChange({
         volume: {
           total,
-          unit: VolumeUnits[unit]
+          unit
         }
       });
     }
@@ -26,16 +26,17 @@ export const ValidatedVolumeForm: React.FC<Props> = ({ onChange }) => {
 
   return (
     <View>
-      <ValidatedTextInput
+      <LabelValue
+        editable={true}
         label="total"
         onChangeNumber={setTotal}
-        placeholder="total"
+        placeholder={`total in ${VolumeUnits[unit]}`}
       />
       <Picker onValueChange={setUnit} selectedValue={unit}>
-        <Picker.Item key="gallon" label={VolumeUnits[VolumeUnits.Gallon]} value={VolumeUnits[VolumeUnits.Gallon]}  />
-        <Picker.Item key="liter" label={VolumeUnits[VolumeUnits.Liter]} value={VolumeUnits[VolumeUnits.Liter]}  />
-        <Picker.Item key="ounce" label={VolumeUnits[VolumeUnits.Ounce]} value={VolumeUnits[VolumeUnits.Ounce]}  />
-        <Picker.Item key="ml" label={VolumeUnits[VolumeUnits.ML]} value={VolumeUnits[VolumeUnits.ML]}  />
+        <Picker.Item key="gallon" label={VolumeUnits[VolumeUnits.Gallon]} value={VolumeUnits.Gallon}  />
+        <Picker.Item key="liter" label={VolumeUnits[VolumeUnits.Liter]} value={VolumeUnits.Liter}  />
+        <Picker.Item key="ounce" label={VolumeUnits[VolumeUnits.Ounce]} value={VolumeUnits.Ounce}  />
+        <Picker.Item key="ml" label={VolumeUnits[VolumeUnits.ML]} value={VolumeUnits.ML}  />
       </Picker>
     </View>
   );

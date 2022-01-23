@@ -4,7 +4,6 @@ import { Picker } from '@react-native-picker/picker';
 
 import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
-import { ValidatedTextInput } from '../components/ValidatedTextInput';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
 import { CircleButton, LabelValue } from '../components';
@@ -56,7 +55,7 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
     <Screen title="calculator">
       <View>
         <CalculatedRecipeView recipes={recipes} defaultRecipe={wipRecipe} />
-        <ValidatedTextInput label="ec" placeholder="EC (millisiemens/cm)" onChangeText={handleSetEc(setEc)} />
+        <LabelValue editable={true} label="ec" placeholder="(millisiemens/cm)" onChange={handleSetEc(setEc)} />
         <Picker onValueChange={handleSetSolution(setSolution, solutions)} selectedValue={solution?.name}>
           <Picker.Item key="none" label="Pick a solution" value={undefined} />
           {solutions.map(s => <Picker.Item key={s.id} label={s.name} value={s.name}/>)}

@@ -6,7 +6,7 @@ import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
-import { CircleButton, LabelValue } from '../components';
+import { Card, CircleButton, LabelValue } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { CalculatedRecipeView } from '../recipe';
@@ -55,21 +55,23 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
     <Screen title="calculator">
       <View>
         <CalculatedRecipeView recipes={recipes} defaultRecipe={wipRecipe} />
-        <LabelValue editable={true} label="ec" placeholder="(millisiemens/cm)" onChange={handleSetEc(setEc)} />
-        <Picker onValueChange={handleSetSolution(setSolution, solutions)} selectedValue={solution?.name}>
-          <Picker.Item key="none" label="Pick a solution" value={undefined} />
-          {solutions.map(s => <Picker.Item key={s.id} label={s.name} value={s.name}/>)}
-        </Picker>
-        <Tabs defaultKey="volume">
-          <Tab title="Volume" id="volume">
-            <ValidatedVolumeForm onChange={setBucketSize} />
-          </Tab>
-          <Tab title="Size" id="size">
-            <ValidatedSizeForm onChange={setBucketSize} />
-          </Tab>
-        </Tabs>
+        <Card title="Create New Recipe" editable={false}>
+          <LabelValue editable={true} label="ec" placeholder="(millisiemens/cm)" onChange={handleSetEc(setEc)} />
+          <Picker onValueChange={handleSetSolution(setSolution, solutions)} selectedValue={solution?.name}>
+            <Picker.Item key="none" label="Pick a solution" value={undefined} />
+            {solutions.map(s => <Picker.Item key={s.id} label={s.name} value={s.name}/>)}
+          </Picker>
+          <Tabs defaultKey="volume">
+            <Tab title="Volume" id="volume">
+              <ValidatedVolumeForm onChange={setBucketSize} />
+            </Tab>
+            <Tab title="Size" id="size">
+              <ValidatedSizeForm onChange={setBucketSize} />
+            </Tab>
+          </Tabs>
+          <CircleButton disabled={!wipRecipe} onPress={saveWipRecipe}>Save Recipe</CircleButton>
+        </Card>
       </View>
-      <CircleButton disabled={!wipRecipe} onPress={saveWipRecipe}>Save Recipe</CircleButton>
     </Screen>
   );
 }

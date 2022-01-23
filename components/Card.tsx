@@ -19,6 +19,7 @@ type Props = {
   removeConfirmationMsg?: React.ReactNode;
   toggleActionLabel?: React.ReactNode;
   ToggleTrigger?: TriggerType;
+  editable?: boolean;
 };
 
 export function Card({
@@ -29,23 +30,24 @@ export function Card({
   onRemove,
   toggleActionLabel,
   ToggleTrigger,
+  editable = true,
 }: Props) {
   return (
     <View style={styles.card}>
       {title && <Title>{title}</Title>}
       {children}
       <View style={styles.actionBar}>
-        {onChange && ToggleTrigger ? (
+        {editable && onChange && ToggleTrigger ? (
           <ToggleTrigger onPress={onChange} />
-        ) :  toggleActionLabel ? <Pressable onPress={onChange}>
+        ) :  editable && toggleActionLabel ? <Pressable onPress={onChange}>
           <Text>{toggleActionLabel}</Text>
         </Pressable> : null}
-        <ConfirmationModal
+        {editable && <ConfirmationModal
           onConfirm={onRemove}
           Trigger={Trigger}
         >
           {removeConfirmationMsg}
-        </ConfirmationModal>
+        </ConfirmationModal>}
       </View>
     </View>
   );

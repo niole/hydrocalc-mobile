@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { FlatList } from 'react-native';
 import { removeRecipe, SetRecipes, Recipe } from '../globalState';
-import { View } from '../components/Themed';
-import { Card } from '../components';
+import { FlatList, Card } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { RecipeInstructions } from '../recipe/RecipeInstructions';

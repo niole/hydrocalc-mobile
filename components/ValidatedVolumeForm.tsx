@@ -28,9 +28,9 @@ export const ValidatedVolumeForm: React.FC<Props> = ({ onChange }) => {
     <View>
       <LabelValue
         editable={true}
-        label="total"
+        label={`total in ${VolumeUnits[unit]}`}
         onChangeNumber={setTotal}
-        placeholder={`total in ${VolumeUnits[unit]}`}
+        placeholder="--"
       />
       <Picker onValueChange={setUnit} selectedValue={unit}>
         <Picker.Item key="gallon" label={VolumeUnits[VolumeUnits.Gallon]} value={VolumeUnits.Gallon}  />

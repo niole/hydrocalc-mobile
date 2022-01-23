@@ -32,21 +32,18 @@ export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
     <View>
       <LabelValue
         editable={true}
-        label="length"
         onChangeNumber={setLength}
-        placeholder={getPlaceholderText('length', unit)}
+        label={getPlaceholderText('length', unit)}
       />
       <LabelValue
         editable={true}
-        label="width"
         onChangeNumber={setWidth}
-        placeholder={getPlaceholderText('width', unit)}
+        label={getPlaceholderText('width', unit)}
       />
       <LabelValue
         editable={true}
-        label="height"
         onChangeNumber={setHeight}
-        placeholder={getPlaceholderText('height', unit)}
+        label={getPlaceholderText('height', unit)}
       />
       <Picker onValueChange={setUnit} selectedValue={unit}>
         <Picker.Item key="cm" label={SizeUnits[SizeUnits.CM]} value={SizeUnits.CM}  />

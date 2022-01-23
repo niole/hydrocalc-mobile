@@ -57,7 +57,7 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
         <View>
           <CalculatedRecipeView recipes={recipes} defaultRecipe={wipRecipe} />
           <Card title="Create New Recipe" editable={false}>
-            <LabelValue editable={true} label="ec" placeholder="(millisiemens/cm)" onChange={handleSetEc(setEc)} />
+            <LabelValue editable={true} label="ec (millisiemens/cm)" placeholder="--" onChangeNumber={handleSetEc(setEc)} />
             <Picker onValueChange={handleSetSolution(setSolution, solutions)} selectedValue={solution?.name}>
               <Picker.Item key="none" label="Pick a solution" value={undefined} />
               {solutions.map(s => <Picker.Item key={s.id} label={s.name} value={s.name}/>)}

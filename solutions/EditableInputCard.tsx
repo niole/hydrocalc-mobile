@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
-import { RemoveButton, ValidatedTextInput, Section, Subtitle, LabelValue, NpkLabel } from '../components';
+import { RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel } from '../components';
 
 const getId = () => `${Math.random()}`;
 
@@ -35,16 +35,15 @@ export const EditableInputCard: React.FC<Props> = ({
     }
   }, [newValues.name, newValues.npk, newValues.brand, newValues.ec]);
   return (
-    <Section>
-      <Subtitle>
-        {editable ? (
-          <ValidatedTextInput
-            defaultValue={newValues.name}
-            onChangeText={name => onChangeValues({ ...newValues, name })}
-          />
-          ) : <Text>{newValues.name || 'untitled'}</Text>
-        }
-      </Subtitle>
+    <View>
+      <Text style={{color: 'grey'}}>input</Text>
+      {editable ? (
+        <ValidatedTextInput
+          defaultValue={newValues.name}
+          onChangeText={name => onChangeValues({ ...newValues, name })}
+        />
+        ) : <Title>{newValues.name || 'untitled'}</Title>
+      }
       <LabelValue
         editable={editable}
         label="brand"
@@ -68,6 +67,6 @@ export const EditableInputCard: React.FC<Props> = ({
       />
       <LabelValue label="frac" value={frac} />
       {onRemove && <RemoveButton onPress={() => onRemove(solutionInput)} /> }
-    </Section>
+    </View>
   );
 };

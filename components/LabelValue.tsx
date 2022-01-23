@@ -13,15 +13,16 @@ type Props = {
   placeholder?: string;
 };
 
-export const LabelValue: React.FC<Props> = ({ label, value, editable, onChange, onChangeNumber, placeholder, rowStyle = false }) => {
-  const containerStyle = [...(editable ? [styles.editingContainer] : []), ...(rowStyle ? [styles.containerRow] : [])];
+export const LabelValue: React.FC<Props> = ({ label, value, editable, onChange, onChangeNumber, placeholder, rowStyle = true }) => {
+  const containerStyle = [styles.container, ...(rowStyle ? [styles.containerRow] : [])];
   return (
     <View style={containerStyle}>
       <Text style={styles.label}>{label}</Text>
         {editable ? (
           <ValidatedTextInput
+            rowStyle={rowStyle}
             defaultValue={value !== undefined ? `${value}` : undefined}
-            placeholder={placeholder}
+            placeholder={placeholder || '--'}
             onChangeText={onChange}
             onChangeNumber={onChangeNumber}
           />
@@ -33,9 +34,8 @@ export const LabelValue: React.FC<Props> = ({ label, value, editable, onChange, 
 };
 
 const styles = StyleSheet.create({
-  editingContainer: {
-    borderColor: 'darkslategray',
-    borderBottomWidth: 1,
+  container: {
+    justifyContent: 'space-between',
   },
   containerRow: {
     flexDirection: 'row',

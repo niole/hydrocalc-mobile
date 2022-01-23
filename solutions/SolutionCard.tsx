@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { EditButton, Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
+import { ValidatedTextInput, EditButton, Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { getInputFraction } from '../recipe/inputCalculator';
 
@@ -35,14 +36,13 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
       onChange={handleEdit}
       ToggleTrigger={({ onPress }) => <EditButton toggled={editing} onPress={onPress!} />}
     >
-      {editing ? <Section>
-        <LabelValue
-          editable={true}
-          value={newSolution.name}
-          onChange={name => setNewSolution({ ...newSolution, name })}
-        />
-        </Section> : <Title>{newSolution.name}</Title>}
-      <Section>
+      <Section bordered={true}>
+        {editing ?
+          <ValidatedTextInput
+            defaultValue={newSolution.name}
+            onChangeText={name => setNewSolution({ ...newSolution, name })}
+          />
+          : <Title>{newSolution.name}</Title>}
         <LabelValue
           label="target npk"
           value={
@@ -54,16 +54,21 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
           }
         />
       </Section>
-      {(newSolution.inputs || []).map((i, index) =>
-        <EditableInputCard
-          editable={editing}
-          key={i.solution.id}
-          frac={i.frac}
-          solutionInput={i.solution}
-          onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
-          onRemove={handleRemoveInput(setNewSolution, newSolution, i)}
-        />
-      )}
+        {(newSolution.inputs || []).map((i, index) =>
+          <Section
+            key={i.solution.id}
+            bordered={true}
+          >
+            <EditableInputCard
+              editable={editing}
+              key={i.solution.id}
+              frac={i.frac}
+              solutionInput={i.solution}
+              onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
+              onRemove={handleRemoveInput(setNewSolution, newSolution, i)}
+            />
+          </Section>
+        )}
       <AddButton
         onPress={addInput(newSolution, setNewSolution)}
       />

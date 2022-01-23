@@ -45,14 +45,18 @@ export const ValidatedTextInput: React.FC<Props> = ({
   return (
     <View style={{ maxWidth: maxSize }}>
       <View style={rowStyle ? styles.labelGroupRow : undefined}>
-        {label && <View><Text style={styles.label}>{`${label} `}</Text></View>}
+        {label && <Text style={styles.label}>{`${label} `}</Text>}
         <TextInput
+          style={styles.editingContainer}
+          textAlign={rowStyle ? 'right' : undefined}
           defaultValue={defaultValue}
           placeholder={placeholder}
           onChangeText={onChangeText ? handleOnChange(validation, onChangeText, handleValidationStringSuccess) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
         />
       </View>
-      {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+      <View>
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+      </View>
     </View>
   );
 };
@@ -112,6 +116,9 @@ async function handleParseNumber(t: string): Promise<number> {
 };
 
 const styles = StyleSheet.create({
+  editingContainer: {
+    color: 'cadetblue',
+  },
   label: {
     fontWeight: 'bold',
   },
@@ -120,5 +127,5 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: 'red'
-  }
+  },
 });

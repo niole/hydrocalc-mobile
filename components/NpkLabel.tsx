@@ -15,9 +15,21 @@ export const NpkLabel: React.FC<Props> = ({
   editable = false
 }) => editable && onChange ? (
   <View style={styles.container}>
-    <ValidatedTextInput defaultValue={`${npk.n}`} label="N" onChangeNumber={n => onChange({ ...npk, n })} />
-    <ValidatedTextInput defaultValue={`${npk.p}`} label="P" onChangeNumber={p => onChange({ ...npk, p })} />
-    <ValidatedTextInput defaultValue={`${npk.k}`} label="K" onChangeNumber={k => onChange({ ...npk, k })} />
+    <ValidatedTextInput
+      rowStyle={true}
+      defaultValue={`${npk.n}`}
+      onChangeNumber={n => onChange({ ...npk, n })}
+    />
+    <ValidatedTextInput
+      rowStyle={true}
+      defaultValue={`${npk.p}`}
+      onChangeNumber={p => onChange({ ...npk, p })}
+    />
+    <ValidatedTextInput
+      rowStyle={true}
+      defaultValue={`${npk.k}`}
+      onChangeNumber={k => onChange({ ...npk, k })}
+    />
   </View>
 ) : npk ? (
   <Text>{npk.n}-{npk.p}-{npk.k}</Text>

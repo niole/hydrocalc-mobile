@@ -11,6 +11,7 @@ import * as React from 'react';
 import { View, ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
+import fontSizes from '../constants/FontSizes';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -61,7 +62,10 @@ function TabNavigator() {
       <Tab.Navigator
         initialRouteName="Calculator"
         screenOptions={{
-          tabBarLabelStyle: { textTransform: 'capitalize' },
+          tabBarLabelStyle: {
+            fontSize: fontSizes.medium,
+            textTransform: 'capitalize'
+          },
           tabBarActiveTintColor: 'darkslategray',
         }}>
         <Tab.Screen

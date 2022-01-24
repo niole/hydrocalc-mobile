@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Pressable, Text, View } from 'react-native';
+import fontSizes from '../constants/FontSizes';
 
 /**
  * I made some tabs bc for some reason things cost money in mobile
@@ -18,11 +19,17 @@ export const Tabs: React.FC<TabsProps> = ({ children, defaultKey }) => {
         {React.Children.map(children, (child: JSX.Element) => (
           <Pressable
             style={
-              selected === child.props.id ? [styles.selected, styles.tabbase] : [styles.notselected, styles.tabbase]
+              selected === child.props.id ? [styles.selected, styles.tabbase] : styles.tabbase
             }
             onPress={() => setSelected(child.props.id)}
           >
-            <Text style={selected === child.props.id ? styles.selectedText : styles.text }>{child.props.title}</Text>
+          <Text style={
+              selected === child.props.id ?
+                [styles.baseText, styles.selectedText] :
+                [styles.baseText, styles.text]
+            }>
+              {child.props.title}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -54,13 +61,15 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgb(0, 122, 255)',
     borderBottomWidth: 3,
   },
+  baseText: {
+    fontSize: fontSizes.medium,
+  },
   selectedText: {
-    color: 'darkslategray'
+    color: 'darkslategray',
   },
   text: {
     color: 'rgba(47, 79, 79, 0.5)',
   },
-  notselected: {},
   tabs: {
     paddingBottom: 15,
     flexDirection: "row"

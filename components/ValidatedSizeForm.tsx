@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import { SizeUnits, BucketSize } from '../globalState';
 import { LabelValue } from './LabelValue';
+import { pluralizeSizes } from './volumeUtil';
 
 type Props = {
   onChange: (bs: BucketSize) => void;
@@ -30,6 +31,10 @@ export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
 
   return (
     <View>
+      <Picker onValueChange={setUnit} selectedValue={unit}>
+        <Picker.Item key="cm" label={SizeUnits[SizeUnits.CM]} value={SizeUnits.CM}  />
+        <Picker.Item key="inch" label={SizeUnits[SizeUnits.Inch]} value={SizeUnits.Inch}  />
+      </Picker>
       <LabelValue
         editable={true}
         onChangeNumber={setLength}
@@ -45,12 +50,8 @@ export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
         onChangeNumber={setHeight}
         label={getPlaceholderText('height', unit)}
       />
-      <Picker onValueChange={setUnit} selectedValue={unit}>
-        <Picker.Item key="cm" label={SizeUnits[SizeUnits.CM]} value={SizeUnits.CM}  />
-        <Picker.Item key="inch" label={SizeUnits[SizeUnits.Inch]} value={SizeUnits.Inch}  />
-      </Picker>
     </View>
   );
 };
 
-const getPlaceholderText = (dimension: string, unit: SizeUnits): string => `${dimension} in ${SizeUnits[unit]}`;
+const getPlaceholderText = (dimension: string, unit: SizeUnits): string => `${dimension} in ${pluralizeSizes(unit)}`;

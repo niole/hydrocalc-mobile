@@ -43,8 +43,8 @@ export const ValidatedTextInput: React.FC<Props> = ({
   };
 
   return (
-    <View style={{ maxWidth: maxSize }}>
-      <View style={rowStyle ? styles.labelGroupRow : undefined}>
+    <View style={{ flex: 1, maxWidth: maxSize }}>
+      <View style={rowStyle ? [styles.inputGroup, styles.labelGroupRow] : styles.inputGroup}>
         {label && <Text style={styles.label}>{`${label} `}</Text>}
         <TextInput
           keyboardType={onChangeNumber ? 'numeric' : undefined}
@@ -55,9 +55,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
           onChangeText={onChangeText ? handleOnChange(validation, handleValidationStringSuccess, handleShowValidationFailure) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
         />
       </View>
-      <View>
-        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
-      </View>
+      {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
     </View>
   );
 };
@@ -122,10 +120,17 @@ async function handleParseNumber(uncleanT: string): Promise<number> {
 };
 
 const styles = StyleSheet.create({
+  inputGroup: {
+    flex: 1,
+  },
   editingContainer: {
+    flex: 1,
     color: 'cadetblue',
+    borderBottomColor: 'teal',
+    borderBottomWidth: 1
   },
   label: {
+    flex: 1,
     fontWeight: 'bold',
   },
   labelGroupRow: {

@@ -28,13 +28,16 @@ export const LabelValue: React.FC<Props> = ({ label, value, editable, onChange, 
             onChangeNumber={onChangeNumber}
           />
         ) : (
-          <Text>{value}</Text>
+          <Text style={styles.value}>{value}</Text>
         )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  value: {
+    flex: 1,
+  },
   container: {
     justifyContent: 'space-between',
   },
@@ -45,6 +48,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.small,
     fontWeight: 'bold',
     paddingRight: 5,
+    flex: 1,
   }
 });
 

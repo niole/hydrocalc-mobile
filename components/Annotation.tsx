@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
+import fontSizes from '../constants/FontSizes';
 
 type Props = {
   children?: string;
@@ -11,6 +12,6 @@ export const Annotation: React.FC<Props> = ({ children }) =>
 const styles = StyleSheet.create({
   container: {
     color: 'grey',
-    fontSize: 14,
+    fontSize: fontSizes.tiny,
   }
 });

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import fontSizes from '../constants/FontSizes';
 
 type Props = {
   children?: React.ReactNode;
@@ -21,14 +22,14 @@ export const Subtitle: React.FC<{ children?: React.ReactNode }> = ({ children })
 
 const styles = StyleSheet.create({
   titleText: {
-    fontSize: 16,
+    fontSize: fontSizes.big,
     fontWeight: 'bold',
   },
   titleContainer: {
     paddingBottom: 10
   },
   subTitle: {
-    fontSize: 14,
+    fontSize: fontSizes.medium,
     fontWeight: 'bold',
     paddingBottom: 7
   },

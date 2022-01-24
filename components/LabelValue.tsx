@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import fontSizes from '../constants/FontSizes';
 import { ValidatedTextInput } from './ValidatedTextInput';
 
 
@@ -41,6 +42,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   label: {
+    fontSize: fontSizes.small,
     fontWeight: 'bold',
     paddingRight: 5,
   }

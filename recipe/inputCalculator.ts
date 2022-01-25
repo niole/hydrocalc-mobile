@@ -1,4 +1,5 @@
-import { SizeUnits, VolumeUnits, BucketSize, SolutionInputMeasurement } from '../globalState';
+import { Solution, SizeUnits, VolumeUnits, BucketSize, SolutionInputMeasurement } from '../globalState';
+import { Matrix, solve } from 'ml-matrix';
 
 /**
  * The conversion constants in here are use with multiplication if they are applied to do what the label says
@@ -105,7 +106,7 @@ export const getGallonsFromSize = (bucketSize: BucketSize): number => {
       case VolumeUnits.ML:
         return (total/1000.0)*LITER_TO_GALLON;
       default:
-        throw new Error("unrecognized unit when calculating gallons in bucket from volume");
+        throw new Error("unimplemented unit found when calculating gallons in bucket from volume");
     }
   } else if (bucketSize.lwh) {
     const { lwh: { unit, length, width, height } } = bucketSize;
@@ -124,4 +125,38 @@ export const getGallonsFromSize = (bucketSize: BucketSize): number => {
   }
 };
 
-export const getInputFraction = (): number => 1;
+/**
+ * takes all solution inputs for a solution and outputs the fractional proportion
+ * of each
+ */
+export const updateInputProportions = (solution: Solution): Solution => {
+  try {
+    const { targetNpk, inputs } = solution;
+    const A = new Matrix(inputs.map(input => {
+      const { n, p, k } = input.solution.npk;
+      return [n, p, k];
+    }));
+
+    const b = Matrix.columnVector([targetNpk.n, targetNpk.p, targetNpk.k]);
+
+    const x = solve(A, b); // there are many solutions. x can be [1, 2, 1].transpose(), or [1.33, 1.33, 1.33].transpose(), etc.
+    const error = Matrix.sub(b, A.mmul(x)); // The error enables to evalu
+
+    console.log(error, x);
+
+    const xArray = [x.get(0,0), x.get(0, 1), x.get(0,2)]
+    const denom = xArray.reduce((a: number, b: number) => a + b, 0);
+    const normalizedX = xArray.map((x: number) => x/denom);
+
+    return {
+      ...solution,
+      inputs: inputs.map((input, i) => ({
+        ...input,
+        frac: normalizedX[i]
+      }))
+    };
+  } catch (error) {
+    console.error('Matrix solving failed, ', error);
+    return solution;
+  }
+};

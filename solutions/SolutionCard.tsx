@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
 import { Annotation, ValidatedTextInput, EditButton, Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
-import { getInputFraction } from '../recipe/inputCalculator';
+import { updateInputProportions } from '../recipe/inputCalculator';
 
 type Props = {
   solution: Solution;
@@ -88,19 +88,14 @@ const handleUpdateSolutionInput =
       const inputs = solution.inputs || [];
       const foundInputIndex = inputs.findIndex(i => i.solution.id === solutionInput.id);
       if (foundInputIndex > -1) {
-        const newFraction = getInputFraction();
-        inputs[foundInputIndex] = {
-          solution: solutionInput,
-          frac: newFraction
-        };
-        setNewSolution(solution);
+        inputs[foundInputIndex].solution = solutionInput;
+        setNewSolution(updateInputProportions(solution));
       } else {
-        const newFraction = getInputFraction();
         const updatedNewSolution = {
           ...solution,
-          inputs: [...inputs, { frac: newFraction, solution: solutionInput }]
+          inputs: [...inputs, { frac: 0, solution: solutionInput }]
         };
-        setNewSolution(updatedNewSolution);
+        setNewSolution(updateInputProportions(updatedNewSolution));
       }
   };
 

@@ -135,18 +135,22 @@ export const updateInputProportions = (solution: Solution): Solution => {
     const A = new Matrix(inputs.map(input => {
       const { n, p, k } = input.solution.npk;
       return [n, p, k];
-    }));
+    })).transpose();
 
     const b = Matrix.columnVector([targetNpk.n, targetNpk.p, targetNpk.k]);
+
+    //console.log(A, b);
 
     const x = solve(A, b); // there are many solutions. x can be [1, 2, 1].transpose(), or [1.33, 1.33, 1.33].transpose(), etc.
     const error = Matrix.sub(b, A.mmul(x)); // The error enables to evalu
 
-    console.log(error, x);
+    //console.log('error', error, x);
 
-    const xArray = [x.get(0,0), x.get(0, 1), x.get(0,2)]
+    const xArray = inputs.map((input, i) => x.get(i, 0));
     const denom = xArray.reduce((a: number, b: number) => a + b, 0);
     const normalizedX = xArray.map((x: number) => x/denom);
+
+    //console.log(xArray, denom, normalizedX);
 
     return {
       ...solution,

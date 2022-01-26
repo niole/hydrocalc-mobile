@@ -62,7 +62,7 @@ describe('inputCalculator.updateInputProportions', () => {
     const actual = inputCalculator.updateInputProportions(solution);
 
     expect(actual.inputs.reduce((a, b) => a + b.frac, 0)).toBe(1);
-    expect(actual.inputs.find(x => x.frac < 0)).not.toBeTruthy();
+    expect(actual.inputs.find(x => x.frac < 0)).toBeFalsy();
   });
 
 });

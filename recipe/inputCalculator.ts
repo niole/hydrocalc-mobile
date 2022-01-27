@@ -139,18 +139,26 @@ export const updateInputProportions = (solution: Solution): Solution => {
 
     const b = Matrix.columnVector([targetNpk.n, targetNpk.p, targetNpk.k]);
 
-    //console.log(A, b);
+    const x = solve(A, b);
+    const error = Matrix.sub(b, A.mmul(x));
 
-    const x = solve(A, b); // there are many solutions. x can be [1, 2, 1].transpose(), or [1.33, 1.33, 1.33].transpose(), etc.
-    const error = Matrix.sub(b, A.mmul(x)); // The error enables to evalu
+    for (let r = 0; r < error.rows; r++) {
+      for (let c = 0; c < error.columns; c++) {
+        if (error.get(r, c) > 0.1) {
+          console.error(
+            'error was greater than 10% for column: ', c,
+            ', row: ', r,
+            ', for solution: ', solution.id, solution.name
+          );
+        }
+      }
+    }
 
-    //console.log('error', error, x);
+    const ecDenom = inputs.reduce((sum, n) => sum + n.solution.ec, 0.0);
 
-    const xArray = inputs.map((input, i) => x.get(i, 0));
-    const denom = xArray.reduce((a: number, b: number) => a + b, 0);
+    const xArray = inputs.map((input, i) => x.get(i, 0)/(input.solution.ec/ecDenom));
+    const denom = xArray.reduce((a: number, b: number) => a + b, 0.0);
     const normalizedX = xArray.map((x: number) => x/denom);
-
-    //console.log(xArray, denom, normalizedX);
 
     return {
       ...solution,

@@ -107,6 +107,50 @@ describe('inputCalculator.updateInputProportions', () => {
     expect(actual.inputs[2].frac).toBe(3/6.0);
   });
 
+  test(`should compute that the ratio is 1/5, 1/5, 3/5 for micro, bloom, green solution with target 2-1-3
+            if micro's ec is twice as high as other solutions
+            `, () => {
+    const solution = {
+      ...baseSolution,
+      inputs: [
+        {
+          frac: 0,
+          solution: {
+            id: 'id',
+            name: 'micro',
+            npk: { n: 5, p: 0, k: 1 },
+            ec: 39.98
+          }
+        },
+        {
+          frac: 0,
+          solution: {
+            id: 'id2',
+            name: 'bloom',
+            npk: { n: 0, p: 5, k: 4 },
+            ec: 19.99
+          }
+        },
+        {
+          frac: 0,
+          solution: {
+            id: 'id3',
+            name: 'green',
+            npk: { n: 2, p: 1, k: 6 },
+            ec: 19.99
+          },
+        },
+      ],
+      targetNpk: { n: 2, p: 1, k: 3 }
+    };
+
+    const actual = inputCalculator.updateInputProportions(solution);
+
+    expect(actual.inputs[0].frac).toBe(0.2);
+    expect(actual.inputs[1].frac).toBe(0.2);
+    expect(actual.inputs[2].frac).toBe(0.6);
+  });
+
 });
 
 const baseSolution = {

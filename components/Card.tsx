@@ -37,14 +37,18 @@ export function Card({
   return (
     <View style={styles.card}>
       <View style={styles.titleBar}>
-        {!titleElement && title && <Title>{title}</Title>}
-        {!title && titleElement}
-        {editable && <ConfirmationModal
-          onConfirm={onRemove}
-          Trigger={Trigger}
-        >
-          {removeConfirmationMsg}
-        </ConfirmationModal>}
+        <View style={styles.titleText}>
+          {!titleElement && title && <Title>{title}</Title>}
+          {!title && titleElement}
+        </View>
+        <View style={styles.titleActions}>
+          {editable && <ConfirmationModal
+            onConfirm={onRemove}
+            Trigger={Trigger}
+          >
+            {removeConfirmationMsg}
+          </ConfirmationModal>}
+        </View>
       </View>
       {children}
       <View style={styles.actionBar}>
@@ -59,6 +63,14 @@ export function Card({
 };
 
 const styles = StyleSheet.create({
+  titleActions: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+  },
+  titleText: {
+    flex: 6,
+  },
   titleBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { NPK } from '../globalState';
 import { ValidatedTextInput } from '../components/ValidatedTextInput';
+import { LabelValue } from './LabelValue';
 
 type Props = {
   npk?: NPK;
@@ -13,30 +14,34 @@ export const NpkLabel: React.FC<Props> = ({
   onChange,
   npk = { n: 0, p: 0, k: 0 },
   editable = false
-}) => editable && onChange ? (
+}) => (
   <View style={styles.container}>
-    <ValidatedTextInput
-      rowStyle={true}
-      defaultValue={`${npk.n}`}
-      onChangeNumber={n => onChange({ ...npk, n })}
+    <LabelValue
+      editable={editable}
+      value={npk.n}
+      onChangeNumber={onChange ? n  => onChange({ ...npk, n }) : undefined}
     />
-    <ValidatedTextInput
-      rowStyle={true}
-      defaultValue={`${npk.p}`}
-      onChangeNumber={p => onChange({ ...npk, p })}
+    <Text style={styles.dash}>-</Text>
+    <LabelValue
+      editable={editable}
+      value={npk.p}
+      onChangeNumber={onChange ? p => onChange({ ...npk, p }) : undefined}
     />
-    <ValidatedTextInput
-      rowStyle={true}
-      defaultValue={`${npk.k}`}
-      onChangeNumber={k => onChange({ ...npk, k })}
+    <Text style={styles.dash}>-</Text>
+    <LabelValue
+      editable={editable}
+      value={npk.k}
+      onChangeNumber={onChange ? k => onChange({ ...npk, k }) : undefined}
     />
   </View>
-) : npk ? (
-  <Text>{npk.n}-{npk.p}-{npk.k}</Text>
-) : null;
+);
 
 const styles = StyleSheet.create({
+  dash: {
+    padding: 3,
+  },
   container: {
+    alignItems: 'center',
     flexDirection: 'row',
   }
 });

@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     borderWidth: 1,
     borderColor: 'lightgrey',
-    borderRadius: 2,
+    borderRadius: 5,
     marginTop: 14,
     marginBottom: 14,
     marginLeft: 7,

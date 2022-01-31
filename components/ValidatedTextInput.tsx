@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, TextInput, View, Text } from 'react-native';
+import fontSizes from '../constants/FontSizes';
 
 const NUMBER_PARSE_FAIL_MSG = "can't parse input as number";
 
@@ -124,10 +125,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   editingContainer: {
+    fontSize: fontSizes.small,
     flex: 1,
     color: 'cadetblue',
-    borderBottomColor: 'teal',
-    borderBottomWidth: 1
   },
   label: {
     flex: 1,

@@ -168,7 +168,7 @@ export const updateInputProportions = (solution: Solution): Solution => {
       }))
     };
   } catch (error) {
-    console.error('Matrix solving failed, ', error);
+    console.warn('Matrix solving failed, ', error);
     return solution;
   }
 };

@@ -40,20 +40,8 @@ const _213Solution = {
 };
 
 const defaultState = {
-  recipes: [{
-    id: getId(),
-    name: 'yellow bucket 1000',
-    solution: _213Solution,
-    bucketSize: { volume: { total: 16, unit: VolumeUnits.Gallon } },
-    ec: 1.0
-  }, {
-    id: getId(),
-    name: 'green bucket 1000',
-    solution: _213Solution,
-    bucketSize: { lwh: { length: 22.5, width: 18.5, height: 12, unit: SizeUnits.Inch } },
-    ec: 1.0
-  }],
-  solutions: [_213Solution],
+  recipes: [],
+  solutions: [],
 };
 
 export function useRecipes() {

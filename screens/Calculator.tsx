@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { Picker } from '@react-native-picker/picker';
 
 import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
-import { Annotation, Card, AddButton, LabelValue } from '../components';
+import { PickerItem, Picker, Annotation, Card, AddButton, LabelValue } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { RecipeSelector, CalculatedRecipeView } from '../recipe';
@@ -67,8 +66,8 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
             <LabelValue editable={true} label="title" onChange={setRecipeTitle} />
             <LabelValue editable={true} label="ec (millisiemens/cm)" onChangeNumber={handleSetEc(setEc)} />
             <Picker onValueChange={handleSetSolution(setSolution, solutions)} selectedValue={solution?.name}>
-              <Picker.Item key="none" label="Pick a solution" value={undefined} />
-              {solutions.map(s => <Picker.Item key={s.id} label={s.name} value={s.name}/>)}
+              <PickerItem key="none" label="Pick a solution" value={undefined} />
+              {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
             </Picker>
             <Tabs defaultKey="volume">
               <Tab title="Volume" id="volume">

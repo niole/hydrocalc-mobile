@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Picker } from '@react-native-picker/picker';
 import { Recipe } from '../globalState';
+import { Picker, PickerItem } from '../components';
 
 type Props = {
   recipes: Recipe[];
@@ -26,8 +26,8 @@ export const RecipeSelector: React.FC<Props> = ({ defaultRecipe, recipes, onChan
 
   return (
     <Picker selectedValue={selectedRecipe ? selectedRecipe.name : ""} onValueChange={selectRecipe(handleSetRecipe, recipes)}>
-      <Picker.Item key="pick" label="Pick from your recipes" value="" />
-      {recipes.map(r => <Picker.Item key={r.id} label={r.name} value={r.name} />)}
+      <PickerItem key="pick" label="No selection" value="" />
+      {recipes.map(r => <PickerItem key={r.id} label={r.name} value={r.name} />)}
     </Picker>
   );
 };

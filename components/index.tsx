@@ -14,3 +14,4 @@ export * from './EditButton';
 export * from './FlatList';
 export * from './Annotation';
 export * from './CheckButton';
+export * from './Picker';

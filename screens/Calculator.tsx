@@ -59,9 +59,6 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
       <ScrollView>
         <View>
           {wipRecipe && <CalculatedRecipeView  defaultRecipe={wipRecipe} />}
-          <Card title="Pick a Recipe" editable={false}>
-            <RecipeSelector recipes={recipes} defaultRecipe={wipRecipe} onChange={setWipRecipe} />
-          </Card>
           <Card title="Create a New Recipe" editable={false}>
             <LabelValue editable={true} label="title" onChange={setRecipeTitle} />
             <LabelValue editable={true} label="ec (millisiemens/cm)" onChangeNumber={handleSetEc(setEc)} />
@@ -81,6 +78,9 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
               <Annotation>Save recipe</Annotation>
               <AddButton disabled={!wipRecipe} onPress={saveWipRecipe} />
             </View>
+          </Card>
+          <Card title="Pick a Recipe" editable={false}>
+            <RecipeSelector recipes={recipes} defaultRecipe={wipRecipe} onChange={setWipRecipe} />
           </Card>
         </View>
       </ScrollView>

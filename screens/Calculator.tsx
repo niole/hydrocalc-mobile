@@ -10,7 +10,7 @@ import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
 import { Annotation, Card, AddButton, LabelValue } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
-import { CalculatedRecipeView } from '../recipe';
+import { RecipeSelector, CalculatedRecipeView } from '../recipe';
 
 enum VolumeView { Volume, Size };
 
@@ -59,7 +59,10 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
     <Screen title="calculator">
       <ScrollView>
         <View>
-          <CalculatedRecipeView recipes={recipes} defaultRecipe={wipRecipe} />
+          {wipRecipe && <CalculatedRecipeView  defaultRecipe={wipRecipe} />}
+          <Card title="Pick a Recipe" editable={false}>
+            <RecipeSelector recipes={recipes} defaultRecipe={wipRecipe} onChange={setWipRecipe} />
+          </Card>
           <Card title="Create New Recipe" editable={false}>
             <LabelValue editable={true} label="title" onChange={setRecipeTitle} />
             <LabelValue editable={true} label="ec (millisiemens/cm)" placeholder="--" onChangeNumber={handleSetEc(setEc)} />

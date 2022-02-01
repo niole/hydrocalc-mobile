@@ -17,10 +17,11 @@ const OUNCES_TO_QUARTER_CUPS = 1/2.0;
 const OUNCES_TO_EIGTH_CUPS = 1.0;
 const OUNCES_TO_TBSPS = 2.0;
 const OUNCES_TO_TSPS = 6.0;
+const OUNCES_TO_HALF_TSPS = OUNCES_TO_TSPS*2;
+const OUNCES_TO_QUARTER_TSPS = OUNCES_TO_TSPS*4;
 
 /**
  * The US conversions are the most annoying and then need help mapping from conversion to label to use
- * TODO add half and quarter tsp
  */
 const US_CONVERSIONS_MAPPER = [
   { conversion: OUNCES_TO_CUPS, label: "cups" },
@@ -29,6 +30,8 @@ const US_CONVERSIONS_MAPPER = [
   { conversion: OUNCES_TO_EIGTH_CUPS, label: "eigth cups" },
   { conversion: OUNCES_TO_TBSPS, label: "tbsps" },
   { conversion: OUNCES_TO_TSPS, label: "tsps" },
+  { conversion: OUNCES_TO_HALF_TSPS, label: "half tsps" },
+  { conversion: OUNCES_TO_QUARTER_TSPS, label: "quarter tsps", isQuarterTsp: true },
 ];
 
 /**
@@ -71,7 +74,15 @@ const getCupsInstruction = (tsps: number): string => {
   let remainingOunces = ounces;
 
   const instructions = US_CONVERSIONS_MAPPER.map(c => {
-    const nextCount = Math.floor(remainingOunces*c.conversion);
+    let nextCount = Math.floor(remainingOunces*c.conversion);
+    if (c.isQuarterTsp) {
+      // don't floor the value if it's the smallest denomination
+      nextCount = remainingOunces*c.conversion;
+      if (Math.floor(nextCount) !== nextCount) {
+        // truncate decimal if extra places
+        nextCount = parseFloat(nextCount.toFixed(1));
+      }
+    }
     remainingOunces -= nextCount/c.conversion;
     if (nextCount > 0) {
       return ` ${nextCount} ${c.label}`;

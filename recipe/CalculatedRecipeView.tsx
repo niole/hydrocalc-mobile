@@ -14,7 +14,7 @@ type CalculatedRecipeViewProps = {
 
 export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({ defaultRecipe }) => {
   return (
-    <Card editable={false} title="Recipe">
+    <Card editable={false}>
       {defaultRecipe ? <RecipeInstructions recipe={defaultRecipe} /> : <Text>...</Text>}
     </Card>
   );

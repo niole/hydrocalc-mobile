@@ -8,26 +8,32 @@ const getId = () => `${Math.random()}`;
  * app start lives in here
  */
 
-const _213Solution = {
-  name: '2-1-3 solution',
-  id: getId(),
-  inputs: [{
-    frac: .33,
-    solution: {
+const bloominput = {
+    id: getId(),
+    name: 'bloom',
+    brand: 'general hydroponics',
+    npk: { n: 0, p: 5, k: 4 },
+    ec: 19.990,
+};
+
+const microinput = {
     id: getId(),
     name: 'micro',
     brand: 'general hydroponics',
     npk: { n: 5, p: 0, k: 1 },
     ec: 19.990
-  }}, {
+};
+
+const _213Solution = {
+  name: '2-1-3 solution',
+  id: getId(),
+  inputs: [{
+    frac: .33,
+    solution: microinput
+  }, {
     frac: .165,
-    solution: {
-    id: getId(),
-    name: 'bloom',
-    brand: 'general hydroponics',
-    npk: { n: 0, p: 5, k: 4 },
-    ec: 19.990
-  }}, {
+    solution: bloominput
+}, {
     frac: .5,
     solution: {
     id: getId(),
@@ -41,7 +47,10 @@ const _213Solution = {
 
 const defaultState = {
   recipes: [],
-  solutions: [],
+  solutions: [{name: '111', id: getId(), targetNpk: {n:1,p:1,k:1}, inputs:[
+    {frac: .5, solution: bloominput},
+    {frac: .5, solution: microinput},
+  ]}],
 };
 
 export function useRecipes() {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import { SolutionInputMeasurement, Recipe } from '../globalState';
-import { Subtitle, LabelValue, NpkLabel, BucketSizeLabel } from '../components';
+import { Section, Picker, PickerItem, Subtitle, LabelValue, NpkLabel, BucketSizeLabel } from '../components';
 import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 
 /**
@@ -16,14 +16,37 @@ type RecipeInstructionsProps = {
 export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   showTitle = true,
   recipe: { name, ec, bucketSize, solution }
-}) => (
-  <View>
-    {showTitle && <Subtitle>{name}</Subtitle>}
-    <LabelValue label="ec" value={`${ec} millisiemen/cm`} />
-    <LabelValue label="bucket size" value={<BucketSizeLabel bucketSize={bucketSize} />} />
-    <LabelValue label="npk" value={<NpkLabel npk={solution.targetNpk} />} />
-    {solution.inputs.map(input => (
-      <LabelValue key={input.solution.id} label={input.solution.name} value={getInputVolumeInstructions(SolutionInputMeasurement.Cup, getGallonsFromSize(bucketSize), input.frac, ec)} />
-    ))}
-  </View>
-);
+}) => {
+  const [unit, selectUnit] = React.useState<SolutionInputMeasurement>(SolutionInputMeasurement.Cup);
+  return (
+    <View>
+      {showTitle && <Subtitle>recipe for {name}</Subtitle>}
+      <Section>
+        <Picker selectedValue={unit} onValueChange={s => selectUnit(s as number)}>
+          <PickerItem
+            label={SolutionInputMeasurement[SolutionInputMeasurement.Liter]}
+            value={SolutionInputMeasurement.Liter}
+          />
+          <PickerItem
+            label={SolutionInputMeasurement[SolutionInputMeasurement.Cup]}
+            value={SolutionInputMeasurement.Cup}
+          />
+          <PickerItem
+            label={SolutionInputMeasurement[SolutionInputMeasurement.FluidOunce]}
+            value={SolutionInputMeasurement.FluidOunce}
+          />
+        </Picker>
+        {solution.inputs.map(input => (
+          <LabelValue
+            key={input.solution.id}
+            label={input.solution.name}
+            value={getInputVolumeInstructions(unit, getGallonsFromSize(bucketSize), input.frac, ec)}
+          />
+        ))}
+      </Section>
+      <LabelValue label="ec" value={`${ec} millisiemen/cm`} />
+      <LabelValue label="bucket size" value={<BucketSizeLabel bucketSize={bucketSize} />} />
+      <LabelValue label="npk" value={<NpkLabel npk={solution.targetNpk} />} />
+    </View>
+  );
+};

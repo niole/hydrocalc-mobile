@@ -53,7 +53,7 @@ export const getInputVolumeInstructions = (
     case SolutionInputMeasurement.FluidOunce:
       return getFluidOunceInstruction(tsps);
     default:
-      return UNSUPPORTED_UNIT_MSG;
+      throw new Error(UNSUPPORTED_UNIT_MSG);
   }
 
 };
@@ -61,7 +61,7 @@ export const getInputVolumeInstructions = (
 const getLitersInstruction = (tsps: number): string => {
   const ml = tsps*ML_P_TSP;
   const liters = Math.floor(ml/1000);
-  const finalMl = ml-liters*1000;
+  const finalMl = toHumanReadableNumber(ml-liters*1000);
 
   const litersInstructions = liters > 0 ? `${liters} liters` : '';
   const mlInstructsion = finalMl > 0 ? `${finalMl} ml` : '';
@@ -76,12 +76,7 @@ const getCupsInstruction = (tsps: number): string => {
   const instructions = US_CONVERSIONS_MAPPER.map(c => {
     let nextCount = Math.floor(remainingOunces*c.conversion);
     if (c.isQuarterTsp) {
-      // don't floor the value if it's the smallest denomination
-      nextCount = remainingOunces*c.conversion;
-      if (Math.floor(nextCount) !== nextCount) {
-        // truncate decimal if extra places
-        nextCount = parseFloat(nextCount.toFixed(1));
-      }
+      nextCount = toHumanReadableNumber(remainingOunces*c.conversion);
     }
     remainingOunces -= nextCount/c.conversion;
     if (nextCount > 0) {
@@ -94,7 +89,7 @@ const getCupsInstruction = (tsps: number): string => {
 };
 
 const getFluidOunceInstruction = (tsps: number): string => {
-  const ounces = getFluidOunces(tsps);
+  const ounces = toHumanReadableNumber(getFluidOunces(tsps));
   return `${ounces} ounces`;
 };
 
@@ -182,4 +177,16 @@ export const updateInputProportions = (solution: Solution): Solution => {
     console.warn('Matrix solving failed, ', error);
     return solution;
   }
+};
+
+const toHumanReadableNumber = (n: number) => {
+  if (Math.floor(n) !== n) {
+    const _1Dec =  parseFloat(n.toFixed(1));
+    const _2Dec =  parseFloat(n.toFixed(2));
+    if (_2Dec !== _1Dec) {
+      return _2Dec;
+    }
+    return _1Dec;
+  }
+  return n;
 };

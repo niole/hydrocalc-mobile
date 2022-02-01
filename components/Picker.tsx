@@ -3,14 +3,14 @@ import { View, StyleSheet } from 'react-native';
 import { Picker as ReactPicker } from '@react-native-picker/picker';
 
 type Props = {
-  selectedValue?: string;
-  onValueChange?: (s: string) => void;
+  selectedValue?: string | number;
+  onValueChange?: (s?: string | number) => void;
   children?: any;
 };
 
-type PickerProps = { label: string; value?: string };
+type PickerProps = { label: string | number; value?: string | number };
 export const PickerItem: React.FC<PickerProps> = ({ label, value }) => (
-  <ReactPicker.Item label={label} value={value} />
+  <ReactPicker.Item label={label.toString()} value={value} />
 );
 
 export const Picker: React.FC<Props> = ({ selectedValue, onValueChange, children }) => (

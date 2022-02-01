@@ -20,7 +20,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   const [unit, selectUnit] = React.useState<SolutionInputMeasurement>(SolutionInputMeasurement.Cup);
   return (
     <View>
-      {showTitle && <Subtitle>recipe for {name}</Subtitle>}
+      {showTitle && <Subtitle>{name}</Subtitle>}
       <Section>
         <Picker selectedValue={unit} onValueChange={s => selectUnit(s as number)}>
           <PickerItem

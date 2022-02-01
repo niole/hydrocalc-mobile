@@ -9,13 +9,13 @@ import { Card } from '../components';
  */
 
 type CalculatedRecipeViewProps = {
-  defaultRecipe?: Recipe;
+  defaultRecipe: Recipe;
 };
 
 export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({ defaultRecipe }) => {
   return (
-    <Card editable={false}>
-      {defaultRecipe ? <RecipeInstructions recipe={defaultRecipe} /> : <Text>...</Text>}
+    <Card editable={false} title={`Recipe for ${defaultRecipe.name}`}>
+      <RecipeInstructions showTitle={false} recipe={defaultRecipe} />
     </Card>
   );
 };

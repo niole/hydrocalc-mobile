@@ -4,7 +4,7 @@ import { Picker, PickerItem } from '../components';
 
 type Props = {
   recipes: Recipe[];
-  defaultRecipe?: Recipe;
+  selectedRecipeId?: string;
   onChange?: (r?: Recipe) => void;
 };
 
@@ -12,8 +12,8 @@ type Props = {
  * renders a recipe selected from all recipes that a user has created
  * TODO limit number of recipes to like 100
  */
-export const RecipeSelector: React.FC<Props> = ({ defaultRecipe, recipes, onChange }) => {
-  const [selectedRecipe, setRecipe] = React.useState<Recipe | undefined>(defaultRecipe);
+export const RecipeSelector: React.FC<Props> = ({ selectedRecipeId, recipes, onChange }) => {
+  const [selectedRecipe, setRecipe] = React.useState<Recipe | undefined>(getSelectedRecipe(recipes, selectedRecipeId));
 
   const handleSetRecipe = (recipe?: Recipe) => {
     setRecipe(recipe);
@@ -21,8 +21,8 @@ export const RecipeSelector: React.FC<Props> = ({ defaultRecipe, recipes, onChan
   };
 
   React.useEffect(() => {
-    setRecipe(defaultRecipe);
-  }, [defaultRecipe]);
+    setRecipe(getSelectedRecipe(recipes, selectedRecipeId));
+  }, [selectedRecipeId]);
 
   return (
     <Picker selectedValue={selectedRecipe ? selectedRecipe.name : ""} onValueChange={selectRecipe(handleSetRecipe, recipes)}>
@@ -35,3 +35,5 @@ export const RecipeSelector: React.FC<Props> = ({ defaultRecipe, recipes, onChan
 const selectRecipe = (setRecipe: (r: Recipe | undefined) => void, recipes: Recipe[]) => (name: string): void => {
   setRecipe(recipes.find(r => r.name === name));
 };
+
+const getSelectedRecipe = (recipes: Recipe[], id?: string): Recipe | undefined => id ? recipes.find(r => r.id === id) : undefined;

@@ -58,30 +58,7 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
     <Screen title="calculator">
       <ScrollView>
         <View>
-          {wipRecipe && <CalculatedRecipeView  defaultRecipe={wipRecipe} />}
-          <Card title="Create a New Recipe" editable={false}>
-            <LabelValue editable={true} label="title" onChange={setRecipeTitle} />
-            <LabelValue editable={true} label="ec (millisiemens/cm)" onChangeNumber={handleSetEc(setEc)} />
-            <Picker onValueChange={handleSetSolution(setSolution, solutions)} selectedValue={solution?.name}>
-              <PickerItem key="none" label="Pick a solution" value={undefined} />
-              {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
-            </Picker>
-            <Tabs defaultKey="volume">
-              <Tab title="Volume" id="volume">
-                <ValidatedVolumeForm onChange={setBucketSize} />
-              </Tab>
-              <Tab title="Size" id="size">
-                <ValidatedSizeForm onChange={setBucketSize} />
-              </Tab>
-            </Tabs>
-            <View style={styles.saveActions}>
-              <Annotation>Save recipe</Annotation>
-              <AddButton disabled={!wipRecipe} onPress={saveWipRecipe} />
-            </View>
-          </Card>
-          <Card title="Pick a Recipe" editable={false}>
-            <RecipeSelector recipes={recipes} defaultRecipe={wipRecipe} onChange={setWipRecipe} />
-          </Card>
+          <CalculatedRecipeView defaultRecipe={wipRecipe} recipes={recipes} solutions={solutions} />
         </View>
       </ScrollView>
     </Screen>

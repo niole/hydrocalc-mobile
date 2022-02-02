@@ -15,3 +15,4 @@ export * from './FlatList';
 export * from './Annotation';
 export * from './CheckButton';
 export * from './Picker';
+export * from './Tabs';

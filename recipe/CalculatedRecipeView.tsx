@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text } from 'react-native';
-import { Recipe } from '../globalState';
+import { Recipe, Solution } from '../globalState';
 import { RecipeInstructions } from './RecipeInstructions';
 import { Card } from '../components';
 
@@ -9,13 +9,15 @@ import { Card } from '../components';
  */
 
 type CalculatedRecipeViewProps = {
-  defaultRecipe: Recipe;
+  defaultRecipe?: Recipe;
+  solutions?: Solution[];
+  recipes?: Recipe[];
 };
 
-export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({ defaultRecipe }) => {
+export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({ defaultRecipe, recipes, solutions }) => {
   return (
-    <Card editable={false} title={`Recipe for ${defaultRecipe.name}`}>
-      <RecipeInstructions showTitle={false} recipe={defaultRecipe} />
+    <Card editable={false} title={defaultRecipe ? `Edit Recipe for ${defaultRecipe.name}` : 'Create New Recipe'}>
+      <RecipeInstructions editable={true} showTitle={false} recipe={defaultRecipe} solutions={solutions} recipes={recipes}/>
     </Card>
   );
 };

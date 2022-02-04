@@ -107,11 +107,11 @@ export const getGallonsFromSize = (bucketSize: BucketSize): number => {
       case VolumeUnits.Gallon:
         return total;
       case VolumeUnits.Liter:
-        return total*LITER_TO_GALLON;
+        return parseFloat((total*LITER_TO_GALLON).toFixed(2));
       case VolumeUnits.Ounce:
         return total*OUNCE_TO_GALLON;
       case VolumeUnits.ML:
-        return (total/1000.0)*LITER_TO_GALLON;
+        return parseFloat(((total/1000.0)*LITER_TO_GALLON).toFixed(2));
       default:
         throw new Error("unimplemented unit found when calculating gallons in bucket from volume");
     }

@@ -1,4 +1,5 @@
 import * as inputCalculator from '../inputCalculator';
+import { VolumeUnits } from '../../globalState/types';
 
 describe('inputCalculator.updateInputProportions', () => {
 
@@ -153,9 +154,14 @@ describe('inputCalculator.updateInputProportions', () => {
 
 });
 
-//describe('inputCalculator.getGallonsFromSize', () => {
-//  test('should convert buck')
-//});
+describe('inputCalculator.getGallonsFromSize', () => {
+  test('should convert buck size with volume filled out properly', () => {
+    expect(inputCalculator.getGallonsFromSize({ volume: { total: 5, unit: VolumeUnits.Gallon }})).toBe(5);
+    expect(inputCalculator.getGallonsFromSize({ volume: { total: 3.78541, unit: VolumeUnits.Liter }})).toBe(1);
+    expect(inputCalculator.getGallonsFromSize({ volume: { total: 128, unit: VolumeUnits.Ounce }})).toBe(1);
+    expect(inputCalculator.getGallonsFromSize({ volume: { total: 3785.41, unit: VolumeUnits.ML }})).toBe(1);
+  });
+});
 
 const baseSolution = {
   id: 'id',

@@ -25,15 +25,16 @@ export const RecipeSelector: React.FC<Props> = ({ selectedRecipeId, recipes, onC
   }, [selectedRecipeId]);
 
   return (
-    <Picker selectedValue={selectedRecipe ? selectedRecipe.name : ""} onValueChange={selectRecipe(handleSetRecipe, recipes)}>
-      <PickerItem key="pick" label="No selection" value="" />
-      {recipes.map(r => <PickerItem key={r.id} label={r.name} value={r.name} />)}
+    <Picker label="recipe" selectedValue={selectedRecipeId} onValueChange={selectRecipe(handleSetRecipe, recipes)}>
+      <PickerItem key="pick" label="None selected" value="" />
+      {recipes.map(r => <PickerItem key={r.id} label={r.name} value={r.id} />)}
     </Picker>
   );
 };
 
-const selectRecipe = (setRecipe: (r: Recipe | undefined) => void, recipes: Recipe[]) => (name: string): void => {
-  setRecipe(recipes.find(r => r.name === name));
+const selectRecipe = (setRecipe: (r: Recipe | undefined) => void, recipes: Recipe[]) => (id: string): void => {
+  setRecipe(recipes.find(r => r.id === id));
 };
 
-const getSelectedRecipe = (recipes: Recipe[], id?: string): Recipe | undefined => id ? recipes.find(r => r.id === id) : undefined;
+const getSelectedRecipe = (recipes: Recipe[], id?: string): Recipe | undefined =>
+  id ? recipes.find(r => r.id === id) : undefined;

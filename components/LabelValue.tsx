@@ -26,7 +26,7 @@ export const LabelValue: React.FC<Props> = ({ label, value, editable, onChange, 
       {editable ? (
         <ValidatedTextInput
           rowStyle={rowStyle}
-          defaultValue={value !== undefined ? `${value}` : undefined}
+          value={value}
           placeholder={placeholder}
           onChangeText={onChange}
           onChangeNumber={onChangeNumber}

@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { Picker as ReactPicker } from '@react-native-picker/picker';
+import fontSizes from '../constants/FontSizes';
 
 type Props = {
   selectedValue?: string | number;
   onValueChange?: (s?: string | number) => void;
   children?: any;
+  label?: string;
 };
 
 type PickerProps = { label: string | number; value?: string | number };
@@ -13,8 +15,9 @@ export const PickerItem: React.FC<PickerProps> = ({ label, value }) => (
   <ReactPicker.Item label={label.toString()} value={value} />
 );
 
-export const Picker: React.FC<Props> = ({ selectedValue, onValueChange, children }) => (
+export const Picker: React.FC<Props> = ({ label, selectedValue, onValueChange, children }) => (
   <View style={styles.container}>
+    {label && <Text style={styles.label}>{label}</Text>}
     <ReactPicker selectedValue={selectedValue} onValueChange={onValueChange}>
       {children}
     </ReactPicker>
@@ -31,4 +34,10 @@ const styles = StyleSheet.create({
     borderColor: 'lightgrey',
     backgroundColor: '#f2f2f2',
   },
+  label: {
+    fontSize: fontSizes.small,
+    fontWeight: 'bold',
+    paddingRight: 5,
+    flex: 1,
+  }
 });

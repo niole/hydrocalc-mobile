@@ -3,7 +3,7 @@ import { Modal as ReactModal, StyleSheet, Text, Pressable, View } from 'react-na
 import { RemoveButton } from './RemoveButton';
 import { CheckButton } from './CheckButton';
 
-export type TriggerProps = { onPress?: (e: any) => void, children?: any };
+export type TriggerProps = { onPress?: () => void, children?: any };
 export type TriggerType = React.ComponentClass<TriggerProps> | React.FC<TriggerProps>;
 
 type Props = {

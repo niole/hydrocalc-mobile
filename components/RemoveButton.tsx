@@ -5,7 +5,7 @@ import { CircleButtonProps } from './CircleButton';
 import { destructiveBackground, styles, svgSizes } from './circleButtonStyles';
 
 type Props = {
-  onPress?: (e: GestureResponderEvent) => void;
+  onPress?: () => void;
 } & CircleButtonProps;
 export const RemoveButton: React.FC<Props> = ({ size = 'small', onPress }) => {
   const kind = 'destructive';

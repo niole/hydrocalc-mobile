@@ -6,7 +6,7 @@ import { RemoveButton } from './RemoveButton';
 
 export type TriggerType = React.ComponentClass<TriggerProps> | React.FC<TriggerProps>;
 
-type TriggerProps = { onPress?: (e: any) => void };
+type TriggerProps = { onPress?: () => void };
 const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
   <RemoveButton onPress={onPress} />
 );
@@ -42,7 +42,7 @@ export function Card({
           {!title && titleElement}
         </View>
         <View style={styles.titleActions}>
-          {editable && <ConfirmationModal
+          {editable && onRemove && <ConfirmationModal
             onConfirm={onRemove}
             Trigger={Trigger}
           >

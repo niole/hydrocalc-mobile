@@ -20,45 +20,34 @@ type Props = {
 };
 
 export default function Calculator({ setRecipes, solutions, recipes, navigation }: RootTabScreenProps<'Calculator'> & Props) {
-  const [ec, setEc] = React.useState<number | undefined>();
-  const [bucketSize, setBucketSize] = React.useState<BucketSize | undefined>();
-  const [solution, setSolution] = React.useState<Solution | undefined>();
-    const [recipeTitle, setRecipeTitle] = React.useState<string | undefined>();
-  const [wipRecipe, setWipRecipe] = React.useState<Recipe | undefined>();
-
-  const saveWipRecipe = () => {
-    if (!!wipRecipe) {
-      const i = recipes.findIndex(r => r.id === wipRecipe.id);
-
-      if (i === -1) {
-        setRecipes([...recipes, wipRecipe]);
-        Toast.show({ type: 'success', text1: `Created new recipe, ${wipRecipe.name}`});
-      } else {
-        recipes[i] = wipRecipe;
-        setRecipes(recipes.slice());
-        Toast.show({ type: 'success', text1: `Updated recipe, ${wipRecipe.name}`});
-      }
-      console.info(`Saved recipe ${wipRecipe.name} to your recipes`);
-    }
-  };
+  const [updatedRecipe, setUpdatedRecipe] = React.useState<Recipe | undefined>();
 
   React.useEffect(() => {
-    if (ec && solution && bucketSize && recipeTitle) {
-      setWipRecipe({
-        id: Math.random().toString(),
-        name: recipeTitle,
-        solution,
-        bucketSize,
-        ec
-      });
+    if (!!updatedRecipe) {
+      const i = recipes.findIndex(r => r.id === updatedRecipe.id);
+
+      if (i === -1) {
+        setRecipes([...recipes, updatedRecipe]);
+        Toast.show({ type: 'success', text1: `Created new recipe, ${updatedRecipe.name}`});
+      } else {
+        recipes[i] = updatedRecipe;
+        setRecipes(recipes.slice());
+        Toast.show({ type: 'success', text1: `Updated recipe, ${updatedRecipe.name}`});
+      }
+      console.info(`Saved recipe ${updatedRecipe.name} to your recipes`);
     }
-  }, [ec, solution, bucketSize, recipeTitle]);
+  }, [updatedRecipe]);
 
   return (
     <Screen title="calculator">
       <ScrollView>
         <View>
-          <CalculatedRecipeView defaultRecipe={wipRecipe} recipes={recipes} solutions={solutions} />
+          <CalculatedRecipeView
+            recipes={recipes}
+            solutions={solutions}
+            onChange={setUpdatedRecipe}
+            defaultRecipe={updatedRecipe}
+          />
         </View>
       </ScrollView>
     </Screen>
@@ -71,10 +60,6 @@ const handleSetEc = (setEc: (ec: number) => void) => (t: string) => {
     } catch (error) {
       console.error("someething went wrong when parsing ec input: ", error);
     }
-};
-
-const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solution[]) => (solutionName?: string) => {
-  setSolution(solutions.find(s => s.name === solutionName));
 };
 
 const styles = StyleSheet.create({

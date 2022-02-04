@@ -5,7 +5,7 @@ import { CircleButtonProps } from './CircleButton';
 import { primaryBackground, styles, svgSizes } from './circleButtonStyles';
 
 type Props = {
-  onPress: (e: GestureResponderEvent) => void;
+  onPress: () => void;
 } & CircleButtonProps;
 
 export const AddButton: React.FC<Props> = ({ size = 'small', onPress }) => {

@@ -1,11 +1,25 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import { Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
-import { Tabs, Tab, Section, Picker, PickerItem, Subtitle, LabelValue, NpkLabel, BucketSizeLabel } from '../components';
+import {
+  Tabs,
+  Tab,
+  ConfirmationModal,
+  RemoveButton,
+  Section,
+  Picker,
+  PickerItem,
+  Subtitle,
+  Title,
+  LabelValue,
+  NpkLabel,
+  BucketSizeLabel,
+} from '../components';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
 import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 import { RecipeSelector } from './RecipeSelector';
+import { SolutionInputMeasurementSelect } from './SolutionInputMeasurementSelect';
 
 type WipRecipe = {
   id: string;
@@ -23,7 +37,7 @@ type RecipeInstructionsProps = {
   showTitle?: boolean;
   recipe?: Recipe;
   editable?: boolean;
-  onChange?: (r: Recipe) => void;
+  onChange?: (r?: Recipe) => void;
   recipes?: Recipe[];
   solutions?: Solution[];
 };
@@ -31,77 +45,97 @@ type RecipeInstructionsProps = {
 export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   recipe,
   onChange,
-  showTitle = true, // TODO???
+  showTitle = true,
   editable = false,
   recipes = [],
   solutions = [],
 }) => {
   const [unit, selectUnit] = React.useState<SolutionInputMeasurement>(SolutionInputMeasurement.Cup);
-  const [wipRecipe, setRecipe] = React.useState<WipRecipe>(recipe || { id: Math.random().toString()});
+  const [wipRecipe, setRecipe] = React.useState<WipRecipe>(recipe || getEmptyRecipe());
+
+  React.useEffect(() => {
+    setRecipe(recipe || getEmptyRecipe());
+  }, [recipe]);
 
   React.useEffect(() => {
     if (!!onChange && editable) {
       const recipeIsNew = JSON.stringify(wipRecipe) !== JSON.stringify(recipe);
-      if (recipeIsNew && !!wipRecipe.name && !!wipRecipe.solution && !!wipRecipe.bucketSize &&  !!wipRecipe.ec) {
+      if (recipeIsNew && !!wipRecipe.name && !!wipRecipe.solution && !!wipRecipe.bucketSize && wipRecipe.ec !== undefined) {
         onChange(wipRecipe as Recipe);
       }
     }
-  }, [wipRecipe]);
+  }, [wipRecipe, recipe]);
 
   const { name, ec, bucketSize, solution } = wipRecipe;
   return (
     <View>
-      {showTitle && <Subtitle>{name}</Subtitle>}
-      {editable && <LabelValue editable={true} label="title" onChange={name => setRecipe({...wipRecipe, name })} /> }
-
-      <Section>
-        <Picker selectedValue={unit} onValueChange={s => selectUnit(s as number)}>
-          <PickerItem
-            label={SolutionInputMeasurement[SolutionInputMeasurement.Liter]}
-            value={SolutionInputMeasurement.Liter}
-          />
-          <PickerItem
-            label={SolutionInputMeasurement[SolutionInputMeasurement.Cup]}
-            value={SolutionInputMeasurement.Cup}
-          />
-          <PickerItem
-            label={SolutionInputMeasurement[SolutionInputMeasurement.FluidOunce]}
-            value={SolutionInputMeasurement.FluidOunce}
-          />
-        </Picker>
-        {!!solution && !!bucketSize && ec !== undefined ? solution.inputs.map(input => (
+      {canShowInstructions(wipRecipe) && (
+        <>
+          {editable && canShowInstructions(wipRecipe) && (
+            <ConfirmationModal
+              onConfirm={() => {
+                setRecipe(getEmptyRecipe());
+                onChange ? onChange(undefined) : null;
+              }}
+              Trigger={({ onPress }) => <RemoveButton size="small" onPress={onPress} />}
+            >
+              <Text>Clear recipe?</Text>
+          </ConfirmationModal>
+          )}
+          {showTitle && <Subtitle>{name}</Subtitle>}
+          {ec !== undefined && !!bucketSize && (
+            <>
+              {solution?.inputs.map(input => (
+                <LabelValue
+                  key={input.solution.id}
+                  label={input.solution.name}
+                  value={getInputVolumeInstructions(unit, getGallonsFromSize(bucketSize), input.frac, ec)}
+                />
+              ))}
+              <SolutionInputMeasurementSelect onChange={selectUnit} />
+            </>
+          )}
+          {solution && <LabelValue label="npk" value={<NpkLabel npk={solution?.targetNpk} />} />}
+          <LabelValue editable={editable} label="ec (millisiemen/cm)" value={ec} onChangeNumber={newEc => setRecipe({...wipRecipe, ec: newEc })}/>
           <LabelValue
-            key={input.solution.id}
-            label={input.solution.name}
-            value={getInputVolumeInstructions(unit, getGallonsFromSize(bucketSize), input.frac, ec)}
+            label="bucket size"
+            value={
+              editable ? (
+                <Tabs defaultKey="volume">
+                  <Tab title="Volume" id="volume">
+                    <ValidatedVolumeForm onChange={(bucketSize: BucketSize) => setRecipe({...wipRecipe, bucketSize })} />
+                  </Tab>
+                  <Tab title="Size" id="size">
+                    <ValidatedSizeForm onChange={(bucketSize: BucketSize) => setRecipe({...wipRecipe, bucketSize })} />
+                  </Tab>
+                </Tabs>
+              ) : bucketSize ? <BucketSizeLabel bucketSize={bucketSize} /> : null
+            }
           />
-        )) : null}
-    </Section>
-      {editable && <Picker onValueChange={handleSetSolution(s => setRecipe({ ...wipRecipe, solution: s }), solutions)} selectedValue={solution?.name}>
-        <PickerItem key="none" label="Pick a solution" value={undefined} />
-        {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
-      </Picker>}
-      <LabelValue editable={editable} label="ec (millisiemen/cm)" value={ec} onChangeNumber={newEc => setRecipe({...wipRecipe, ec: newEc })}/>
-      <LabelValue label="bucket size" value={
-          editable ? (
-            <Tabs defaultKey="volume">
-              <Tab title="Volume" id="volume">
-                <ValidatedVolumeForm onChange={(bucketSize: BucketSize) => setRecipe({...wipRecipe, bucketSize })} />
-              </Tab>
-              <Tab title="Size" id="size">
-                <ValidatedSizeForm onChange={(bucketSize: BucketSize) => setRecipe({...wipRecipe, bucketSize })} />
-              </Tab>
-            </Tabs>
-          ) : bucketSize ? <BucketSizeLabel bucketSize={bucketSize} /> : null
-        } />
-      {solution && <LabelValue label="npk" value={<NpkLabel npk={solution?.targetNpk} />} />}
-      {editable && <Section>
-        <RecipeSelector
-          recipes={recipes}
-          selectedRecipeId={wipRecipe?.id}
-          onChange={r => setRecipe(r || { id: Math.random().toString()})}
-        />
-      </Section>}
+          <Section/>
+        </>
+      )}
+        {editable && (
+          <>
+            <Subtitle>Create a Recipe</Subtitle>
+            <LabelValue editable={true} value={wipRecipe.name} label="title" onChange={name => setRecipe({...wipRecipe, name })} />
+            <Picker label="solution" onValueChange={handleSetSolution(s => setRecipe({ ...wipRecipe, solution: s }), solutions)} selectedValue={solution?.name}>
+              <PickerItem key="none" label="None selected" value={undefined} />
+              {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
+            </Picker>
+            <Section>
+              <Text>OR</Text>
+            </Section>
+            <Section>
+              <Subtitle>Pick a Recipe</Subtitle>
+              <RecipeSelector
+                recipes={recipes}
+                selectedRecipeId={wipRecipe?.id}
+                onChange={r => setRecipe(r || { id: Math.random().toString()})}
+              />
+            </Section>
+          </>
+        )}
     </View>
   );
 };
@@ -110,3 +144,7 @@ const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solut
   setSolution(solutions.find(s => s.name === solutionName));
 };
 
+const canShowInstructions = ({ name, ec, bucketSize, solution }: WipRecipe): boolean =>
+!!name && !!solution;
+
+const getEmptyRecipe = () => ({ id: Math.random().toString() });

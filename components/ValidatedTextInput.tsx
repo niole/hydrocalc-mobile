@@ -13,6 +13,7 @@ type Props = {
   placeholder?: string;
   maxSize?: number;
   defaultValue?: string;
+  value?: any;
   rowStyle?: boolean;
 };
 
@@ -25,6 +26,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
   onValidationFail,
   maxSize,
   defaultValue,
+  value,
   rowStyle = false
 }) => {
   const [errorMsg, setErrorMsg] = React.useState<string | undefined>();
@@ -42,7 +44,6 @@ export const ValidatedTextInput: React.FC<Props> = ({
     setErrorMsg(undefined);
     onChangeNumber ? onChangeNumber(t) : null;
   };
-
   return (
     <View style={{ flex: 1, maxWidth: maxSize }}>
       <View style={rowStyle ? [styles.inputGroup, styles.labelGroupRow] : styles.inputGroup}>
@@ -51,7 +52,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
           keyboardType={onChangeNumber ? 'numeric' : undefined}
           style={styles.editingContainer}
           textAlign={rowStyle ? 'right' : undefined}
-          defaultValue={defaultValue}
+          value={value}
           placeholder={placeholder}
           onChangeText={onChangeText ? handleOnChange(validation, handleValidationStringSuccess, handleShowValidationFailure) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
         />

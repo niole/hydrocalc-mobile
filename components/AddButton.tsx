@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { Text, GestureResponderEvent, Pressable } from 'react-native';
+import { Text, Pressable } from 'react-native';
 import { CircleButtonProps } from './CircleButton';
 import { primaryBackground, styles, svgSizes } from './circleButtonStyles';
 

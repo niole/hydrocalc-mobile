@@ -13,6 +13,7 @@ import {
   LabelValue,
   NpkLabel,
   BucketSizeLabel,
+  MoreDrawer,
 } from '../components';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
@@ -24,6 +25,14 @@ type WipRecipe = {
   id: string;
   name?: string;
   solution?: Solution;
+  bucketSize?: BucketSize;
+  ec?: number;
+};
+
+type ShowableRecipe = {
+  id: string;
+  name: string;
+  solution: Solution;
   bucketSize?: BucketSize;
   ec?: number;
 };
@@ -60,31 +69,30 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   const { name, ec, bucketSize, solution } = wipRecipe;
   return (
     <View>
-      {canShowInstructions(wipRecipe) && (
+      {doer<WipRecipe, ShowableRecipe, React.ReactNode>(wipRecipe, null, canWipShowInstructions, showableRecipe => (
         <>
           <View style={styles.titleBar}>
             {showTitle && <Subtitle>{name}</Subtitle>}
-              <Pressable onPress={() => {
-                showActionSheetWithOptions({
-                  options: ['Clear', 'Save', 'Cancel'],
-                  cancelButtonIndex: 2,
-                  destructiveButtonIndex: 0,
-                }, i => {
-                  switch(i) {
-                    case 0:
-                      setRecipe(getEmptyRecipe());
-                      onChange ? onChange(undefined) : null;
-                      break;
-                    case 1:
-                      onChange ? onChange(wipRecipe as Recipe) : null;
-                      break;
-                    default:
-                      break;
+            {editable && <MoreDrawer
+              options={[
+                { label: 'Cancel' },
+                {
+                  label: 'Clear',
+                  action: () => {
+                    setRecipe(getEmptyRecipe());
+                    onChange ? onChange(undefined) : null;
                   }
-                })
-              }}><Text>yay</Text></Pressable>
+                },
+                ...(recipeIsSaveable(wipRecipe) ? [{
+                  label: 'Save',
+                  action: () => onChange ? onChange(showableRecipe as Recipe) : null,
+                }] : []),
+              ]}
+              cancelButtonIndex={0}
+              destructiveButtonIndex={1}
+            />}
           </View>
-          {ec !== undefined && !!bucketSize && (
+          {doer<ShowableRecipe, Recipe, React.ReactNode>(showableRecipe, null, recipeIsSaveable, ({ solution, ec, bucketSize }) => (
             <>
               {solution?.inputs.map(input => (
                 <LabelValue
@@ -95,19 +103,19 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
               ))}
               <SolutionInputMeasurementSelect onChange={selectUnit} />
             </>
-          )}
-          {solution && <LabelValue label="npk" value={<NpkLabel npk={solution?.targetNpk} />} />}
-          <LabelValue editable={editable} label="ec (millisiemen/cm)" value={ec} onChangeNumber={newEc => setRecipe({...wipRecipe, ec: newEc })}/>
+          ))}
+          <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
+          <LabelValue editable={editable} label="ec (millisiemen/cm)" value={ec} onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}/>
           <LabelValue
             label="bucket size"
             value={
               editable ? (
                 <Tabs defaultKey="volume">
                   <Tab title="Volume" id="volume">
-                    <ValidatedVolumeForm onChange={(bucketSize: BucketSize) => setRecipe({...wipRecipe, bucketSize })} />
+                    <ValidatedVolumeForm onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })} />
                   </Tab>
                   <Tab title="Size" id="size">
-                    <ValidatedSizeForm onChange={(bucketSize: BucketSize) => setRecipe({...wipRecipe, bucketSize })} />
+                    <ValidatedSizeForm onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })} />
                   </Tab>
                 </Tabs>
               ) : bucketSize ? <BucketSizeLabel bucketSize={bucketSize} /> : null
@@ -115,28 +123,28 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
           />
           <Section/>
         </>
+      ))}
+      {editable && (
+        <>
+          <Subtitle>Create a Recipe</Subtitle>
+          <LabelValue editable={true} value={wipRecipe.name} label="title" onChange={name => setRecipe({...wipRecipe, name })} />
+          <Picker label="solution" onValueChange={handleSetSolution(s => setRecipe({ ...wipRecipe, solution: s }), solutions)} selectedValue={solution?.name}>
+            <PickerItem key="none" label="None selected" value={undefined} />
+            {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
+          </Picker>
+          <Section>
+            <Text>OR</Text>
+          </Section>
+          <Section>
+            <Subtitle>Pick a Recipe</Subtitle>
+            <RecipeSelector
+              recipes={recipes}
+              selectedRecipeId={wipRecipe?.id}
+              onChange={r => setRecipe(r || { id: Math.random().toString()})}
+            />
+          </Section>
+        </>
       )}
-        {editable && (
-          <>
-            <Subtitle>Create a Recipe</Subtitle>
-            <LabelValue editable={true} value={wipRecipe.name} label="title" onChange={name => setRecipe({...wipRecipe, name })} />
-            <Picker label="solution" onValueChange={handleSetSolution(s => setRecipe({ ...wipRecipe, solution: s }), solutions)} selectedValue={solution?.name}>
-              <PickerItem key="none" label="None selected" value={undefined} />
-              {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
-            </Picker>
-            <Section>
-              <Text>OR</Text>
-            </Section>
-            <Section>
-              <Subtitle>Pick a Recipe</Subtitle>
-              <RecipeSelector
-                recipes={recipes}
-                selectedRecipeId={wipRecipe?.id}
-                onChange={r => setRecipe(r || { id: Math.random().toString()})}
-              />
-            </Section>
-          </>
-        )}
     </View>
   );
 };
@@ -145,8 +153,22 @@ const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solut
   setSolution(solutions.find(s => s.name === solutionName));
 };
 
-const canShowInstructions = ({ name, ec, bucketSize, solution }: WipRecipe): boolean =>
-!!name && !!solution;
+const recipeIsSaveable = ({ name, ec, bucketSize, solution }: WipRecipe): boolean =>
+!!name && !!solution && ec !== undefined && bucketSize !== undefined;
+
+function doer<B, A extends B, R>(
+  before: B,
+  defaultV: R,
+  checker: (before: B) => boolean,
+  action: (after: A) => R
+): R {
+  if (checker(before)) {
+    return action(before as A);
+  }
+  return defaultV;
+}
+
+const canWipShowInstructions = ({ name, solution }: WipRecipe): boolean => !!name && !!solution;
 
 const getEmptyRecipe = () => ({ id: Math.random().toString() });
 

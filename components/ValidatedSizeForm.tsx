@@ -8,13 +8,30 @@ import { pluralizeSizes } from './volumeUtil';
 
 type Props = {
   onChange?: (bs: BucketSize) => void;
+  value?: BucketSize;
 };
 
-export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
-  const [length, setLength] = React.useState<number | undefined>();
-  const [width, setWidth] = React.useState<number | undefined>();
-  const [height, setHeight] = React.useState<number | undefined>();
+export const ValidatedSizeForm: React.FC<Props> = ({ onChange, value }) => {
+  const [length, setLength] = React.useState<number | undefined>(value?.lwh?.length);
+  const [width, setWidth] = React.useState<number | undefined>(value?.lwh?.width);
+  const [height, setHeight] = React.useState<number | undefined>(value?.lwh?.height);
   const [unit, setUnit] = React.useState<SizeUnits>(SizeUnits.Inch);
+
+  React.useEffect(() => {
+    if (!!value) {
+      if (value.lwh !== undefined) {
+        setLength(value.lwh.length);
+        setWidth(value.lwh.width);
+        setHeight(value.lwh.height);
+        setUnit(value.lwh.unit);
+      } else {
+        // clear it
+        setLength(undefined);
+        setWidth(undefined);
+        setHeight(undefined);
+      }
+    }
+  }, [value]);
 
   React.useEffect(() => {
     if (!!length && !!width && !!height && !!onChange) {
@@ -39,16 +56,19 @@ export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
         editable={true}
         onChangeNumber={setLength}
         label={getPlaceholderText('length', unit)}
+        value={length}
       />
       <LabelValue
         editable={true}
         onChangeNumber={setWidth}
         label={getPlaceholderText('width', unit)}
+        value={width}
       />
       <LabelValue
         editable={true}
         onChangeNumber={setHeight}
         label={getPlaceholderText('height', unit)}
+        value={height}
       />
     </View>
   );

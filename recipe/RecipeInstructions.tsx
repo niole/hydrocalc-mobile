@@ -3,8 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
-  Tabs,
-  Tab,
+  Doer,
   Section,
   Picker,
   PickerItem,
@@ -67,61 +66,65 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   const { name, ec, bucketSize, solution } = wipRecipe;
   return (
     <View>
-      {doer<WipRecipe, ShowableRecipe, React.ReactNode>(wipRecipe, null, canWipShowInstructions, showableRecipe => (
-        <>
-          <View style={styles.titleBar}>
-            {showTitle && <Subtitle>{name}</Subtitle>}
-            {editable && <MoreDrawer
-              options={[
-                { label: 'Cancel' },
-                {
-                  label: 'Clear',
-                  action: () => {
-                    setRecipe(getEmptyRecipe());
-                    onChange ? onChange(undefined) : null;
-                  }
-                },
-                ...(recipeIsSaveable(wipRecipe) ? [{
-                  label: 'Save',
-                  action: () => onChange ? onChange(showableRecipe as Recipe) : null,
-                }] : []),
-              ]}
-              cancelButtonIndex={0}
-              destructiveButtonIndex={1}
-            />}
-          </View>
-          {doer<ShowableRecipe, Recipe, React.ReactNode>(showableRecipe, null, recipeIsSaveable, ({ solution, ec, bucketSize }) => (
-            <>
-              {solution?.inputs.map(input => (
-                <LabelValue
-                  key={input.solution.id}
-                  label={input.solution.name}
-                  value={getInputVolumeInstructions(unit, getGallonsFromSize(bucketSize), input.frac, ec)}
+      <Doer before={wipRecipe} checker={canWipShowInstructions}>
+        {(showableRecipe: ShowableRecipe) => (
+          <>
+            <View style={styles.titleBar}>
+              {showTitle ? <Subtitle>{name}</Subtitle> : <></>}
+              {editable && <MoreDrawer
+                options={[
+                  { label: 'Cancel' },
+                  {
+                    label: 'Clear',
+                    action: () => {
+                      setRecipe(getEmptyRecipe());
+                      onChange ? onChange(undefined) : null;
+                    }
+                  },
+                  ...(recipeIsSaveable(wipRecipe) ? [{
+                    label: 'Save',
+                    action: () => onChange ? onChange(showableRecipe as Recipe) : null,
+                  }] : []),
+                ]}
+                cancelButtonIndex={0}
+                destructiveButtonIndex={1}
+              />}
+            </View>
+            <Doer before={showableRecipe} checker={recipeIsSaveable}>
+              {({ solution, ec, bucketSize }: Recipe) => (
+                <>
+                  {solution?.inputs.map(input => (
+                    <LabelValue
+                      key={input.solution.id}
+                      label={input.solution.name}
+                      value={getInputVolumeInstructions(unit, getGallonsFromSize(bucketSize), input.frac, ec)}
+                    />
+                  ))}
+                  <SolutionInputMeasurementSelect onChange={selectUnit} />
+                </>
+              )}
+            </Doer>
+            <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
+            <LabelValue
+              editable={editable}
+              label="ec (millisiemen/cm)"
+              value={ec}
+              onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
+            />
+            <LabelValue
+              label="bucket size"
+              componentValue={
+                <BucketSizeLabel
+                  editable={editable}
+                  bucketSize={bucketSize}
+                  onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
                 />
-              ))}
-              <SolutionInputMeasurementSelect onChange={selectUnit} />
-            </>
-          ))}
-          <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
-          <LabelValue
-            editable={editable}
-            label="ec (millisiemen/cm)"
-            value={ec}
-            onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
-          />
-          <LabelValue
-            label="bucket size"
-            value={
-              <BucketSizeLabel
-                editable={editable}
-                bucketSize={bucketSize}
-                onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
-              />
-            }
-          />
-          <Section/>
-        </>
-      ))}
+              }
+            />
+            <Section/>
+          </>
+        )}
+      </Doer>
       {editable && (
         <>
           <Subtitle>Create a Recipe</Subtitle>
@@ -153,18 +156,6 @@ const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solut
 
 const recipeIsSaveable = ({ name, ec, bucketSize, solution }: WipRecipe): boolean =>
 !!name && !!solution && ec !== undefined && bucketSize !== undefined;
-
-function doer<B, A extends B, R>(
-  before: B,
-  defaultV: R,
-  checker: (before: B) => boolean,
-  action: (after: A) => R
-): R {
-  if (checker(before)) {
-    return action(before as A);
-  }
-  return defaultV;
-}
 
 const canWipShowInstructions = ({ name, solution }: WipRecipe): boolean => !!name && !!solution;
 

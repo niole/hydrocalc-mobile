@@ -8,11 +8,24 @@ import { pluralizeVolumes } from './volumeUtil';
 
 type Props = {
   onChange?: (bs: BucketSize) => void;
+  value?: BucketSize;
 };
 
-export const ValidatedVolumeForm: React.FC<Props> = ({ onChange }) => {
-  const [total, setTotal] = React.useState<number | undefined>();
+export const ValidatedVolumeForm: React.FC<Props> = ({ onChange, value }) => {
+  const [total, setTotal] = React.useState<number | undefined>(value?.volume?.total);
   const [unit, setUnit] = React.useState<VolumeUnits>(VolumeUnits.Gallon);
+
+  React.useEffect(() => {
+    if (!!value) {
+      if (value.volume !== undefined) {
+        setTotal(value.volume.total);
+        setUnit(value.volume.unit);
+      } else {
+        // clear it
+        setTotal(undefined);
+      }
+    }
+  }, [value]);
 
   React.useEffect(() => {
     if (!!total && !!onChange) {
@@ -37,6 +50,7 @@ export const ValidatedVolumeForm: React.FC<Props> = ({ onChange }) => {
         editable={true}
         label={`total in ${pluralizeVolumes(unit)}`}
         onChangeNumber={setTotal}
+        value={total}
       />
     </View>
   );

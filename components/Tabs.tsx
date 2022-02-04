@@ -14,7 +14,7 @@ type TabsProps = {
 export const Tabs: React.FC<TabsProps> = ({ children, defaultKey }) => {
   const [selected, setSelected] = React.useState<string>(defaultKey);
   return (
-    <View>
+    <View style={{flex:1}}>
       <View style={styles.tabs}>
         {React.Children.map(children, (child: JSX.Element) => (
           <Pressable

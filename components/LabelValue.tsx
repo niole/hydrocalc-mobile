@@ -7,6 +7,7 @@ import { ValidatedTextInput } from './ValidatedTextInput';
 type Props = {
   label?: string;
   value?: React.ReactNode;
+  componentValue?: React.ReactNode;
   editable?: boolean;
   onChange?: (data: any) => void;
   onChangeNumber?: (data: any) => void;
@@ -14,10 +15,19 @@ type Props = {
   placeholder?: string;
 };
 
-export const LabelValue: React.FC<Props> = ({ label, value, editable, onChange, onChangeNumber, placeholder, rowStyle = false }) => {
+export const LabelValue: React.FC<Props> = ({
+  componentValue,
+  label,
+  value,
+  editable,
+  onChange,
+  onChangeNumber,
+  placeholder,
+  rowStyle = false,
+}) => {
   const containerStyle = [
     styles.container,
-    ...(rowStyle ? [styles.containerRow] : []),
+    rowStyle ? styles.containerRow : styles.containerColumn,
     ...(editable ? [styles.editableContainer] : [])
   ];
   return (
@@ -31,9 +41,9 @@ export const LabelValue: React.FC<Props> = ({ label, value, editable, onChange, 
           onChangeText={onChange}
           onChangeNumber={onChangeNumber}
         />
-      ) : (
+      ) : value !== undefined ? (
         <Text style={styles.value}>{value}</Text>
-      )}
+      ) : !!componentValue ? componentValue : null}
     </View>
   );
 };
@@ -62,6 +72,9 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.small,
     fontWeight: 'bold',
     paddingRight: 5,
+    flex: 1,
+  },
+  containerColumn: {
     flex: 1,
   }
 });

@@ -52,7 +52,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
           keyboardType={onChangeNumber ? 'numeric' : undefined}
           style={styles.editingContainer}
           textAlign={rowStyle ? 'right' : undefined}
-          value={value}
+          value={value !== undefined && value !== null ? `${value}` : undefined}
           placeholder={placeholder}
           onChangeText={onChangeText ? handleOnChange(validation, handleValidationStringSuccess, handleShowValidationFailure) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
         />
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   editingContainer: {
     fontSize: fontSizes.small,
     flex: 1,
-    color: 'cadetblue',
+    color: 'black',
   },
   label: {
     flex: 1,

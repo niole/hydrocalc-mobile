@@ -133,18 +133,22 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
             <PickerItem key="none" label="None selected" value={undefined} />
             {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
           </Picker>
-          <Section>
-            <Text>OR</Text>
-          </Section>
-          <Section>
-            <Subtitle>Pick a Recipe</Subtitle>
-            <RecipeSelector
-              recipes={recipes}
-              selectedRecipeId={wipRecipe?.id}
-              onChange={r => setRecipe(r || { id: Math.random().toString()})}
-            />
-          </Section>
-        </>
+          {recipes.length > 0 && (
+            <>
+            <Section>
+              <Text>OR</Text>
+            </Section>
+            <Section>
+              <Subtitle>Pick a Recipe</Subtitle>
+              <RecipeSelector
+                recipes={recipes}
+                selectedRecipeId={wipRecipe?.id}
+                onChange={r => setRecipe(r || { id: Math.random().toString()})}
+              />
+            </Section>
+          </>
+        )}
+      </>
       )}
     </View>
   );

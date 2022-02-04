@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
-import { AddButton, FlatList } from '../components';
+import { InfoBox, AddButton, FlatList } from '../components';
 import { addSolution, removeSolution, updateSolution, SetSolutions, Solution } from '../globalState';
 import { SolutionCard } from '../solutions';
 import { RootTabScreenProps } from '../types';
@@ -20,7 +20,11 @@ export default function Solutions({ setSolutions, solutions }: RootTabScreenProp
   return (
     <Screen title="solutions">
       <AddButton size="big" onPress={() => addSolution(setSolutions, solutions, createDefaultSolution())} />
-      <FlatList
+        {solutions.length === 0 ? (
+          <InfoBox title="Create a custom solution.">
+            {'Can\'t find a solution with the right NPK ratio or need to combine solutions?\n\nAdd your own solution here.'}
+          </InfoBox>
+        ) : <FlatList
         data={solutions.reverse()}
         renderItem={({ item }) => (
           <SolutionCard
@@ -30,7 +34,7 @@ export default function Solutions({ setSolutions, solutions }: RootTabScreenProp
             solution={item}
             />
         )}
-      />
+      />}
     </Screen>
   );
 }

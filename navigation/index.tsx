@@ -82,20 +82,20 @@ function TabNavigator() {
             />}
         </Tab.Screen>
         <Tab.Screen
-          name="Solutions"
-          options={{
-            title: 'solutions',
-          }}
-        >
-          {props => <Solutions solutions={solutions} setSolutions={setSolutions} {...props} />}
-        </Tab.Screen>
-        <Tab.Screen
           name="MyRecipes"
           options={{
             title: 'my recipes',
           }}
         >
           {props => <MyRecipes recipes={recipes} setRecipes={setRecipes} {...props} />}
+        </Tab.Screen>
+        <Tab.Screen
+          name="Solutions"
+          options={{
+            title: 'solution editor',
+          }}
+        >
+          {props => <Solutions solutions={solutions} setSolutions={setSolutions} {...props} />}
         </Tab.Screen>
       </Tab.Navigator>
     </View>

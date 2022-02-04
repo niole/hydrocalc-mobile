@@ -47,10 +47,7 @@ const _213Solution = {
 
 const defaultState = {
   recipes: [],
-  solutions: [{name: '111', id: getId(), targetNpk: {n:1,p:1,k:1}, inputs:[
-    {frac: .5, solution: bloominput},
-    {frac: .5, solution: microinput},
-  ]}],
+  solutions: [],
 };
 
 export function useRecipes() {

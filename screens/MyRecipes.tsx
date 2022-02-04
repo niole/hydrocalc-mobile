@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import { removeRecipe, SetRecipes, Recipe } from '../globalState';
-import { FlatList, Card } from '../components';
+import { FlatList, Card, InfoBox } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { RecipeInstructions } from '../recipe/RecipeInstructions';
@@ -14,7 +14,11 @@ type Props = {
 export default function MyRecipes({ setRecipes, recipes }: RootTabScreenProps<'MyRecipes'> & Props) {
   return (
     <Screen title="my recipes">
-      <FlatList
+      {recipes.length === 0 ? (
+        <InfoBox title="No recipes yet.">
+          Create a recipe in the Calculator tab.
+        </InfoBox>
+      ) : <FlatList
         data={recipes}
         renderItem={({ item }) => (
           <Card
@@ -24,7 +28,7 @@ export default function MyRecipes({ setRecipes, recipes }: RootTabScreenProps<'M
             <RecipeInstructions showTitle={false} key={item.id} recipe={item} />
           </Card>
         )}
-      />
+      />}
     </Screen>
   );
 }

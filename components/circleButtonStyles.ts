@@ -5,7 +5,7 @@ export const svgSizes = {
   small: 30
 };
 
-export const primaryBackground = 'teal';
+export const primaryBackground = 'rgb(0, 122, 255)';
 
 export const destructiveBackground = 'red';
 

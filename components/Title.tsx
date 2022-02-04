@@ -5,11 +5,12 @@ import fontSizes from '../constants/FontSizes';
 type Props = {
   children?: React.ReactNode;
   subTitle?: React.ReactNode;
+  textAlign?: 'center' | 'left' | 'right';
 };
 
-export const Title: React.FC<Props> = ({ subTitle, children }) => (
-  <View style={styles.titleContainer}>
-    <Text style={styles.titleText}>{children}</Text>
+export const Title: React.FC<Props> = ({ subTitle, children, textAlign }) => (
+  <View style={[styles.titleContainer]}>
+    <Text style={[styles.titleText, { textAlign }]}>{children}</Text>
     {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}
   </View>
 );

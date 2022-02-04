@@ -19,3 +19,4 @@ export * from './Tabs';
 export * from './MoreButton';
 export * from './MoreDrawer';
 export * from './Doer';
+export * from './InfoBox';

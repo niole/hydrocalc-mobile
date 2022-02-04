@@ -18,7 +18,6 @@ export default function MyRecipes({ setRecipes, recipes }: RootTabScreenProps<'M
         data={recipes}
         renderItem={({ item }) => (
           <Card
-            removeConfirmationMsg={<Text>{`Are you sure you want to remove recipe, ${item.name}?`}</Text>}
             title={item.name}
             onRemove={() => removeRecipe(setRecipes, recipes, item)}
           >

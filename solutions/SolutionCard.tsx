@@ -40,7 +40,6 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
           />
         ) : undefined
       }
-      removeConfirmationMsg={<Text>{`Are you sure you want to remove solution, ${newSolution.name}?`}</Text>}
       onRemove={() => onRemove(solution)}
       onChange={handleEdit}
       ToggleTrigger={({ onPress }) => <EditButton toggled={editing} onPress={onPress!} />}

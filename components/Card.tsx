@@ -11,7 +11,6 @@ type Props = {
   children?: React.ReactNode;
   onChange?: () => void;
   onRemove?: () => void;
-  removeConfirmationMsg?: React.ReactNode;
   toggleActionLabel?: React.ReactNode;
   ToggleTrigger?: TriggerType;
   editable?: boolean;
@@ -19,7 +18,6 @@ type Props = {
 };
 
 export function Card({
-  removeConfirmationMsg,
   title,
   children,
   onChange,

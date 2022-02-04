@@ -15,8 +15,6 @@ import {
   BucketSizeLabel,
   MoreDrawer,
 } from '../components';
-import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
-import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
 import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 import { RecipeSelector } from './RecipeSelector';
 import { SolutionInputMeasurementSelect } from './SolutionInputMeasurementSelect';
@@ -105,20 +103,20 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
             </>
           ))}
           <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
-          <LabelValue editable={editable} label="ec (millisiemen/cm)" value={ec} onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}/>
+          <LabelValue
+            editable={editable}
+            label="ec (millisiemen/cm)"
+            value={ec}
+            onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
+          />
           <LabelValue
             label="bucket size"
             value={
-              editable ? (
-                <Tabs defaultKey="volume">
-                  <Tab title="Volume" id="volume">
-                    <ValidatedVolumeForm onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })} />
-                  </Tab>
-                  <Tab title="Size" id="size">
-                    <ValidatedSizeForm onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })} />
-                  </Tab>
-                </Tabs>
-              ) : bucketSize ? <BucketSizeLabel bucketSize={bucketSize} /> : null
+              <BucketSizeLabel
+                editable={editable}
+                bucketSize={bucketSize}
+                onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
+              />
             }
           />
           <Section/>

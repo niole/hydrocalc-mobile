@@ -7,7 +7,7 @@ import { LabelValue } from './LabelValue';
 import { pluralizeSizes } from './volumeUtil';
 
 type Props = {
-  onChange: (bs: BucketSize) => void;
+  onChange?: (bs: BucketSize) => void;
 };
 
 export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
@@ -17,7 +17,7 @@ export const ValidatedSizeForm: React.FC<Props> = ({ onChange }) => {
   const [unit, setUnit] = React.useState<SizeUnits>(SizeUnits.Inch);
 
   React.useEffect(() => {
-    if (!!length && !!width && !!height) {
+    if (!!length && !!width && !!height && !!onChange) {
       onChange({
         lwh: {
           length,

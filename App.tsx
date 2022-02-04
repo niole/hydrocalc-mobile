@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Toast from 'react-native-toast-message';
 
 import useCachedResources from './hooks/useCachedResources';
@@ -16,9 +17,13 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme="light" />
-        <StatusBar />
-        <Toast />
+        <ActionSheetProvider>
+          <>
+            <Navigation colorScheme="light" />
+            <StatusBar />
+            <Toast />
+          </>
+        </ActionSheetProvider>
       </SafeAreaProvider>
     );
   }

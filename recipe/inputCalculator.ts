@@ -39,11 +39,12 @@ const US_CONVERSIONS_MAPPER = [
  */
 export const getInputVolumeInstructions = (
   unit: SolutionInputMeasurement,
-  gallons: number,
+  bucketSizeGallons: number,
   inputFraction: number,
-  ecTarget: number
+  ecTarget: number,
+  tspsPerGallon1kEC: number,
 ): string => {
-  const tsps = TSPS_PER_GALLON_1K_EC*inputFraction*gallons*ecTarget;
+  const tsps = tspsPerGallon1kEC*inputFraction*bucketSizeGallons*ecTarget;
 
   switch (unit) {
     case SolutionInputMeasurement.Liter:
@@ -160,9 +161,9 @@ export const updateInputProportions = (solution: Solution): Solution => {
       }
     }
 
-    const ecDenom = inputs.reduce((sum, n) => sum + n.solution.ec, 0.0);
+//    const ecDenom = inputs.reduce((sum, n) => sum + n.solution.tspsPerGallon1kEC, 0.0);
 
-    const xArray = inputs.map((input, i) => x.get(i, 0)/(input.solution.ec/ecDenom));
+    const xArray = inputs.map((input, i) => x.get(i, 0)/(input.solution.tspsPerGallon1kEC));
     const denom = xArray.reduce((a: number, b: number) => a + b, 0.0);
     const normalizedX = xArray.map((x: number) => x/denom);
 

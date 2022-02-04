@@ -36,7 +36,7 @@ export type SolutionInput = {
   name: string;
   brand?: string;
   npk: NPK;
-  ec: number;
+  tspsPerGallon1kEC: number;
 };
 
 export type FractionalInput = {

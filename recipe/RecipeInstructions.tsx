@@ -5,8 +5,6 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   Doer,
   Section,
-  Picker,
-  PickerItem,
   Subtitle,
   Title,
   LabelValue,
@@ -17,6 +15,7 @@ import {
 import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 import { RecipeSelector } from './RecipeSelector';
 import { SolutionInputMeasurementSelect } from './SolutionInputMeasurementSelect';
+import { SolutionPicker } from '../solutions/SolutionPicker';
 
 type WipRecipe = {
   id: string;
@@ -97,7 +96,14 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                     <LabelValue
                       key={input.solution.id}
                       label={input.solution.name}
-                      value={getInputVolumeInstructions(unit, getGallonsFromSize(bucketSize), input.frac, ec)}
+                      value={
+                        getInputVolumeInstructions(
+                          unit,
+                          getGallonsFromSize(bucketSize),
+                          input.frac,
+                          ec,
+                          input.solution.tspsPerGallon1kEC
+                        )}
                     />
                   ))}
                   <SolutionInputMeasurementSelect onChange={selectUnit} />
@@ -129,10 +135,11 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
         <>
           <Subtitle>Create a Recipe</Subtitle>
           <LabelValue editable={true} value={wipRecipe.name} label="title" onChange={name => setRecipe({...wipRecipe, name })} />
-          <Picker label="solution" onValueChange={handleSetSolution(s => setRecipe({ ...wipRecipe, solution: s }), solutions)} selectedValue={solution?.name}>
-            <PickerItem key="none" label="None selected" value={undefined} />
-            {solutions.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
-          </Picker>
+          <SolutionPicker
+            solutions={solutions}
+            solution={solution}
+            onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+          />
           {recipes.length > 0 && (
             <>
             <Section>

@@ -109,7 +109,7 @@ describe('inputCalculator.updateInputProportions', () => {
   });
 
   test(`should compute that the ratio is 1/5, 1/5, 3/5 for micro, bloom, green solution with target 2-1-3
-            if micro's ec is twice as high as other solutions
+            if micro requires that 2x amount of solution is required to achieve ec of 1 microsiemen/cm
             `, () => {
     const solution = {
       ...baseSolution,

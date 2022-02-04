@@ -1,5 +1,5 @@
 import * as inputCalculator from '../inputCalculator';
-import { VolumeUnits } from '../../globalState/types';
+import { SizeUnits, VolumeUnits } from '../../globalState/types';
 
 describe('inputCalculator.updateInputProportions', () => {
 
@@ -160,6 +160,11 @@ describe('inputCalculator.getGallonsFromSize', () => {
     expect(inputCalculator.getGallonsFromSize({ volume: { total: 3.78541, unit: VolumeUnits.Liter }})).toBe(1);
     expect(inputCalculator.getGallonsFromSize({ volume: { total: 128, unit: VolumeUnits.Ounce }})).toBe(1);
     expect(inputCalculator.getGallonsFromSize({ volume: { total: 3785.41, unit: VolumeUnits.ML }})).toBe(1);
+  });
+
+  test('should convert bucket size with size filled out properly', () => {
+    expect(inputCalculator.getGallonsFromSize({ lwh: { length: 12, width: 12, height: 12, unit: SizeUnits.Inch }})).toBe(7.48);
+    expect(inputCalculator.getGallonsFromSize({ lwh: { length: 30.48, width: 30.48, height: 30.48, unit: SizeUnits.CM }})).toBe(7.48);
   });
 });
 

@@ -120,9 +120,9 @@ export const getGallonsFromSize = (bucketSize: BucketSize): number => {
 
     switch (unit) {
       case SizeUnits.CM:
-        return (length*width*height/Math.pow(2.54, 3))*CUBIC_INCH_TO_GALLON;
+        return parseFloat(((length*width*height/Math.pow(2.54, 3))*CUBIC_INCH_TO_GALLON).toFixed(2));
       case SizeUnits.Inch:
-        return length*width*height*CUBIC_INCH_TO_GALLON;
+        return parseFloat((length*width*height*CUBIC_INCH_TO_GALLON).toFixed(2));
       default:
         throw new Error("unrecognized unit when calculating gallons in bucket from size");
     }

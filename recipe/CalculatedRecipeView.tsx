@@ -25,41 +25,16 @@ export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({
   solutions,
   onChange,
 }) => {
-  const [recipe, setRecipe] = React.useState<Recipe | undefined>(defaultRecipe);
-
-  React.useEffect(() => {
-    setRecipe(defaultRecipe);
-  }, [defaultRecipe]);
-
   return (
-    <Card
-      editable={true}
-      onChange={() => recipe && onChange ? onChange(recipe) : null}
-      ToggleTrigger={SaveConfirmationModal}
-    >
+    <Card>
       <RecipeInstructions
         editable={true}
         showTitle={true}
-        recipe={recipe}
+        recipe={defaultRecipe}
         solutions={solutions}
         recipes={recipes}
-        onChange={setRecipe}
+        onChange={onChange}
       />
     </Card>
   );
 };
-
-const SaveConfirmationModal: React.FC<{ onPress?: () => void}> = ({ onPress }) => (
-  <ConfirmationModal
-    onConfirm={onPress}
-    Trigger={({ onPress }) => <AddButton size="big" onPress={onPress} />}
-  >
-    <Text>Would you like to save your new recipe?</Text>
-  </ConfirmationModal>
-);
-
-const handleRemove = (setRecipe: (r?: Recipe) => void, onChange?: CalculatedRecipeViewProps['onChange']) => () => {
-    setRecipe(undefined);
-    onChange ? onChange(undefined) : null;
-  };
-

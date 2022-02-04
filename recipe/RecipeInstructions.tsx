@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
 import {
   Tabs,
   Tab,
   ConfirmationModal,
+  AddButton,
   RemoveButton,
   Section,
   Picker,
@@ -57,32 +58,34 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
     setRecipe(recipe || getEmptyRecipe());
   }, [recipe]);
 
-  React.useEffect(() => {
-    if (!!onChange && editable) {
-      const recipeIsNew = JSON.stringify(wipRecipe) !== JSON.stringify(recipe);
-      if (recipeIsNew && !!wipRecipe.name && !!wipRecipe.solution && !!wipRecipe.bucketSize && wipRecipe.ec !== undefined) {
-        onChange(wipRecipe as Recipe);
-      }
-    }
-  }, [wipRecipe, recipe]);
+  //  React.useEffect(() => {
+  //    if (!!onChange && editable) {
+  //      const recipeIsNew = JSON.stringify(wipRecipe) !== JSON.stringify(recipe);
+  //      if (recipeIsNew && !!wipRecipe.name && !!wipRecipe.solution && !!wipRecipe.bucketSize && wipRecipe.ec !== undefined) {
+  //        onChange(wipRecipe as Recipe);
+  //      }
+  //    }
+  //  }, [wipRecipe, recipe]);
 
   const { name, ec, bucketSize, solution } = wipRecipe;
   return (
     <View>
       {canShowInstructions(wipRecipe) && (
         <>
-          {editable && canShowInstructions(wipRecipe) && (
-            <ConfirmationModal
-              onConfirm={() => {
-                setRecipe(getEmptyRecipe());
-                onChange ? onChange(undefined) : null;
-              }}
-              Trigger={({ onPress }) => <RemoveButton size="small" onPress={onPress} />}
-            >
-              <Text>Clear recipe?</Text>
-          </ConfirmationModal>
-          )}
-          {showTitle && <Subtitle>{name}</Subtitle>}
+          <View style={styles.titleBar}>
+            {showTitle && <Subtitle>{name}</Subtitle>}
+            {editable && canShowInstructions(wipRecipe) && (
+              <ConfirmationModal
+                onConfirm={() => {
+                  setRecipe(getEmptyRecipe());
+                  onChange ? onChange(undefined) : null;
+                }}
+                Trigger={({ onPress }) => <RemoveButton size="small" onPress={onPress} />}
+              >
+                <Text>Clear recipe?</Text>
+              </ConfirmationModal>
+            )}
+          </View>
           {ec !== undefined && !!bucketSize && (
             <>
               {solution?.inputs.map(input => (
@@ -112,6 +115,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
               ) : bucketSize ? <BucketSizeLabel bucketSize={bucketSize} /> : null
             }
           />
+            {editable && !!onChange && <SaveConfirmationModal onPress={() => onChange(wipRecipe as Recipe)} />}
           <Section/>
         </>
       )}
@@ -140,6 +144,15 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   );
 };
 
+const SaveConfirmationModal: React.FC<{ onPress?: () => void}> = ({ onPress }) => (
+  <ConfirmationModal
+    onConfirm={onPress}
+    Trigger={({ onPress }) => <AddButton size="big" onPress={onPress} />}
+  >
+    <Text>Would you like to save your new recipe?</Text>
+  </ConfirmationModal>
+);
+
 const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solution[]) => (solutionName?: string) => {
   setSolution(solutions.find(s => s.name === solutionName));
 };
@@ -148,3 +161,10 @@ const canShowInstructions = ({ name, ec, bucketSize, solution }: WipRecipe): boo
 !!name && !!solution;
 
 const getEmptyRecipe = () => ({ id: Math.random().toString() });
+
+const styles = StyleSheet.create({
+  titleBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }
+});

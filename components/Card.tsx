@@ -1,15 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Pressable, Text, View } from 'react-native';
-import { ConfirmationModal } from './ConfirmationModal';
 import { Title } from './Title';
-import { RemoveButton } from './RemoveButton';
+import { MoreDrawer } from './MoreDrawer';
 
 export type TriggerType = React.ComponentClass<TriggerProps> | React.FC<TriggerProps>;
-
 type TriggerProps = { onPress?: () => void };
-const Trigger: React.FC<TriggerProps> = ({ onPress }) => (
-  <RemoveButton onPress={onPress} />
-);
 
 type Props = {
   title?: string;
@@ -42,12 +37,13 @@ export function Card({
           {!title && titleElement}
         </View>
         <View style={styles.titleActions}>
-          {editable && onRemove && <ConfirmationModal
-            onConfirm={onRemove}
-            Trigger={Trigger}
-          >
-            {removeConfirmationMsg}
-          </ConfirmationModal>}
+          {editable && onRemove && (
+            <MoreDrawer
+              options={[{ label: 'Cancel' }, { label: 'Remove', action: onRemove }]}
+              cancelButtonIndex={0}
+              destructiveButtonIndex={1}
+            />
+          )}
         </View>
       </View>
       {children}

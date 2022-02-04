@@ -48,11 +48,11 @@ export const getInputVolumeInstructions = (
 
   switch (unit) {
     case SolutionInputMeasurement.Liter:
-      return getLitersInstruction(tsps);
+      return getLitersInstruction(tsps).trim();
     case SolutionInputMeasurement.Cup:
-      return getCupsInstruction(tsps);
+      return getCupsInstruction(tsps).trim();
     case SolutionInputMeasurement.FluidOunce:
-      return getFluidOunceInstruction(tsps);
+      return getFluidOunceInstruction(tsps).trim();
     default:
       throw new Error(UNSUPPORTED_UNIT_MSG);
   }

@@ -1,5 +1,5 @@
 import * as inputCalculator from '../inputCalculator';
-import { SizeUnits, VolumeUnits } from '../../globalState/types';
+import { SolutionInputMeasurement, SizeUnits, VolumeUnits } from '../../globalState/types';
 
 describe('inputCalculator.updateInputProportions', () => {
 
@@ -165,6 +165,32 @@ describe('inputCalculator.getGallonsFromSize', () => {
   test('should convert bucket size with size filled out properly', () => {
     expect(inputCalculator.getGallonsFromSize({ lwh: { length: 12, width: 12, height: 12, unit: SizeUnits.Inch }})).toBe(7.48);
     expect(inputCalculator.getGallonsFromSize({ lwh: { length: 30.48, width: 30.48, height: 30.48, unit: SizeUnits.CM }})).toBe(7.48);
+  });
+});
+
+describe('inputCalculator.getInputVolumeInstructions', () => {
+  test('should calculate that 1 ounce of solution should be used', () => {
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.FluidOunce, 2, 1, 1.0, 3)).toBe("1 ounces");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Cup, 2, 1, 1.0, 3)).toBe("1 eigth cups");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Liter, 2, 1, 1.0, 3)).toBe("29.57 ml");
+  });
+
+  test('should calculate that 0.5 ounce of solution should be used', () => {
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.FluidOunce, 2, 1, 0.5, 3)).toBe("0.5 ounces");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Cup, 2, 1, 0.5, 3)).toBe("1 tbsps");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Liter, 2, 1, 0.5, 3)).toBe("14.79 ml");
+  });
+
+  test('should calculate that 1 cup, .5 cups, and 1 tbsp should be used', () => {
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.FluidOunce, 50, 1, 0.5, 3)).toBe("12.5 ounces");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Cup, 50, 1, 0.5, 3)).toBe("1 cups, 1 half cups, 1 tbsps");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Liter, 50, 1, 0.5, 3)).toBe("369.67 ml");
+  });
+
+  test('should calculate that 1 cup, .5 cups, and 1 tbsp should be used', () => {
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.FluidOunce, 50, 1.1, 0.5, 3)).toBe("13.75 ounces");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Cup, 50, 1.1, 0.5, 3)).toBe("1 cups, 1 half cups, 1 eigth cups, 1 tbsps, 1 tsps, 1 half tsps");
+    expect(inputCalculator.getInputVolumeInstructions(SolutionInputMeasurement.Liter, 50, 1.1, 0.5, 3)).toBe("406.64 ml");
   });
 });
 

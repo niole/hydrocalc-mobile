@@ -28,6 +28,7 @@ export default function Solutions({ setSolutions, solutions }: RootTabScreenProp
         data={solutions.reverse()}
         renderItem={({ item }) => (
           <SolutionCard
+            solutions={solutions.filter(s => s.id !== item.id)}
             onChange={updateSolution(setSolutions, solutions)}
             onRemove={handeRemoveSolution(setSolutions, solutions, item)}
             key={item.id}

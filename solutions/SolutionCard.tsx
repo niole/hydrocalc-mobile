@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { Annotation, ValidatedTextInput, EditButton, Title, AddButton, Section, NpkLabel, LabelValue, Card } from '../components';
+import { Annotation, ValidatedTextInput, EditButton, Title, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { updateInputProportions } from '../recipe/inputCalculator';
+import { SolutionInputPicker } from './SolutionInputPicker';
+
 
 type Props = {
+  solutions?: Solution[];
   solution: Solution;
   onChange: (solution: Solution) => void;
   onRemove: (solution?: Solution) => void;
 };
 
-export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) => {
+export const SolutionCard: React.FC<Props> = ({ solutions = [], solution, onChange, onRemove }) => {
   const [newSolution, setNewSolution] = React.useState<Solution>(solution);
   const [editing, setEditing] = React.useState<boolean>(false);
 
@@ -55,28 +58,26 @@ export const SolutionCard: React.FC<Props> = ({ solution, onChange, onRemove }) 
             />
           }
         />
-      </Section>
-        {(newSolution.inputs || []).map((i, index) =>
-          <Section
-            key={i.solution.id}
-            bordered={true}
-          >
-            <EditableInputCard
-              editable={editing}
-              key={i.solution.id}
-              frac={i.frac}
-              solutionInput={i.solution}
-              onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
-              onRemove={handleRemoveInput(setNewSolution, newSolution, i)}
-            />
-          </Section>
-      )}
-      <View style={styles.addInputBar}>
-        <AddButton
-          onPress={addInput(newSolution, setNewSolution)}
+        <SolutionInputPicker
+          onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
+          solutions={solutions}
         />
-        <Annotation>add an input to your solution</Annotation>
-      </View>
+      </Section>
+      {(newSolution.inputs || []).map((i, index) =>
+        <Section
+          key={i.solution.id}
+          bordered={true}
+        >
+          <EditableInputCard
+            editable={editing}
+            key={i.solution.id}
+            frac={i.frac}
+            solutionInput={i.solution}
+            onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
+            onRemove={handleRemoveInput(setNewSolution, newSolution, i)}
+          />
+        </Section>
+      )}
     </Card>
   );
 };
@@ -98,23 +99,6 @@ const handleUpdateSolutionInput =
       }
   };
 
-const addInput = (newSolution: Solution, setNewSolution: (s: Solution) => void) => () => {
-  setNewSolution({
-    ...newSolution,
-    inputs: newSolution.inputs.concat(
-      [{
-        solution: {
-          id: Math.random().toString(),
-          name: 'untitled solution',
-          npk: {n:0,p:0,k:0},
-          ec: 0
-        },
-        frac: 0,
-      }]
-    )
-  });
-};
-
 const handleRemoveInput = (setNewSolution: (s: Solution) => void, solution: Solution, i: FractionalInput) => () => {
   const inputIndex = solution.inputs.findIndex(input => input.solution.id === i.solution.id);
   if (inputIndex > -1) {
@@ -124,5 +108,4 @@ const handleRemoveInput = (setNewSolution: (s: Solution) => void, solution: Solu
 };
 
 const styles = StyleSheet.create({
-  addInputBar: { flexDirection: 'row', alignItems: 'center' }
 });

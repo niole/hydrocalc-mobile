@@ -22,10 +22,10 @@ export const EditableInputCard: React.FC<Props> = ({
 }) => {
   const [newValues, onChangeValues] = React.useState<SolutionInput>(solutionInput);
   React.useEffect(() => {
-    if (!!newValues.name && !!newValues.npk && newValues.ec !== undefined && onChange) {
+    if (!!newValues.name && !!newValues.npk && newValues.tspsPerGallon1kEC !== undefined && onChange) {
       onChange(newValues as SolutionInput);
     }
-  }, [newValues.name, newValues.npk, newValues.brand, newValues.ec]);
+  }, [newValues.name, newValues.npk, newValues.brand, newValues.tspsPerGallon1kEC]);
   return (
     <View>
       <View style={styles.titleBar}>
@@ -63,9 +63,9 @@ export const EditableInputCard: React.FC<Props> = ({
       />
       <LabelValue
         editable={editable}
-        onChangeNumber={ec => onChangeValues({...newValues, ec})}
-        label="ec"
-        value={newValues.ec}
+        onChangeNumber={tspsPerGallon1kEC => onChangeValues({...newValues, tspsPerGallon1kEC})}
+        label="tsps per gallon for 1k ec"
+        value={newValues.tspsPerGallon1kEC}
       />
     </View>
   );

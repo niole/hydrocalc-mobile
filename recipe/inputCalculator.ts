@@ -6,7 +6,6 @@ import { Matrix, solve } from 'ml-matrix';
  * or they are applied using division if you want to undo a conversion.
  */
 const UNSUPPORTED_UNIT_MSG = 'unit not supported';
-const TSPS_PER_GALLON_1K_EC = 1.95; // TODO support more than just general hydroponics
 const ML_P_TSP = 4.92892;
 const CUBIC_INCH_TO_GALLON = 0.004329;
 const OUNCE_TO_GALLON = 1/128.0;

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, TextInput, View, Text } from 'react-native';
+import { getThrottledHandler } from './getThrottledHandler';
 import fontSizes from '../constants/FontSizes';
 
 const NUMBER_PARSE_FAIL_MSG = "can't parse input as number";
@@ -44,6 +45,13 @@ export const ValidatedTextInput: React.FC<Props> = ({
     setErrorMsg(undefined);
     onChangeNumber ? onChangeNumber(t) : null;
   };
+
+  const changeHandler = onChangeText ?
+    handleOnChange(validation, handleValidationStringSuccess, handleShowValidationFailure) :
+    onChangeNumber ?
+    handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) :
+    () => null;
+
   return (
     <View style={{ flex: 1, maxWidth: maxSize }}>
       <View style={rowStyle ? [styles.inputGroup, styles.labelGroupRow] : styles.inputGroup}>
@@ -52,9 +60,9 @@ export const ValidatedTextInput: React.FC<Props> = ({
           keyboardType={onChangeNumber ? 'numeric' : undefined}
           style={styles.editingContainer}
           textAlign={rowStyle ? 'right' : undefined}
-          value={value !== undefined && value !== null ? `${value}` : undefined}
+          defaultValue={value !== undefined && value !== null ? `${value}` : undefined}
           placeholder={placeholder}
-          onChangeText={onChangeText ? handleOnChange(validation, handleValidationStringSuccess, handleShowValidationFailure) : onChangeNumber ? handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) : undefined}
+          onChangeText={getThrottledHandler(changeHandler)}
         />
       </View>
       {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}

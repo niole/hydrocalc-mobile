@@ -17,6 +17,7 @@ export const InfoBox: React.FC<Props> = ({ title, children }) => (
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius: 5,
     borderColor: 'rgb(0, 122, 255)',
     borderWidth: 5,
     margin: 22,

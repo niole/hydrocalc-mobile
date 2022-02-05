@@ -60,7 +60,7 @@ function TabNavigator() {
   return (
     <View style={{ flex: 1, paddingTop: 50 }}>
       <Tab.Navigator
-        initialRouteName="Calculator"
+        initialRouteName="MyRecipes"
         screenOptions={{
           tabBarLabelStyle: {
             fontSize: fontSizes.medium,
@@ -68,6 +68,14 @@ function TabNavigator() {
           },
           tabBarActiveTintColor: 'darkslategray',
         }}>
+        <Tab.Screen
+          name="MyRecipes"
+          options={{
+            title: 'my recipes',
+          }}
+        >
+          {props => <MyRecipes recipes={recipes} setRecipes={setRecipes} {...props} />}
+        </Tab.Screen>
         <Tab.Screen
           name="Calculator"
           options={{
@@ -80,14 +88,6 @@ function TabNavigator() {
             solutions={solutions}
             {...props }
             />}
-        </Tab.Screen>
-        <Tab.Screen
-          name="MyRecipes"
-          options={{
-            title: 'my recipes',
-          }}
-        >
-          {props => <MyRecipes recipes={recipes} setRecipes={setRecipes} {...props} />}
         </Tab.Screen>
         <Tab.Screen
           name="Solutions"

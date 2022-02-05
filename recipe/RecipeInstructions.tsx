@@ -11,6 +11,7 @@ import {
   NpkLabel,
   BucketSizeLabel,
   MoreDrawer,
+  Annotation,
 } from '../components';
 import { getGallonsFromSize, getInputVolumeInstructions } from './inputCalculator';
 import { RecipeSelector } from './RecipeSelector';
@@ -93,14 +94,17 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
             <Doer before={wipRecipe} checker={recipeIsSaveable}>
               {({ solution, ec, bucketSize }: Recipe) => (
                 <>
-                  <Section>
-                    <Text style={[styles.readableText, { marginBottom: 16, marginLeft:10}]}>This recipe creates <Text style={styles.bold}><BucketSizeLabel fontSize={18} bucketSize={bucketSize} /></Text> of nutrient solution with an e.c. of <Text style={styles.bold}>{ec}</Text> millisiemens/cm and a N-P-K ratio of <Text style={styles.bold}>{solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>.</Text>
+              <Section>
+                    <View style={{marginBottom: 16, marginLeft:10}}>
+                      <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates <Text style={styles.bold}><BucketSizeLabel fontSize={18} bucketSize={bucketSize} /></Text> of nutrient solution with an e.c. of <Text style={styles.bold}>{ec}</Text> millisiemens/cm and a N-P-K ratio of <Text style={styles.bold}>{solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>.</Text>
+                      {editable && <Annotation>Change npk, bucket size, and e.c. in the Recipe Inputs section.</Annotation>}
+                      </View>
                     <Subtitle>Instructions</Subtitle>
                     <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
                     <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
                   <Section>
                   {solution?.inputs.map(input => (
-                    <View style={{ marginBottom: 3, marginLeft:20}}>
+                    <View key={input.solution.id} style={{ marginBottom: 3, marginLeft:20}}>
                       <Text style={styles.readableText}>
                         {getInputVolumeInstructions(
                           unit,
@@ -123,17 +127,18 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
       </>
     )}
     </Doer>
-    <SolutionPicker
-      solutions={solutions}
-      solution={solution}
-      onChange={s => setRecipe({ ...wipRecipe, solution: s })}
-    />
+    {editable && (
+      <SolutionPicker
+        solutions={solutions}
+        solution={solution}
+        onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+      />)}
     <Doer before={wipRecipe} checker={canWipShowInstructions}>
       {(showableRecipe: ShowableRecipe) => (
         <>
           <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
           <LabelValue
-            editable={editable}
+            editable={true}
             label="ec (millisiemen/cm)"
             value={ec}
             onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
@@ -142,7 +147,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
             label="bucket size"
             componentValue={
               <BucketSizeLabel
-                editable={editable}
+                editable={true}
                 bucketSize={bucketSize}
                 onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
               />

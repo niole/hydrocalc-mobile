@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
+import { VolumeUnits, Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   Doer,
@@ -65,11 +65,12 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   const { name, ec, bucketSize, solution } = wipRecipe;
   return (
     <View>
+      {editable && <Title>Create a Recipe</Title>}
       <Doer before={wipRecipe} checker={canWipShowInstructions}>
         {(showableRecipe: ShowableRecipe) => (
           <>
             <View style={styles.titleBar}>
-              {showTitle ? <Subtitle>{name}</Subtitle> : <></>}
+              {showTitle ? <EditableTitle  onChange={name => setRecipe({...wipRecipe, name })} editable={editable}>{name}</EditableTitle> : <></>}
               {editable && <MoreDrawer
                 options={[
                   { label: 'Cancel' },
@@ -82,84 +83,98 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                   },
                   ...(recipeIsSaveable(wipRecipe) ? [{
                     label: 'Save',
-                    action: () => onChange ? onChange(showableRecipe as Recipe) : null,
+                    action: () => onChange ? onChange(wipRecipe as Recipe) : null,
                   }] : []),
                 ]}
                 cancelButtonIndex={0}
                 destructiveButtonIndex={1}
               />}
             </View>
-            <Doer before={showableRecipe} checker={recipeIsSaveable}>
+            <Doer before={wipRecipe} checker={recipeIsSaveable}>
               {({ solution, ec, bucketSize }: Recipe) => (
                 <>
+                  <Section>
+                    <Text style={[styles.readableText, { marginBottom: 16, marginLeft:10}]}>This recipe creates <Text style={styles.bold}><BucketSizeLabel fontSize={18} bucketSize={bucketSize} /></Text> of nutrient solution with an e.c. of <Text style={styles.bold}>{ec}</Text> millisiemens/cm and a N-P-K ratio of <Text style={styles.bold}>{solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>.</Text>
+                    <Subtitle>Instructions</Subtitle>
+                    <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
+                    <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
+                  <Section>
                   {solution?.inputs.map(input => (
-                    <LabelValue
-                      key={input.solution.id}
-                      label={input.solution.name}
-                      value={
-                        getInputVolumeInstructions(
+                    <View style={{ marginBottom: 3, marginLeft:20}}>
+                      <Text style={styles.readableText}>
+                        {getInputVolumeInstructions(
                           unit,
                           getGallonsFromSize(bucketSize),
                           input.frac,
                           ec,
                           input.solution.tspsPerGallon1kEC
-                        )}
-                    />
+                        )} of </Text><Text style={[styles.bold, styles.readableText]}>{input.solution.name}</Text>
+                    </View>
                   ))}
+                  </Section>
                   <SolutionInputMeasurementSelect onChange={selectUnit} />
-                </>
+                </Section>
+              </>
               )}
             </Doer>
-            <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
-            <LabelValue
-              editable={editable}
-              label="ec (millisiemen/cm)"
-              value={ec}
-              onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
-            />
-            <LabelValue
-              label="bucket size"
-              componentValue={
-                <BucketSizeLabel
-                  editable={editable}
-                  bucketSize={bucketSize}
-                  onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
-                />
-              }
-            />
-            <Section/>
-          </>
-        )}
-      </Doer>
-      {editable && (
-        <>
-          <Subtitle>Create a Recipe</Subtitle>
-          <LabelValue editable={true} value={wipRecipe.name} label="title" onChange={name => setRecipe({...wipRecipe, name })} />
-          <SolutionPicker
-            solutions={solutions}
-            solution={solution}
-            onChange={s => setRecipe({ ...wipRecipe, solution: s })}
-          />
-          {recipes.length > 0 && (
-            <>
-            <Section>
-              <Text>OR</Text>
-            </Section>
-            <Section>
-              <Subtitle>Pick a Recipe</Subtitle>
-              <RecipeSelector
-                recipes={recipes}
-                selectedRecipeId={wipRecipe?.id}
-                onChange={r => setRecipe(r || { id: Math.random().toString()})}
-              />
-            </Section>
-          </>
-        )}
+          <>
+          <Title>Recipe Inputs</Title>
+        </>
       </>
+    )}
+    </Doer>
+    <SolutionPicker
+      solutions={solutions}
+      solution={solution}
+      onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+    />
+    <Doer before={wipRecipe} checker={canWipShowInstructions}>
+      {(showableRecipe: ShowableRecipe) => (
+        <>
+          <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
+          <LabelValue
+            editable={editable}
+            label="ec (millisiemen/cm)"
+            value={ec}
+            onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
+          />
+          <LabelValue
+            label="bucket size"
+            componentValue={
+              <BucketSizeLabel
+                editable={editable}
+                bucketSize={bucketSize}
+                onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
+              />
+            }
+          />
+        </>
       )}
-    </View>
+    </Doer>
+    {editable && recipes.length > 0 && (
+      <Section>
+        <Text style={{textAlign: 'center'}}>-- or --</Text>
+        <Title>Pick a Recipe</Title>
+        <RecipeSelector
+          recipes={recipes}
+          selectedRecipeId={wipRecipe?.id}
+          onChange={r => setRecipe(r || { id: Math.random().toString()})}
+        />
+      </Section>
+    )}
+  </View>
   );
-};
+  };
+
+  const EditableTitle: React.FC<{ editable?: boolean, children?: string, onChange?: (t: string) => void }> = ({
+    editable = false,
+    children,
+    onChange,
+  }) => editable ? (
+    <LabelValue editable={true} value={children} label="title" onChange={onChange} />
+  ) : (
+    <Subtitle>{children}</Subtitle>
+  );
 
 const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solution[]) => (solutionName?: string) => {
   setSolution(solutions.find(s => s.name === solutionName));
@@ -168,14 +183,27 @@ const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solut
 const recipeIsSaveable = ({ name, ec, bucketSize, solution }: WipRecipe): boolean =>
 !!name && !!solution && ec !== undefined && bucketSize !== undefined;
 
-const canWipShowInstructions = ({ name, solution }: WipRecipe): boolean => !!name && !!solution;
+const canWipShowInstructions = ({ solution }: WipRecipe): boolean => !!solution;
 
-const getEmptyRecipe = () => ({ id: Math.random().toString() });
+const getEmptyRecipe = () => ({
+  id: Math.random().toString(),
+  name: 'untitled recipe',
+  ec: 1,
+  bucketSize: { volume: { total: 20, unit: VolumeUnits.Gallon}}
+});
 
 const styles = StyleSheet.create({
   titleBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }
+  },
+  bold: {
+    fontWeight: 'bold'
+  },
+  readableText: {
+    fontSize: 18,
+  },
+  centeredText: {
+    textAlign: 'center',
+  },
 });
-

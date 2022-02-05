@@ -21,7 +21,7 @@ export const SolutionInputMeasurementSelect: React.FC<Props> = ({ onChange, defa
     },[defaultUnit]);
 
     return (
-      <Picker selectedValue={unit} onValueChange={s => selectUnit(s as number)}>
+      <Picker label="solution units" selectedValue={unit} onValueChange={s => selectUnit(s as number)}>
         <PickerItem
           label={SolutionInputMeasurement[SolutionInputMeasurement.Liter]}
           value={SolutionInputMeasurement.Liter}

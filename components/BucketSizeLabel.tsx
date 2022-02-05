@@ -23,12 +23,14 @@ type BucketSizeProps = {
   bucketSize?: BucketSize;
   editable?: boolean;
   onChange?: (bucketSize: BucketSize) => void;
+  fontSize?: number;
 };
 
 export const BucketSizeLabel: React.FC<BucketSizeProps> = ({
   onChange,
   editable = false,
   bucketSize,
+  fontSize,
 }) => editable ? (
   <Tabs defaultKey="volume">
     <Tab title="Volume" id="volume">
@@ -41,10 +43,10 @@ export const BucketSizeLabel: React.FC<BucketSizeProps> = ({
 ) : (
 <>
   <Doer before={bucketSize} checker={bs => !!bs?.volume}>
-    {({ volume }: BucketWithVolume) => <Text>{volume.total} {pluralizeVolumes(volume.unit)}</Text>}
+    {({ volume }: BucketWithVolume) => <Text style={fontSize ? { fontSize } : undefined}>{volume.total} {pluralizeVolumes(volume.unit)}</Text>}
   </Doer>
   <Doer before={bucketSize} checker={bs => !!bs?.lwh}>
-    {({ lwh }: BucketWithSize) => <Text>{lwh.length} x {lwh.width} x {lwh.height} {pluralizeSizes(lwh.unit)}</Text>}
+    {({ lwh }: BucketWithSize) => <Text style={fontSize ? { fontSize } : undefined} >{lwh.length} x {lwh.width} x {lwh.height} {pluralizeSizes(lwh.unit)}</Text>}
   </Doer>
 </>
 );

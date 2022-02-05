@@ -22,6 +22,8 @@ export default function MyRecipes({ setRecipes, recipes }: RootTabScreenProps<'M
         data={recipes}
         renderItem={({ item }) => (
           <Card
+            minimizeable={true}
+            defaultMinimized={true}
             title={item.name}
             onRemove={() => removeRecipe(setRecipes, recipes, item)}
           >

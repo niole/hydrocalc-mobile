@@ -4,6 +4,8 @@ import { Picker, PickerItem } from '../components';
 import { brandSolutionInputs } from '../constants/brands';
 import * as inputCalculator from '../recipe/inputCalculator';
 
+const CUSTOM_INPUT_VALUE = 'custom';
+
 /**
  * all solutions can be solution inputs
  */
@@ -30,11 +32,12 @@ export const SolutionInputPicker: React.FC<Props> = ({
   ];
   return (
     <Picker
-      label="solution"
+      label="Add a solution input"
       onValueChange={onChange ? handleSetSolutionInput(onChange, allSolutionInputs) : undefined}
       selectedValue={solutionInput?.name}
     >
       <PickerItem key="none" label="None selected" value={undefined} />
+      <PickerItem key="custom" label="Custom input" value={CUSTOM_INPUT_VALUE} />
       {allSolutionInputs.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
     </Picker>
   );
@@ -44,8 +47,19 @@ const handleSetSolutionInput = (
   setSolutionInput: (s: SolutionInput) => void,
   solutions: SolutionInput[]
 ) => (solutionName?: string | number) => {
-  const solutionInput = solutions.find(s => s.name === solutionName);
-  if (solutionInput) {
-    setSolutionInput(solutionInput);
+  if (!!solutionName) {
+    if (solutionName === CUSTOM_INPUT_VALUE) {
+      setSolutionInput({
+        id: Math.random().toString(),
+        name: 'custom input',
+        npk: { n: 0, p: 0, k: 0 },
+        tspsPerGallon1kEC: 0
+      });
+    } else {
+      const solutionInput = solutions.find(s => s.name === solutionName);
+      if (solutionInput) {
+        setSolutionInput(solutionInput);
+      }
+    }
   }
 };

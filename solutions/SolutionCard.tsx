@@ -118,7 +118,7 @@ const handleUpdateSolutionInput =
       } else {
         const updatedNewSolution = {
           ...solution,
-          inputs: [...inputs, { frac: 0, solution: solutionInput }]
+          inputs: [{ frac: 0, solution: solutionInput }, ...inputs]
         };
         setNewSolution(updateInputProportions(updatedNewSolution));
       }

@@ -56,11 +56,11 @@ export const EditableInputCard: React.FC<Props> = ({
           <Text>Are you sure you want to remove input, {newValues.name}?</Text>
             </ConfirmationModal></View>}
       </View>
-      <LabelValue
-        editable={editable}
-        label="brand"
-        value={newValues.brand}
-      />
+      {newValues.brand && (
+        <LabelValue
+          label="brand"
+          value={newValues.brand}
+        />)}
       <LabelValue
         label="npk"
         value={

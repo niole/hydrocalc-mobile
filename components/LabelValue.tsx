@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import fontSizes from '../constants/FontSizes';
-import { ValidatedTextInput } from './ValidatedTextInput';
+import { Validator, ValidatedTextInput } from './ValidatedTextInput';
 
 
 type Props = {
@@ -13,6 +13,8 @@ type Props = {
   onChangeNumber?: (data: any) => void;
   rowStyle?: boolean;
   placeholder?: string;
+  validation?: Validator;
+  validateOnMount?: boolean;
 };
 
 export const LabelValue: React.FC<Props> = ({
@@ -23,6 +25,8 @@ export const LabelValue: React.FC<Props> = ({
   onChange,
   onChangeNumber,
   placeholder,
+  validation,
+  validateOnMount,
   rowStyle = false,
 }) => {
   const containerStyle = [
@@ -35,6 +39,8 @@ export const LabelValue: React.FC<Props> = ({
       {label && <Text style={styles.label}>{label}</Text>}
       {editable ? (
         <ValidatedTextInput
+          validateOnMount={validateOnMount}
+          validation={validation}
           rowStyle={rowStyle}
           value={value}
           placeholder={placeholder}

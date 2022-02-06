@@ -22,7 +22,7 @@ import { SolutionPicker } from '../solutions/SolutionPicker';
 
 type WipRecipe = {
   id: string;
-  name: string;
+  name?: string;
   solution?: Solution;
   bucketSize: BucketSize;
   ec: number;
@@ -70,7 +70,14 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
     <View>
       {editable && <Title>Create a Recipe</Title>}
         <View style={styles.titleBar}>
-          {showTitle ? <EditableTitle  onChange={name => setRecipe({...wipRecipe, name })} editable={editable}>{name}</EditableTitle> : <></>}
+          {showTitle ? (
+            <EditableTitle
+              onChange={name => setRecipe({...wipRecipe, name })}
+              editable={editable}
+            >
+              {name}
+            </EditableTitle>
+          ) : <></>}
           {editable && <MoreDrawer
             options={[
               { label: 'Cancel' },
@@ -184,7 +191,14 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
     children,
     onChange,
   }) => editable ? (
-    <LabelValue editable={true} value={children} label="title" onChange={onChange} />
+    <LabelValue
+      validateOnMount={true}
+      validation={t => !t ? ({ kind: 'info', message: 'Recipe title is required' }) : undefined}
+      editable={true}
+      value={children}
+      label="title"
+      onChange={onChange}
+    />
   ) : (
     <Subtitle>{children}</Subtitle>
   );
@@ -200,7 +214,6 @@ const canWipShowInstructions = ({ solution }: WipRecipe): boolean => !!solution;
 
 const getEmptyRecipe = () => ({
   id: Math.random().toString(),
-  name: 'untitled recipe',
   ec: 1,
   bucketSize: { volume: { total: 20, unit: VolumeUnits.Gallon}}
 });

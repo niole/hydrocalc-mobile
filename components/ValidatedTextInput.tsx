@@ -5,17 +5,21 @@ import fontSizes from '../constants/FontSizes';
 
 const NUMBER_PARSE_FAIL_MSG = "can't parse input as number";
 
+export type ValidationResult = { message: string, kind: 'warning' | 'error' | 'info' };
+export type Validator = (t: string | number) => ValidationResult | undefined; // returns a message if it failed
+
 type Props = {
   label?: string;
-  validation?: (t: string | number) => string | undefined; // returns a message if it failed
+  validation?: Validator;
   onChangeText?: (t: string) => void; // executes if valid
   onChangeNumber?: (t: number) => void; // executes if valid
-  onValidationFail?: (errorMessage: string) => void; // lets you do something on validation fail
+  onValidationFail?: (errorMessage: ValidationResult) => void; // lets you do something on validation fail
   placeholder?: string;
   maxSize?: number;
   defaultValue?: string;
   value?: any;
   rowStyle?: boolean;
+  validateOnMount?: boolean;
 };
 
 export const ValidatedTextInput: React.FC<Props> = ({
@@ -28,10 +32,12 @@ export const ValidatedTextInput: React.FC<Props> = ({
   maxSize,
   defaultValue,
   value,
+  validateOnMount,
   rowStyle = false
 }) => {
-  const [errorMsg, setErrorMsg] = React.useState<string | undefined>();
-  const handleShowValidationFailure = (errorMsg: string) => {
+  const [errorMsg, setErrorMsg] = React.useState<ValidationResult | undefined>();
+
+  const handleShowValidationFailure = (errorMsg: ValidationResult) => {
     setErrorMsg(errorMsg);
     onValidationFail ? onValidationFail(errorMsg) : null;
   };
@@ -51,6 +57,11 @@ export const ValidatedTextInput: React.FC<Props> = ({
     onChangeNumber ?
     handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) :
     () => null;
+  React.useEffect(() => {
+    if (validateOnMount) {
+      changeHandler(value);
+    }
+  }, []);
 
   return (
     <View style={{ flex: 1, maxWidth: maxSize }}>
@@ -65,7 +76,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
           onChangeText={getThrottledHandler(changeHandler)}
         />
       </View>
-      {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+      {errorMsg && <Text style={styles[`${errorMsg.kind}Msg` as 'infoMsg']}>{errorMsg.message}</Text>}
     </View>
   );
 };
@@ -90,7 +101,7 @@ const handleOnChangeNumber = (
     }
   } catch (error) {
     console.error(NUMBER_PARSE_FAIL_MSG, error);
-    onValidationFail(NUMBER_PARSE_FAIL_MSG);
+    onValidationFail({ kind: 'error', message: NUMBER_PARSE_FAIL_MSG });
   }
 };
 
@@ -147,5 +158,11 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: 'red'
+  },
+  warningMsg: {
+    color: 'orange'
+  },
+  infoMsg: {
+    color: 'grey'
   },
 });

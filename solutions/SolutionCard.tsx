@@ -33,6 +33,10 @@ export const SolutionCard: React.FC<Props> = ({ solutions = [], solution, onChan
     setEditing(!editing);
   };
 
+  const handleEditSolutionNpk = (targetNpk: NPK) => {
+    setNewSolution(updateInputProportions({...newSolution, targetNpk}));
+  };
+
   return (
     <Card
       title={!editing ? newSolution.name : undefined }
@@ -54,7 +58,7 @@ export const SolutionCard: React.FC<Props> = ({ solutions = [], solution, onChan
             <NpkLabel
               editable={editing}
               npk={newSolution.targetNpk}
-              onChange={targetNpk => setNewSolution({...newSolution, targetNpk})}
+              onChange={handleEditSolutionNpk}
             />
           }
         />

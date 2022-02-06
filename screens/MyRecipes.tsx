@@ -11,7 +11,7 @@ type Props = {
   setRecipes: SetRecipes;
 };
 
-export default function MyRecipes({ setRecipes, recipes }: RootTabScreenProps<'MyRecipes'> & Props) {
+const MyRecipes: React.FC<Props & RootTabScreenProps<'MyRecipes'>> = ({ setRecipes, recipes }) => {
   return (
     <Screen title="my recipes">
       {recipes.length === 0 ? (
@@ -34,3 +34,5 @@ export default function MyRecipes({ setRecipes, recipes }: RootTabScreenProps<'M
     </Screen>
   );
 }
+
+export default MyRecipes;

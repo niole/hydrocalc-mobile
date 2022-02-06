@@ -32,7 +32,7 @@ type WipRecipe = {
 
 type ShowableRecipe = {
   id: string;
-  name: string;
+  name?: string;
   solution: Solution;
   bucketSize: BucketSize;
   ec: number;
@@ -115,8 +115,8 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
       <Section>
         <Tabs defaultKey="instructions">
           <Tab title="instructions" id="instructions">
-            <Doer before={wipRecipe} checker={recipeIsSaveable}>
-              {({ solution, ec, bucketSize }: Recipe) => (
+            <Doer before={wipRecipe} checker={recipeIsRenderable}>
+              {({ solution, ec, bucketSize }: ShowableRecipe) => (
                 <>
                   <Section>
                         <View style={{marginBottom: 16, marginLeft:10}}>
@@ -221,6 +221,9 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
 const handleSetSolution = (setSolution: (s?: Solution) => void, solutions: Solution[]) => (solutionName?: string) => {
   setSolution(solutions.find(s => s.name === solutionName));
 };
+
+const recipeIsRenderable = ({ ec, bucketSize, solution }: WipRecipe): boolean =>
+!!solution && ec !== undefined && bucketSize !== undefined;
 
 const recipeIsSaveable = ({ name, ec, bucketSize, solution }: WipRecipe): boolean =>
 !!name && !!solution && ec !== undefined && bucketSize !== undefined;

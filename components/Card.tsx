@@ -35,11 +35,12 @@ export function Card({
 }: Props) {
     const [minimized, setMinimized] = React.useState<boolean>(defaultMinimized);
 
-    React.useEffect(() => {
-      if (minimizeable) {
-        setMinimized(defaultMinimized);
-      }
-    }, [defaultMinimized, minimizeable]);
+  React.useEffect(() => {
+    if (minimizeable) {
+      setMinimized(defaultMinimized);
+    }
+  }, [defaultMinimized, minimizeable]);
+
   const titleComponent = (
     <View style={styles.titleText}>
       {!titleElement && title && <Title>{title}</Title>}
@@ -51,7 +52,7 @@ export function Card({
     <View style={styles.card}>
       <View style={styles.titleBar}>
         {minimizeable ? (
-          <Pressable onPress={() => setMinimized(!minimized)}>
+          <Pressable onPress={() => setMinimized(!minimized)} style={{flex:7}}>
             {titleComponent}
           </Pressable>
         ) : titleComponent}

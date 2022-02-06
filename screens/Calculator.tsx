@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
-import Toast from 'react-native-toast-message';
 
-import { Tabs, Tab } from '../components/Tabs';
 import { BucketSize, SetRecipes, Recipe, Solution } from '../globalState';
 import { ValidatedSizeForm } from '../components/ValidatedSizeForm';
 import { ValidatedVolumeForm } from '../components/ValidatedVolumeForm';
-import { PickerItem, Picker, Annotation, Card, AddButton, LabelValue } from '../components';
+import { Toast, Tabs, Tab, PickerItem, Picker, Annotation, Card, AddButton, LabelValue } from '../components';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
 import { RecipeSelector, CalculatedRecipeView } from '../recipe';
@@ -28,11 +26,16 @@ export default function Calculator({ setRecipes, solutions, recipes, navigation 
 
       if (i === -1) {
         setRecipes([...recipes, updatedRecipe]);
-        Toast.show({ type: 'success', text1: `Created new recipe, ${updatedRecipe.name}`});
+        Toast.success(`Created new recipe, ${updatedRecipe.name}`);
       } else {
+        const oldRecipeName = recipes[i].name;
         recipes[i] = updatedRecipe;
         setRecipes(recipes.slice());
-        Toast.show({ type: 'success', text1: `Updated recipe, ${updatedRecipe.name}`});
+        if (oldRecipeName !== updatedRecipe.name) {
+          Toast.success(`Updated recipe, ${oldRecipeName} -> ${updatedRecipe.name}`);
+        } else {
+          Toast.success(`Updated recipe, ${updatedRecipe.name}`);
+        }
       }
       console.info(`Saved recipe ${updatedRecipe.name} to your recipes`);
     }

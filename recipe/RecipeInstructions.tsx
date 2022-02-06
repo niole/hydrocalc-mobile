@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { VolumeUnits, Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { RECIPE_LIMIT } from '../constants/Limits';
 import {
+  Toast,
   Tabs,
   Tab,
   Doer,
@@ -72,12 +72,9 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
       if (recipes.length < RECIPE_LIMIT) {
         onChange(recipe);
       } else {
-        Toast.show({
-          autoHide: false,
-          type: 'error',
-          text1: `Can't create recipe ${recipe.name}.`,
-          text2: `You have already reached our limit of ${RECIPE_LIMIT} recipes.`
-        });
+        Toast.error(
+          `Can't create recipe ${recipe.name}. You have already reached our limit of ${RECIPE_LIMIT} recipes.`,
+        );
       }
     }
   };

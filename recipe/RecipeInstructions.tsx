@@ -66,9 +66,10 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   }, [recipe]);
 
   const { name, ec, bucketSize, solution } = wipRecipe;
+  const isExistingRecipe = !!recipes.find(r => r.id === wipRecipe.id);
   return (
     <View>
-      {editable && <Title>Create a Recipe</Title>}
+      {editable && <Title>{isExistingRecipe ? 'Edit Recipe' : 'Create a Recipe'}</Title>}
         <View style={styles.titleBar}>
           {showTitle ? (
             <EditableTitle

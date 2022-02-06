@@ -57,11 +57,18 @@ export const ValidatedTextInput: React.FC<Props> = ({
     onChangeNumber ?
     handleOnChangeNumber(validation, handleValidationNumberSuccess, handleShowValidationFailure) :
     () => null;
+
   React.useEffect(() => {
     if (validateOnMount) {
       changeHandler(value);
     }
   }, []);
+
+  React.useEffect(() => {
+    if (validateOnMount) {
+      changeHandler(value);
+    }
+  }, [value]);
 
   return (
     <View style={{ flex: 1, maxWidth: maxSize }}>

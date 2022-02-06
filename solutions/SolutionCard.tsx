@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { Annotation, ValidatedTextInput, EditButton, Title, Section, NpkLabel, LabelValue, Card } from '../components';
+import { Annotation, ValidatedTextInput, Title, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { updateInputProportions } from '../recipe/inputCalculator';
 import { SolutionInputPicker } from './SolutionInputPicker';
@@ -33,15 +33,18 @@ export const SolutionCard: React.FC<Props> = ({
     if (editing) {
       if (!!newSolution.name && !!newSolution.inputs && !!newSolution.targetNpk) {
         // submit changed solution
+        setEditing(false);
         onChange(newSolution as Solution);
         console.info('Submitted updated solution');
       } else {
         // reset old solution
+        setEditing(false);
         setNewSolution(solution);
         console.info('Solution was incomplete. Not submitting updated solution');
       }
+    } else {
+      setEditing(true);
     }
-    setEditing(!editing);
   };
 
   const handleEditSolutionNpk = (targetNpk: NPK) => {
@@ -53,15 +56,19 @@ export const SolutionCard: React.FC<Props> = ({
       defaultMinimized={!editing}
       title={!editing ? newSolution.name : undefined }
       titleElement={editing ? (
-          <ValidatedTextInput
-            defaultValue={newSolution.name}
-            onChangeText={name => setNewSolution({ ...newSolution, name })}
+        <LabelValue
+            label="solution name"
+            value={newSolution.name}
+            editable={true}
+            onChange={name => setNewSolution({ ...newSolution, name })}
           />
         ) : undefined
       }
       onRemove={() => onRemove(solution)}
-      onChange={handleEdit}
-      ToggleTrigger={({ onPress }) => <EditButton toggled={editing} onPress={onPress!} />}
+      actionOptions={[{
+        label: editing ? 'Save' : 'Edit',
+        action: handleEdit
+      }]}
     >
       <Section bordered={true}>
         <LabelValue

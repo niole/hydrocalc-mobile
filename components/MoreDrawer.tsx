@@ -2,15 +2,15 @@ import * as React from 'react';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { MoreButton } from './MoreButton';
 
-type Option = {
+export type MoreDrawerOption = {
   label: string;
   action?: () => void;
 };
 
 type Props = {
-  options: Option[];
+  options: MoreDrawerOption[];
   cancelButtonIndex: number;
-  destructiveButtonIndex: number;
+  destructiveButtonIndex?: number;
 };
 
 export const MoreDrawer: React.FC<Props> = props => {

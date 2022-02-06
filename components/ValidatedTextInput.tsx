@@ -9,6 +9,7 @@ export type ValidationResult = { message: string, kind: 'warning' | 'error' | 'i
 export type Validator = (t: string | number) => ValidationResult | undefined; // returns a message if it failed
 
 type Props = {
+  multiline?: boolean;
   label?: string;
   validation?: Validator;
   onChangeText?: (t: string) => void; // executes if valid
@@ -33,7 +34,8 @@ export const ValidatedTextInput: React.FC<Props> = ({
   defaultValue,
   value,
   validateOnMount,
-  rowStyle = false
+  rowStyle = false,
+  multiline = false,
 }) => {
   const [errorMsg, setErrorMsg] = React.useState<ValidationResult | undefined>();
 
@@ -75,6 +77,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
       <View style={rowStyle ? [styles.inputGroup, styles.labelGroupRow] : styles.inputGroup}>
         {label && <Text style={styles.label}>{`${label} `}</Text>}
         <TextInput
+          multiline={multiline}
           keyboardType={onChangeNumber ? 'numeric' : undefined}
           style={styles.editingContainer}
           textAlign={rowStyle ? 'right' : undefined}

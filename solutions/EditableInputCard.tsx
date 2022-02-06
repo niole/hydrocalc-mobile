@@ -1,7 +1,15 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
-import { Annotation, ConfirmationModal, RemoveButton, ValidatedTextInput, Section, Title, LabelValue, NpkLabel } from '../components';
+import {
+  ConfirmationModal,
+  RemoveButton,
+  ValidatedTextInput,
+  Section,
+  Title,
+  LabelValue,
+  NpkLabel,
+} from '../components';
 
 const getId = () => `${Math.random()}`;
 
@@ -29,22 +37,24 @@ export const EditableInputCard: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.titleBar}>
-        <View>
-          <Annotation>input</Annotation>
+        <View style={{flex:7}}>
           {editable ? (
-            <ValidatedTextInput
-              defaultValue={newValues.name}
-              onChangeText={name => onChangeValues({ ...newValues, name })}
+            <LabelValue
+              label="input name"
+              editable={editable}
+              multiline={true}
+              value={newValues.name}
+              onChange={name => onChangeValues({ ...newValues, name })}
             />
             ) : <Title>{newValues.name || 'untitled'}</Title>
           }
         </View>
-        {onRemove && <ConfirmationModal
+          {onRemove && <View style={{flex:1}}><ConfirmationModal
           onConfirm={() => onRemove!(solutionInput)}
           Trigger={RemoveButton}
         >
           <Text>Are you sure you want to remove input, {newValues.name}?</Text>
-        </ConfirmationModal>}
+            </ConfirmationModal></View>}
       </View>
       <LabelValue
         editable={editable}

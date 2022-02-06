@@ -33,10 +33,11 @@ export default function Solutions({ setSolutions, solutions }: RootTabScreenProp
     const wipSolutionIndex = wipSolutions.findIndex(s => s.id === solution.id);
     if (wipSolutionIndex > -1) {
       const updatedSolution = wipSolutions[wipSolutionIndex];
+      setWipSolutions(wipSolutions.slice(0, wipSolutionIndex).concat(wipSolutions.slice(wipSolutionIndex+1)));
       // @ts-ignore
       delete updatedSolution.isWip;
+      updatedSolution.id = Math.random().toString();
       updateSolution(setSolutions, solutions)(updatedSolution);
-      setWipSolutions(wipSolutions.slice(0, wipSolutionIndex).concat(wipSolutions.slice(wipSolutionIndex+1)));
     } else {
       updateSolution(setSolutions, solutions)(solution);
     }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { Title } from './Title';
-import { MoreDrawer } from './MoreDrawer';
+import { MoreDrawerOption, MoreDrawer } from './MoreDrawer';
 
 export type TriggerType = React.ComponentClass<TriggerProps> | React.FC<TriggerProps>;
 type TriggerProps = { onPress?: () => void };
@@ -17,6 +17,7 @@ type Props = {
   titleElement?: React.ReactNode;
   minimizeable?: boolean;
   defaultMinimized?: boolean;
+  actionOptions?: MoreDrawerOption[];
 };
 
 export function Card({
@@ -30,6 +31,7 @@ export function Card({
   minimizeable = false,
   defaultMinimized = false,
   editable = true,
+  actionOptions = [],
 }: Props) {
     const [minimized, setMinimized] = React.useState<boolean>(defaultMinimized);
 
@@ -54,11 +56,15 @@ export function Card({
           </Pressable>
         ) : titleComponent}
         <View style={styles.titleActions}>
-          {editable && onRemove && (
+          {editable && (onRemove || actionOptions.length > 0) && (
             <MoreDrawer
-              options={[{ label: 'Cancel' }, { label: 'Remove', action: onRemove }]}
+              options={[
+                { label: 'Cancel' },
+                ...(onRemove ? [{ label: 'Remove', action: onRemove }] : []),
+                ...actionOptions,
+              ]}
               cancelButtonIndex={0}
-              destructiveButtonIndex={1}
+              destructiveButtonIndex={onRemove ? 1 : undefined}
             />
           )}
         </View>

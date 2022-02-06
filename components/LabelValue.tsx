@@ -15,6 +15,7 @@ type Props = {
   placeholder?: string;
   validation?: Validator;
   validateOnMount?: boolean;
+  multiline?: boolean;
 };
 
 export const LabelValue: React.FC<Props> = ({
@@ -28,6 +29,7 @@ export const LabelValue: React.FC<Props> = ({
   validation,
   validateOnMount,
   rowStyle = false,
+  multiline = false,
 }) => {
   const containerStyle = [
     styles.container,
@@ -39,6 +41,7 @@ export const LabelValue: React.FC<Props> = ({
       {label && <Text style={styles.label}>{label}</Text>}
       {editable ? (
         <ValidatedTextInput
+          multiline={multiline}
           validateOnMount={validateOnMount}
           validation={validation}
           rowStyle={rowStyle}

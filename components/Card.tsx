@@ -31,13 +31,20 @@ export function Card({
   defaultMinimized = false,
   editable = true,
 }: Props) {
-  const [minimized, setMinimized] = React.useState<boolean>(defaultMinimized);
+    const [minimized, setMinimized] = React.useState<boolean>(defaultMinimized);
+
+    React.useEffect(() => {
+      if (minimizeable) {
+        setMinimized(defaultMinimized);
+      }
+    }, [defaultMinimized, minimizeable]);
   const titleComponent = (
     <View style={styles.titleText}>
       {!titleElement && title && <Title>{title}</Title>}
       {!title && titleElement}
     </View>
   );
+
   return (
     <View style={styles.card}>
       <View style={styles.titleBar}>

@@ -12,11 +12,22 @@ type Props = {
   solution: Solution;
   onChange: (solution: Solution) => void;
   onRemove: (solution?: Solution) => void;
+  editable?: boolean;
 };
 
-export const SolutionCard: React.FC<Props> = ({ solutions = [], solution, onChange, onRemove }) => {
+export const SolutionCard: React.FC<Props> = ({
+  solution,
+  onChange,
+  onRemove,
+  editable = false,
+  solutions = [],
+}) => {
   const [newSolution, setNewSolution] = React.useState<Solution>(solution);
-  const [editing, setEditing] = React.useState<boolean>(false);
+  const [editing, setEditing] = React.useState<boolean>(editable);
+
+  React.useEffect(() => {
+    setEditing(editable);
+  }, [editable]);
 
   const handleEdit = () => {
     if (editing) {
@@ -36,9 +47,10 @@ export const SolutionCard: React.FC<Props> = ({ solutions = [], solution, onChan
   const handleEditSolutionNpk = (targetNpk: NPK) => {
     setNewSolution(updateInputProportions({...newSolution, targetNpk}));
   };
-
   return (
     <Card
+      minimizeable={!editing}
+      defaultMinimized={!editing}
       title={!editing ? newSolution.name : undefined }
       titleElement={editing ? (
           <ValidatedTextInput

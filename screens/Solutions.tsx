@@ -9,7 +9,17 @@ import { Screen } from './Screen';
 import { NewSolution } from '../solutions/types';
 
 const getId = () => `${Math.random()}`;
-const createDefaultSolution = () => ({ id: getId(), name: 'untitled', inputs: [], targetNpk: { n:0, p:0, k:0 }});
+const createDefaultSolution = () => ({
+  id: getId(),
+  name: 'untitled',
+  inputs: [],
+  targetNpk: { n:0, p:0, k:0 },
+  isWip: true as true,
+});
+
+type WipSolution = {
+  isWip: true;
+} & Solution;
 
 type Props = {
   solutions: Solution[];
@@ -17,25 +27,53 @@ type Props = {
 };
 
 export default function Solutions({ setSolutions, solutions }: RootTabScreenProps<'Solutions'> & Props) {
+  const [wipSolutions, setWipSolutions] = React.useState<WipSolution[]>([]);
+
+  const onSolutionChange = (solution: Solution) => {
+    const wipSolutionIndex = wipSolutions.findIndex(s => s.id === solution.id);
+    if (wipSolutionIndex > -1) {
+      const updatedSolution = wipSolutions[wipSolutionIndex];
+      // @ts-ignore
+      delete updatedSolution.isWip;
+      updateSolution(setSolutions, solutions)(updatedSolution);
+      setWipSolutions(wipSolutions.slice(0, wipSolutionIndex).concat(wipSolutions.slice(wipSolutionIndex+1)));
+    } else {
+      updateSolution(setSolutions, solutions)(solution);
+    }
+  };
+
+  const onSolutionRemove = (solution: Solution) => () => {
+    const wipSolutionIndex = wipSolutions.findIndex(s => s.id === solution.id);
+    if (wipSolutionIndex > -1) {
+      setWipSolutions([...wipSolutions.slice(0, wipSolutionIndex), ...wipSolutions.slice(wipSolutionIndex+1)]);
+    } else {
+      handeRemoveSolution(setSolutions, solutions, solution)();
+    }
+
+  };
+
   return (
     <Screen title="solutions">
-      <AddButton size="big" onPress={() => addSolution(setSolutions, solutions, createDefaultSolution())} />
-        {solutions.length === 0 ? (
+      <AddButton size="big" onPress={() => setWipSolutions([createDefaultSolution(), ...wipSolutions])} />
+        {wipSolutions.length == 0 && solutions.length === 0 ? (
           <InfoBox title="Create a custom solution.">
             {'Can\'t find a solution with the right NPK ratio or need to combine solutions?\n\nAdd your own solution here.'}
           </InfoBox>
-        ) : <FlatList
-        data={solutions.reverse()}
-        renderItem={({ item }) => (
-          <SolutionCard
-            solutions={solutions.filter(s => s.id !== item.id)}
-            onChange={updateSolution(setSolutions, solutions)}
-            onRemove={handeRemoveSolution(setSolutions, solutions, item)}
-            key={item.id}
-            solution={item}
+        ) : (
+        <FlatList
+          data={[...wipSolutions, ...solutions.reverse()]}
+          renderItem={({ item }) => (
+            <SolutionCard
+              editable={item.isWip}
+              solutions={solutions.filter(s => s.id !== item.id)}
+              onChange={onSolutionChange}
+              onRemove={onSolutionRemove(item)}
+              key={item.id}
+              solution={item}
             />
-        )}
-      />}
+          )}
+        />
+      )}
     </Screen>
   );
 }

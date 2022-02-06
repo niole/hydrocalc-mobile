@@ -4,6 +4,7 @@ import { VolumeUnits, Solution, BucketSize, SolutionInputMeasurement, Recipe } f
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { RECIPE_LIMIT } from '../constants/Limits';
 import {
+  InfoBox,
   Toast,
   Tabs,
   Tab,
@@ -112,9 +113,20 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
             destructiveButtonIndex={1}
           />}
         </View>
+        {editable && (
+          <SolutionPicker
+          solutions={solutions}
+          solution={solution}
+          onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+          />)}
       <Section>
         <Tabs defaultKey="instructions">
           <Tab title="instructions" id="instructions">
+            {!recipeIsRenderable(wipRecipe) && (
+              <InfoBox>
+                Pick a solution to get started.
+              </InfoBox>
+            )}
             <Doer before={wipRecipe} checker={recipeIsRenderable}>
               {({ solution, ec, bucketSize }: ShowableRecipe) => (
                 <>
@@ -145,22 +157,15 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                 </>
               )}
             </Doer>
-            {editable && (
-              <SolutionPicker
-              solutions={solutions}
-              solution={solution}
-              onChange={s => setRecipe({ ...wipRecipe, solution: s })}
-            />)}
           </Tab>
           <Tab title="recipe inputs" id="inputs">
-            {editable && (
-              <SolutionPicker
-              solutions={solutions}
-              solution={solution}
-              onChange={s => setRecipe({ ...wipRecipe, solution: s })}
-              />)}
-            <Doer before={wipRecipe} checker={recipeIsSaveable}>
-              {(showableRecipe: Recipe) => (
+            {!recipeIsRenderable(wipRecipe) && (
+              <InfoBox>
+                Pick a solution to get started.
+              </InfoBox>
+            )}
+            <Doer before={wipRecipe} checker={recipeIsRenderable}>
+              {(showableRecipe: ShowableRecipe) => (
                 <>
                   <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
                   <LabelValue
@@ -208,7 +213,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   }) => editable ? (
     <LabelValue
       validateOnMount={true}
-      validation={t => !t ? ({ kind: 'info', message: 'Recipe title is required' }) : undefined}
+      validation={t => !t ? ({ kind: 'info', message: 'Please give your recipe a title.' }) : undefined}
       editable={true}
       value={children}
       label="title"

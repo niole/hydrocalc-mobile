@@ -3,6 +3,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { VolumeUnits, Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
+  Tabs,
+  Tab,
   Doer,
   Section,
   Subtitle,
@@ -20,18 +22,18 @@ import { SolutionPicker } from '../solutions/SolutionPicker';
 
 type WipRecipe = {
   id: string;
-  name?: string;
+  name: string;
   solution?: Solution;
-  bucketSize?: BucketSize;
-  ec?: number;
+  bucketSize: BucketSize;
+  ec: number;
 };
 
 type ShowableRecipe = {
   id: string;
   name: string;
   solution: Solution;
-  bucketSize?: BucketSize;
-  ec?: number;
+  bucketSize: BucketSize;
+  ec: number;
 };
 
 /**
@@ -67,109 +69,115 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   return (
     <View>
       {editable && <Title>Create a Recipe</Title>}
-      <Doer before={wipRecipe} checker={canWipShowInstructions}>
-        {(showableRecipe: ShowableRecipe) => (
-          <>
-            <View style={styles.titleBar}>
-              {showTitle ? <EditableTitle  onChange={name => setRecipe({...wipRecipe, name })} editable={editable}>{name}</EditableTitle> : <></>}
-              {editable && <MoreDrawer
-                options={[
-                  { label: 'Cancel' },
-                  {
-                    label: 'Clear',
-                    action: () => {
-                      setRecipe(getEmptyRecipe());
-                      onChange ? onChange(undefined) : null;
-                    }
-                  },
-                  ...(recipeIsSaveable(wipRecipe) ? [{
-                    label: 'Save',
-                    action: () => onChange ? onChange(wipRecipe as Recipe) : null,
-                  }] : []),
-                ]}
-                cancelButtonIndex={0}
-                destructiveButtonIndex={1}
-              />}
-            </View>
+        <View style={styles.titleBar}>
+          {showTitle ? <EditableTitle  onChange={name => setRecipe({...wipRecipe, name })} editable={editable}>{name}</EditableTitle> : <></>}
+          {editable && <MoreDrawer
+            options={[
+              { label: 'Cancel' },
+              {
+                label: 'Clear',
+                action: () => {
+                  setRecipe(getEmptyRecipe());
+                  onChange ? onChange(undefined) : null;
+                }
+              },
+              ...(recipeIsSaveable(wipRecipe) ? [{
+                label: 'Save',
+                action: () => onChange ? onChange(wipRecipe as Recipe) : null,
+              }] : []),
+            ]}
+            cancelButtonIndex={0}
+            destructiveButtonIndex={1}
+          />}
+        </View>
+      <Section>
+        <Tabs defaultKey="instructions">
+          <Tab title="instructions" id="instructions">
             <Doer before={wipRecipe} checker={recipeIsSaveable}>
               {({ solution, ec, bucketSize }: Recipe) => (
                 <>
-              <Section>
-                    <View style={{marginBottom: 16, marginLeft:10}}>
-                      <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates <Text style={styles.bold}><BucketSizeLabel fontSize={18} bucketSize={bucketSize} /></Text> of nutrient solution with an e.c. of <Text style={styles.bold}>{ec}</Text> millisiemens/cm and a N-P-K ratio of <Text style={styles.bold}>{solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>.</Text>
-                      {editable && <Annotation>Change npk, bucket size, and e.c. in the Recipe Inputs section.</Annotation>}
-                      </View>
-                    <Subtitle>Instructions</Subtitle>
-                    <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
-                    <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
                   <Section>
-                  {solution?.inputs.map(input => (
-                    <View key={input.solution.id} style={{ marginBottom: 3, marginLeft:20}}>
-                      <Text style={styles.readableText}>
-                        {getInputVolumeInstructions(
-                          unit,
-                          getGallonsFromSize(bucketSize),
-                          input.frac,
-                          ec,
-                          input.solution.tspsPerGallon1kEC
-                        )} of </Text><Text style={[styles.bold, styles.readableText]}>{input.solution.name}</Text>
-                    </View>
-                  ))}
+                        <View style={{marginBottom: 16, marginLeft:10}}>
+                          <Annotation>Change npk, bucket size, and e.c. in the Recipe Inputs section.</Annotation>
+                          <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates <Text style={styles.bold}><BucketSizeLabel fontSize={18} bucketSize={bucketSize} /></Text> of nutrient solution with an e.c. of <Text style={styles.bold}>{ec}</Text> millisiemens/cm and a N-P-K ratio of <Text style={styles.bold}>{solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>.</Text>
+                          </View>
+                        <Subtitle>Instructions</Subtitle>
+                        <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
+                        <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
+                      <Section>
+                      {solution?.inputs.map(input => (
+                        <View key={input.solution.id} style={{ marginBottom: 3, marginLeft:20}}>
+                          <Text style={styles.readableText}>
+                            {getInputVolumeInstructions(
+                              unit,
+                              getGallonsFromSize(bucketSize),
+                              input.frac,
+                              ec,
+                              input.solution.tspsPerGallon1kEC
+                            )} of </Text><Text style={[styles.bold, styles.readableText]}>{input.solution.name}</Text>
+                        </View>
+                      ))}
+                      </Section>
+                      <SolutionInputMeasurementSelect onChange={selectUnit} />
                   </Section>
-                  <SolutionInputMeasurementSelect onChange={selectUnit} />
-                </Section>
-              </>
+                </>
               )}
             </Doer>
-          <>
-          <Title>Recipe Inputs</Title>
-        </>
-      </>
-    )}
-    </Doer>
-    {editable && (
-      <SolutionPicker
-        solutions={solutions}
-        solution={solution}
-        onChange={s => setRecipe({ ...wipRecipe, solution: s })}
-      />)}
-    <Doer before={wipRecipe} checker={canWipShowInstructions}>
-      {(showableRecipe: ShowableRecipe) => (
-        <>
-          <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
-          <LabelValue
-            editable={true}
-            label="ec (millisiemen/cm)"
-            value={ec}
-            onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
+            {editable && (
+              <SolutionPicker
+              solutions={solutions}
+              solution={solution}
+              onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+            />)}
+          </Tab>
+          <Tab title="recipe inputs" id="inputs">
+            {editable && (
+              <SolutionPicker
+              solutions={solutions}
+              solution={solution}
+              onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+              />)}
+            <Doer before={wipRecipe} checker={recipeIsSaveable}>
+              {(showableRecipe: Recipe) => (
+                <>
+                  <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
+                  <LabelValue
+                    editable={true}
+                    label="ec (millisiemen/cm)"
+                    value={ec}
+                    onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
+                  />
+                  <LabelValue
+                    label="bucket size"
+                    componentValue={
+                      <BucketSizeLabel
+                        editable={true}
+                        bucketSize={bucketSize}
+                        onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
+                      />
+                    }
+                  />
+              </>
+            )}
+          </Doer>
+        </Tab>
+      </Tabs>
+    </Section>
+    {showRecipePicker(editable, recipes.length) && (
+      <Section bordered={true} topOnly={true}>
+        <View style={{ marginTop: 7}}>
+          <Title>Pick a Recipe</Title>
+          <RecipeSelector
+            recipes={recipes}
+            selectedRecipeId={wipRecipe?.id}
+            onChange={r => setRecipe(r || getEmptyRecipe())}
           />
-          <LabelValue
-            label="bucket size"
-            componentValue={
-              <BucketSizeLabel
-                editable={true}
-                bucketSize={bucketSize}
-                onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
-              />
-            }
-          />
-        </>
-      )}
-    </Doer>
-    {editable && recipes.length > 0 && (
-      <Section>
-        <Text style={{textAlign: 'center'}}>-- or --</Text>
-        <Title>Pick a Recipe</Title>
-        <RecipeSelector
-          recipes={recipes}
-          selectedRecipeId={wipRecipe?.id}
-          onChange={r => setRecipe(r || { id: Math.random().toString()})}
-        />
+        </View>
       </Section>
     )}
   </View>
-  );
-  };
+);
+};
 
   const EditableTitle: React.FC<{ editable?: boolean, children?: string, onChange?: (t: string) => void }> = ({
     editable = false,
@@ -196,6 +204,8 @@ const getEmptyRecipe = () => ({
   ec: 1,
   bucketSize: { volume: { total: 20, unit: VolumeUnits.Gallon}}
 });
+
+const showRecipePicker = (editable: boolean, recipeCount: number) =>  editable && recipeCount > 0;
 
 const styles = StyleSheet.create({
   titleBar: {

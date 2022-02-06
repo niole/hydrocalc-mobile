@@ -81,10 +81,12 @@ export const SolutionCard: React.FC<Props> = ({
             />
           }
         />
-        <SolutionInputPicker
-          onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
-          solutions={solutions}
-        />
+        {editing && (
+            <SolutionInputPicker
+              onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
+              solutions={solutions}
+            />
+        )}
       </Section>
       {(newSolution.inputs || []).map((i, index) =>
         <Section

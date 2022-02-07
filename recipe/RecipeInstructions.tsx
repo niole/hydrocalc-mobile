@@ -121,7 +121,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
           />)}
       <Section>
         <Tabs defaultKey="instructions">
-          <Tab title="instructions" id="instructions">
+          <Tab title="Instructions" id="instructions">
             {!recipeIsRenderable(wipRecipe) && (
               <InfoBox>
                 Pick a solution to get started.
@@ -132,9 +132,9 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                 <>
                   <Section>
                         <View style={{marginBottom: 16, marginLeft:10}}>
-                          <Annotation>Change npk, bucket size, and e.c. in the Recipe Inputs section.</Annotation>
                           <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates <Text style={styles.bold}><BucketSizeLabel fontSize={18} bucketSize={bucketSize} /></Text> of nutrient solution with an e.c. of <Text style={styles.bold}>{ec}</Text> millisiemens/cm and a N-P-K ratio of <Text style={styles.bold}>{solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>.</Text>
-                          </View>
+                          <Annotation>Change npk, bucket size, and e.c. in the Recipe Inputs section.</Annotation>
+                        </View>
                         <Subtitle>Instructions</Subtitle>
                         <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
                         <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
@@ -158,7 +158,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
               )}
             </Doer>
           </Tab>
-          <Tab title="recipe inputs" id="inputs">
+          <Tab title="Recipe Inputs" id="inputs">
             {!recipeIsRenderable(wipRecipe) && (
               <InfoBox>
                 Pick a solution to get started.

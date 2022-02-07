@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
 import { Toast, Annotation, ValidatedTextInput, Title, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
@@ -137,19 +137,12 @@ const handleUpdateSolutionInput =
         // update with what the user provided
         inputs[foundInputIndex].solution = solutionInput;
         setNewSolution({ ...solution, inputs });
-
-
-        // TODO update proportions or warn the user
-        //        setNewSolution(updateInputProportions(solution));
       } else {
         const updatedNewSolution = {
           ...solution,
           inputs: [{ frac: 0, solution: solutionInput }, ...inputs]
         };
         setNewSolution(updatedNewSolution);
-
-        // TODO update proportions or warn the user
-        //        setNewSolution(updateInputProportions(updatedNewSolution));
     }
   };
 
@@ -160,6 +153,3 @@ const handleRemoveInput = (setNewSolution: (s: Solution) => void, solution: Solu
     setNewSolution({...solution, inputs: newInputs });
   }
 };
-
-const styles = StyleSheet.create({
-});

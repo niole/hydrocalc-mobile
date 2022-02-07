@@ -151,16 +151,12 @@ export const updateInputProportions = (solution: Solution): Solution => {
     for (let r = 0; r < error.rows; r++) {
       for (let c = 0; c < error.columns; c++) {
         if (error.get(r, c) > 0.1) {
-          console.error(
-            'error was greater than 10% for column: ', c,
-            ', row: ', r,
-            ', for solution: ', solution.id, solution.name
-          );
+          const errorMessage = `error was greater than 10% for column: ${c}, row: ${r}, ` +
+            `for solution ${solution.id}, ${solution.name}`;
+          throw new Error(errorMessage);
         }
       }
     }
-
-//    const ecDenom = inputs.reduce((sum, n) => sum + n.solution.tspsPerGallon1kEC, 0.0);
 
     const xArray = inputs.map((input, i) => x.get(i, 0)/(input.solution.tspsPerGallon1kEC));
     const denom = xArray.reduce((a: number, b: number) => a + b, 0.0);
@@ -174,7 +170,7 @@ export const updateInputProportions = (solution: Solution): Solution => {
       }))
     };
   } catch (error) {
-    console.warn('Matrix solving failed, ', error);
+    console.error('Failed to update input proportions for solution ', solution.name, ' ', solution.id, ' :', error);
     return solution;
   }
 };

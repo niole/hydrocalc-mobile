@@ -18,7 +18,7 @@ export const Toast = {
     ReactToast.show(
       msg,
       {
-          duration: ReactToast.durations.SHORT,
+          duration: 5000,
           position: ReactToast.positions.TOP,
           shadow: true,
           animation: true,

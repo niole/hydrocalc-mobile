@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { Annotation, ValidatedTextInput, Title, Section, NpkLabel, LabelValue, Card } from '../components';
+import { Toast, Annotation, ValidatedTextInput, Title, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { updateInputProportions } from '../recipe/inputCalculator';
 import { SolutionInputPicker } from './SolutionInputPicker';
@@ -31,13 +31,35 @@ export const SolutionCard: React.FC<Props> = ({
 
   const handleEdit = () => {
     if (editing) {
-      if (!!newSolution.name && !!newSolution.inputs && !!newSolution.targetNpk) {
-        // submit changed solution
-        setEditing(false);
-        onChange(newSolution as Solution);
-        console.info('Submitted updated solution');
+      const computedSolution = updateInputProportions(newSolution);
+
+      if (!!computedSolution.name && !!computedSolution.inputs && !!computedSolution.targetNpk) {
+        if (computedSolution.targetNpk.n === 0 && computedSolution.targetNpk.p === 0 && computedSolution.targetNpk.k === 0) {
+          Toast.error('Please provide a target npk ratio for this solution.');
+        } else if (computedSolution.inputs.length === 0) {
+          Toast.error('Please provide some inputs for this solution.');
+        } else {
+          const proportionZeroInputs = computedSolution.inputs.filter(i => i.frac === 0);
+          if (proportionZeroInputs.length > 0) {
+            if (proportionZeroInputs.length === computedSolution.inputs.length) {
+              Toast.error(`The npk ratios of the selected inputs cannot be combined in order to achieve the target npk ratio. Please pick inputs that contain the nitrogen, phorphorus, and potassium.`);
+            } else {
+              Toast.error(`Found ${proportionZeroInputs.length} inputs that are unnecessary: ${proportionZeroInputs.map(i => i.solution.name).join(',')}`);
+            }
+          } else {
+            // submit changed solution
+            try {
+              setEditing(false);
+              onChange(computedSolution as Solution);
+              console.info('Submitted updated solution');
+              Toast.success(`Saved new solution ${computedSolution.name}`);
+            } catch (error) {
+              console.error(`Something went wrong when computing proportions: ${error}`);
+            }
+          }
+        }
       } else {
-        // reset old solution
+        // reset old solution because not totally filled out
         setEditing(false);
         setNewSolution(solution);
         console.info('Solution was incomplete. Not submitting updated solution');
@@ -47,9 +69,7 @@ export const SolutionCard: React.FC<Props> = ({
     }
   };
 
-  const handleEditSolutionNpk = (targetNpk: NPK) => {
-    setNewSolution(updateInputProportions({...newSolution, targetNpk}));
-  };
+  const handleEditSolutionNpk = (targetNpk: NPK) => setNewSolution({...newSolution, targetNpk});
   return (
     <Card
       minimizeable={!editing}
@@ -112,16 +132,25 @@ const handleUpdateSolutionInput =
 (solutionInput: SolutionInput) => {
       const inputs = solution.inputs || [];
       const foundInputIndex = inputs.findIndex(i => i.solution.id === solutionInput.id);
+
       if (foundInputIndex > -1) {
+        // update with what the user provided
         inputs[foundInputIndex].solution = solutionInput;
-        setNewSolution(updateInputProportions(solution));
+        setNewSolution({ ...solution, inputs });
+
+
+        // TODO update proportions or warn the user
+        //        setNewSolution(updateInputProportions(solution));
       } else {
         const updatedNewSolution = {
           ...solution,
           inputs: [{ frac: 0, solution: solutionInput }, ...inputs]
         };
-        setNewSolution(updateInputProportions(updatedNewSolution));
-      }
+        setNewSolution(updatedNewSolution);
+
+        // TODO update proportions or warn the user
+        //        setNewSolution(updateInputProportions(updatedNewSolution));
+    }
   };
 
 const handleRemoveInput = (setNewSolution: (s: Solution) => void, solution: Solution, i: FractionalInput) => () => {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 
 import { InfoBox, AddButton, FlatList } from '../components';
-import { addSolution, removeSolution, updateSolution, SetSolutions, Solution } from '../globalState';
+import { FractionalInput, NPK, addSolution, removeSolution, updateSolution, SetSolutions, Solution } from '../globalState';
 import { SolutionCard } from '../solutions';
 import { RootTabScreenProps } from '../types';
 import { Screen } from './Screen';
@@ -11,7 +11,6 @@ import { NewSolution } from '../solutions/types';
 const getId = () => `${Math.random()}`;
 const createDefaultSolution = () => ({
   id: getId(),
-  name: 'untitled',
   inputs: [],
   targetNpk: { n:0, p:0, k:0 },
   isWip: true as true,
@@ -19,7 +18,11 @@ const createDefaultSolution = () => ({
 
 type WipSolution = {
   isWip: true;
-} & Solution;
+  id: string;
+  name?: string;
+  inputs: FractionalInput[];
+  targetNpk: NPK;
+};
 
 type Props = {
   solutions: Solution[];

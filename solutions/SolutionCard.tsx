@@ -6,6 +6,12 @@ import { EditableInputCard } from './EditableInputCard';
 import { updateInputProportions } from '../recipe/inputCalculator';
 import { SolutionInputPicker } from './SolutionInputPicker';
 
+type WipSolution = {
+  id: string;
+  name?: string;
+  inputs: FractionalInput[];
+  targetNpk: NPK;
+};
 
 type Props = {
   solutions?: Solution[];
@@ -22,7 +28,7 @@ export const SolutionCard: React.FC<Props> = ({
   editable = false,
   solutions = [],
 }) => {
-  const [newSolution, setNewSolution] = React.useState<Solution>(solution);
+  const [newSolution, setNewSolution] = React.useState<WipSolution>(solution);
   const [editing, setEditing] = React.useState<boolean>(editable);
 
   React.useEffect(() => {
@@ -31,38 +37,43 @@ export const SolutionCard: React.FC<Props> = ({
 
   const handleEdit = () => {
     if (editing) {
-      const computedSolution = updateInputProportions(newSolution);
 
-      if (!!computedSolution.name && !!computedSolution.inputs && !!computedSolution.targetNpk) {
-        if (computedSolution.targetNpk.n === 0 && computedSolution.targetNpk.p === 0 && computedSolution.targetNpk.k === 0) {
-          Toast.error('Please provide a target npk ratio for this solution.');
-        } else if (computedSolution.inputs.length === 0) {
-          Toast.error('Please provide some inputs for this solution.');
-        } else {
-          const proportionZeroInputs = computedSolution.inputs.filter(i => i.frac === 0);
-          if (proportionZeroInputs.length > 0) {
-            if (proportionZeroInputs.length === computedSolution.inputs.length) {
-              Toast.error(`The npk ratios of the selected inputs cannot be combined in order to achieve the target npk ratio. Please pick inputs that contain the nitrogen, phorphorus, and potassium.`);
-            } else {
-              Toast.error(`Found ${proportionZeroInputs.length} inputs that are unnecessary: ${proportionZeroInputs.map(i => i.solution.name).join(',')}`);
-            }
+      if (!!newSolution.name) {
+        const computedSolution = updateInputProportions(newSolution as Solution);
+
+        if (!!computedSolution.name && !!computedSolution.inputs && !!computedSolution.targetNpk) {
+          if (computedSolution.targetNpk.n === 0 && computedSolution.targetNpk.p === 0 && computedSolution.targetNpk.k === 0) {
+            Toast.error('Please provide a target npk ratio for this solution.');
+          } else if (computedSolution.inputs.length === 0) {
+            Toast.error('Please provide some inputs for this solution.');
           } else {
-            // submit changed solution
-            try {
-              setEditing(false);
-              onChange(computedSolution as Solution);
-              console.info('Submitted updated solution');
-              Toast.success(`Saved new solution ${computedSolution.name}`);
-            } catch (error) {
-              console.error(`Something went wrong when computing proportions: ${error}`);
+            const proportionZeroInputs = computedSolution.inputs.filter(i => i.frac === 0);
+            if (proportionZeroInputs.length > 0) {
+              if (proportionZeroInputs.length === computedSolution.inputs.length) {
+                Toast.error(`The npk ratios of the selected inputs cannot be combined in order to achieve the target npk ratio. Please pick inputs that contain the nitrogen, phorphorus, and potassium.`);
+              } else {
+                Toast.error(`Found ${proportionZeroInputs.length} inputs that are unnecessary: ${proportionZeroInputs.map(i => i.solution.name).join(',')}`);
+              }
+            } else {
+              // submit changed solution
+              try {
+                setEditing(false);
+                onChange(computedSolution as Solution);
+                console.info('Submitted updated solution');
+                Toast.success(`Saved new solution ${computedSolution.name}`);
+              } catch (error) {
+                console.error(`Something went wrong when computing proportions: ${error}`);
+              }
             }
           }
+        } else {
+          // reset old solution because not totally filled out
+          setEditing(false);
+          setNewSolution(solution);
+          console.info('Solution was incomplete. Not submitting updated solution');
         }
       } else {
-        // reset old solution because not totally filled out
-        setEditing(false);
-        setNewSolution(solution);
-        console.info('Solution was incomplete. Not submitting updated solution');
+        Toast.error('Please provide a name for this solution.');
       }
     } else {
       setEditing(true);
@@ -81,6 +92,8 @@ export const SolutionCard: React.FC<Props> = ({
             value={newSolution.name}
             editable={true}
             onChange={name => setNewSolution({ ...newSolution, name })}
+            validation={s => !s ? { message: 'Please provide a solution name.', kind: 'info' } : undefined}
+            validateOnMount={true}
           />
         ) : undefined
       }
@@ -90,7 +103,13 @@ export const SolutionCard: React.FC<Props> = ({
         action: handleEdit
       }]}
     >
-      <Section bordered={true}>
+    <Section bordered={newSolution.inputs.length > 0}>
+        {editing && (
+            <SolutionInputPicker
+              onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
+              solutions={solutions}
+            />
+        )}
         <LabelValue
           label="target npk"
           value={
@@ -101,12 +120,6 @@ export const SolutionCard: React.FC<Props> = ({
             />
           }
         />
-        {editing && (
-            <SolutionInputPicker
-              onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
-              solutions={solutions}
-            />
-        )}
       </Section>
       {(newSolution.inputs || []).map((i, index) =>
         <Section
@@ -128,7 +141,7 @@ export const SolutionCard: React.FC<Props> = ({
 };
 
 const handleUpdateSolutionInput =
-  (setNewSolution: (s: Solution) => void, solution: Solution) =>
+  (setNewSolution: (s: WipSolution) => void, solution: WipSolution) =>
 (solutionInput: SolutionInput) => {
       const inputs = solution.inputs || [];
       const foundInputIndex = inputs.findIndex(i => i.solution.id === solutionInput.id);
@@ -146,7 +159,7 @@ const handleUpdateSolutionInput =
     }
   };
 
-const handleRemoveInput = (setNewSolution: (s: Solution) => void, solution: Solution, i: FractionalInput) => () => {
+const handleRemoveInput = (setNewSolution: (s: WipSolution) => void, solution: WipSolution, i: FractionalInput) => () => {
   const inputIndex = solution.inputs.findIndex(input => input.solution.id === i.solution.id);
   if (inputIndex > -1) {
     const newInputs = solution.inputs.slice(0, inputIndex).concat(solution.inputs.slice(inputIndex+1));

@@ -24,7 +24,6 @@ export const SolutionInputPicker: React.FC<Props> = ({
     ...solutions.map(s => ({
       id: `${s.id}-calculated-input`,
       name: s.name,
-      //brand?: string; TODO might be useful to add this to the solution
       npk: s.targetNpk,
       tspsPerGallon1kEC: s.inputs.reduce((acc, s) => acc + (s.frac*s.solution.tspsPerGallon1kEC), 0)
     })),

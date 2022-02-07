@@ -60,7 +60,10 @@ export default function Solutions({ setSolutions, solutions }: RootTabScreenProp
     <Screen title="solutions">
       <AddButton size="big" onPress={() => setWipSolutions([createDefaultSolution(), ...wipSolutions])} />
         {wipSolutions.length == 0 && solutions.length === 0 ? (
-          <InfoBox title="Create a custom solution.">
+          <InfoBox
+            title="Create a custom solution."
+            onPress={() => setWipSolutions([createDefaultSolution(), ...wipSolutions])}
+          >
             {'Can\'t find a solution with the right NPK ratio or need to combine solutions?\n\nAdd your own solution here.'}
           </InfoBox>
         ) : (

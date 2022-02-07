@@ -8,6 +8,7 @@ type Props = {
   onValueChange?: (s?: string | number) => void;
   children?: any;
   label?: string;
+  pickerRef?: React.RefObject<any>;
 };
 
 type PickerProps = { label: string | number; value?: string | number };
@@ -15,10 +16,10 @@ export const PickerItem: React.FC<PickerProps> = ({ label, value }) => (
   <ReactPicker.Item label={label.toString()} value={value} />
 );
 
-export const Picker: React.FC<Props> = ({ label, selectedValue, onValueChange, children }) => (
+export const Picker: React.FC<Props> = ({ pickerRef, label, selectedValue, onValueChange, children }) => (
   <View style={styles.container}>
     {label && <Text style={styles.label}>{label}</Text>}
-    <ReactPicker selectedValue={selectedValue} onValueChange={onValueChange}>
+    <ReactPicker ref={pickerRef} selectedValue={selectedValue} onValueChange={onValueChange}>
       {children}
     </ReactPicker>
   </View>

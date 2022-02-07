@@ -11,11 +11,11 @@ type Props = {
   setRecipes: SetRecipes;
 };
 
-const MyRecipes: React.FC<Props & RootTabScreenProps<'MyRecipes'>> = ({ setRecipes, recipes }) => {
+const MyRecipes: React.FC<Props & RootTabScreenProps<'MyRecipes'>> = ({ navigation, setRecipes, recipes }) => {
   return (
     <Screen title="my recipes">
       {recipes.length === 0 ? (
-        <InfoBox title="No recipes yet.">
+        <InfoBox title="No recipes yet." onPress={() => navigation.navigate('Calculator')}>
           Create a recipe in the Calculator tab.
         </InfoBox>
       ) : <FlatList

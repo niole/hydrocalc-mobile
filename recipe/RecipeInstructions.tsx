@@ -60,6 +60,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   recipes = [],
   solutions = [],
 }) => {
+  const solutionPickerRef = React.useRef();
   const [unit, selectUnit] = React.useState<SolutionInputMeasurement>(SolutionInputMeasurement.Cup);
   const [wipRecipe, setRecipe] = React.useState<WipRecipe>(recipe || getEmptyRecipe());
   const { showActionSheetWithOptions } = useActionSheet();
@@ -115,15 +116,16 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
         </View>
         {editable && (
           <SolutionPicker
-          solutions={solutions}
-          solution={solution}
-          onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+            pickerRef={solutionPickerRef}
+            solutions={solutions}
+            solution={solution}
+            onChange={s => setRecipe({ ...wipRecipe, solution: s })}
           />)}
       <Section>
         <Tabs defaultKey="instructions">
           <Tab title="Instructions" id="instructions">
             {!recipeIsRenderable(wipRecipe) && (
-              <InfoBox>
+              <InfoBox onPress={() => solutionPickerRef.current?.focus()}>
                 Pick a solution to get started.
               </InfoBox>
             )}
@@ -160,7 +162,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
           </Tab>
           <Tab title="Recipe Inputs" id="inputs">
             {!recipeIsRenderable(wipRecipe) && (
-              <InfoBox>
+              <InfoBox onPress={() => solutionPickerRef.current?.focus()}>
                 Pick a solution to get started.
               </InfoBox>
             )}

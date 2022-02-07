@@ -11,12 +11,14 @@ type Props = {
   onChange?: (s: Solution) => void;
   solutions?: Solution[];
   solution?: Solution;
+  pickerRef?: React.RefObject<any>;
 };
 
-export const SolutionPicker: React.FC<Props> = ({ onChange, solution, solutions = [] }) => {
+export const SolutionPicker: React.FC<Props> = ({ pickerRef, onChange, solution, solutions = [] }) => {
   const allSolutions = [...solutions, ...brandSolutions];
   return (
     <Picker
+      pickerRef={pickerRef}
       label="solution"
       onValueChange={onChange ? handleSetSolution(onChange, allSolutions) : undefined}
       selectedValue={solution?.name}

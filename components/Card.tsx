@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Pressable, Text, View } from 'react-native';
+import { StyleSheet, Button, Pressable, Text, View } from 'react-native';
 import { Title } from './Title';
 import { MoreDrawerOption, MoreDrawer } from './MoreDrawer';
 
@@ -51,10 +51,8 @@ export function Card({
   return (
     <View style={styles.card}>
       <View style={styles.titleBar}>
-        {minimizeable ? (
-          <Pressable onPress={() => setMinimized(!minimized)} style={{flex:7}}>
-            {titleComponent}
-          </Pressable>
+        {minimizeable && !!title ? (
+          <Button title={title} onPress={() => setMinimized(!minimized)} />
         ) : titleComponent}
         <View style={styles.titleActions}>
           {editable && (onRemove || actionOptions.length > 0) && (

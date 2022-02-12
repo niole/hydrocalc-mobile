@@ -84,6 +84,7 @@ export const ValidatedTextInput: React.FC<Props> = ({
           defaultValue={value !== undefined && value !== null ? `${value}` : undefined}
           placeholder={placeholder}
           onChangeText={getThrottledHandler(changeHandler)}
+          returnKeyType="next"
         />
       </View>
       {errorMsg && <Text style={styles[`${errorMsg.kind}Msg` as 'infoMsg']}>{errorMsg.message}</Text>}

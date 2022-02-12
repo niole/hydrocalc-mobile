@@ -17,14 +17,14 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <ActionSheetProvider>
-          <>
-            <RootSiblingParent>
+        <RootSiblingParent>
+          <ActionSheetProvider>
+            <>
               <Navigation colorScheme="light" />
               <StatusBar />
-            </RootSiblingParent>
-          </>
-        </ActionSheetProvider>
+            </>
+          </ActionSheetProvider>
+        </RootSiblingParent>
       </SafeAreaProvider>
     );
   }

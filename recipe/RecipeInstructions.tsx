@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { VolumeUnits, Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { RECIPE_LIMIT } from '../constants/Limits';
+import { formHook } from '../hooks/formHook';
 import {
   InfoBox,
   Toast,
@@ -62,8 +63,15 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
 }) => {
   const solutionPickerRef = React.useRef();
   const [unit, selectUnit] = React.useState<SolutionInputMeasurement>(SolutionInputMeasurement.Cup);
-  const [wipRecipe, setRecipe] = React.useState<WipRecipe>(recipe || getEmptyRecipe());
   const { showActionSheetWithOptions } = useActionSheet();
+  const [formState, setRecipe] = formHook<WipRecipe, Recipe>(getEmptyRecipe(), wipRecipe => ({
+    id: !wipRecipe.id ? { kind: 'error', message: 'Needs an id' } : undefined,
+    name: wipRecipe.name === undefined ? { kind: 'error', message: 'Recipe name is required' } : undefined,
+    solution: !wipRecipe.solution ? { kind: 'error', message: 'Pick a solution' } : undefined,
+    bucketSize: !wipRecipe.bucketSize ? { kind: 'error', message: 'Picka bucket size' } : undefined,
+    ec: !wipRecipe.ec ? { kind: 'error', message: 'Set an ec' } : undefined,
+  }));
+
 
   React.useEffect(() => {
     setRecipe(recipe || getEmptyRecipe());
@@ -72,7 +80,15 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   const onChangeValidation = (recipe: Recipe) => {
     if (onChange) {
       if (recipes.length < RECIPE_LIMIT) {
-        onChange(recipe);
+        if (formState.submittable) {
+          onChange(formState.submittable);
+        } else {
+          const errorMessage = Object.values(formState.validationState)
+          .map(x => x?.message)
+          .filter(x => !!x)
+          .join('. ');
+          Toast.error(`Looks like you missed some things: ${errorMessage}`);
+        }
       } else {
         Toast.error(
           `Can't create recipe ${recipe.name}. You have already reached our limit of ${RECIPE_LIMIT} recipes.`,
@@ -81,6 +97,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
     }
   };
 
+  const wipRecipe = formState.state;
   const { name, ec, bucketSize, solution } = wipRecipe;
   const isExistingRecipe = !!recipes.find(r => r.id === wipRecipe.id);
   return (
@@ -107,7 +124,6 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
               },
               {
                 label: 'Save',
-                disabled: !recipeIsSaveable(wipRecipe),
                 action: () => onChangeValidation(wipRecipe as Recipe),
               },
             ]}

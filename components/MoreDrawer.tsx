@@ -5,6 +5,7 @@ import { MoreButton } from './MoreButton';
 export type MoreDrawerOption = {
   label: string;
   action?: () => void;
+  disabled?: boolean;
 };
 
 type Props = {
@@ -29,7 +30,7 @@ const handleOnPress = (
     }: Props
 ) => () => {
   showActionSheetWithOptions(
-    { options: options.map(o => o.label), cancelButtonIndex, destructiveButtonIndex },
+  { options: options.map(o => o.label), cancelButtonIndex, destructiveButtonIndex, disabledButtonIndices: options.map(x => x.disabled).filter(x => x !== undefined) },
     (i: number | undefined) => {
       if (i !== undefined && !!options[i].action) {
         options[i].action!();

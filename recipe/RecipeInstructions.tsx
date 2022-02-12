@@ -105,10 +105,11 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                   onChange ? onChange(undefined) : null;
                 }
               },
-              ...(recipeIsSaveable(wipRecipe) ? [{
+              {
                 label: 'Save',
+                disabled: !recipeIsSaveable(wipRecipe),
                 action: () => onChangeValidation(wipRecipe as Recipe),
-              }] : []),
+              },
             ]}
             cancelButtonIndex={0}
             destructiveButtonIndex={1}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Text } from 'react-native';
 import { Solution, SolutionInput } from '../globalState';
 import { Picker, PickerItem } from '../components';
 import { brandSolutionInputs } from '../constants/brands';
@@ -35,9 +36,9 @@ export const SolutionInputPicker: React.FC<Props> = ({
       onValueChange={onChange ? handleSetSolutionInput(onChange, allSolutionInputs) : undefined}
       selectedValue={solutionInput?.name}
     >
-      <PickerItem key="none" label="None selected" value={undefined} />
-      <PickerItem key="custom" label="Custom input" value={CUSTOM_INPUT_VALUE} />
-      {allSolutionInputs.map(s => <PickerItem key={s.id} label={s.name} value={s.name}/>)}
+      <PickerItem key="none" label={<Text>None selected</Text>} value={undefined} />
+      <PickerItem key="custom" label={<Text>Custom input</Text>} value={CUSTOM_INPUT_VALUE} />
+      {allSolutionInputs.map(s => <PickerItem key={s.id} label={<Text>{s.name}</Text>} value={s.name}/>)}
     </Picker>
   );
 };

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Text } from 'react-native';
 import { Picker, PickerItem } from '../components';
 import { SolutionInputMeasurement } from '../globalState';
 
@@ -23,15 +24,15 @@ export const SolutionInputMeasurementSelect: React.FC<Props> = ({ onChange, defa
     return (
       <Picker label="solution units" selectedValue={unit} onValueChange={s => selectUnit(s as number)}>
         <PickerItem
-          label={SolutionInputMeasurement[SolutionInputMeasurement.Liter]}
+          label={<Text>{SolutionInputMeasurement[SolutionInputMeasurement.Liter]}</Text>}
           value={SolutionInputMeasurement.Liter}
         />
         <PickerItem
-          label={SolutionInputMeasurement[SolutionInputMeasurement.Cup]}
+          label={<Text>{SolutionInputMeasurement[SolutionInputMeasurement.Cup]}</Text>}
           value={SolutionInputMeasurement.Cup}
         />
         <PickerItem
-          label={SolutionInputMeasurement[SolutionInputMeasurement.FluidOunce]}
+          label={<Text>{SolutionInputMeasurement[SolutionInputMeasurement.FluidOunce]}</Text>}
           value={SolutionInputMeasurement.FluidOunce}
         />
       </Picker>

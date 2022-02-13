@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Text } from 'react-native';
 import { Recipe } from '../globalState';
 import { Picker, PickerItem } from '../components';
 
@@ -26,8 +27,8 @@ export const RecipeSelector: React.FC<Props> = ({ selectedRecipeId, recipes, onC
 
   return (
     <Picker label="recipe" selectedValue={selectedRecipeId} onValueChange={selectRecipe(handleSetRecipe, recipes)}>
-      <PickerItem key="pick" label="None selected" value="" />
-      {recipes.map(r => <PickerItem key={r.id} label={r.name} value={r.id} />)}
+      <PickerItem key="pick" label={<Text>None selected</Text>} value="" />
+      {recipes.map(r => <PickerItem key={r.id} label={<Text>{r.name}</Text>} value={r.id} />)}
     </Picker>
   );
 };

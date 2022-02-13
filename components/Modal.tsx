@@ -66,18 +66,18 @@ export function Modal({
             <ScrollView>{children}</ScrollView>
           </View>
           <View style={styles.actionBar}>
-            <RemoveButton
+            {onCancel && <RemoveButton
               size="big"
               onPress={handleCancel}
             >
               {cancelLabel || <Text>cancel</Text>}
-            </RemoveButton>
-            <CheckButton
+            </RemoveButton>}
+            {onSubmit && <CheckButton
               size="big"
               onPress={handleSubmit}
             >
               {submitLabel || <Text>submit</Text>}
-            </CheckButton>
+            </CheckButton>}
           </View>
         </View>
       </ReactModal>

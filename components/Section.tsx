@@ -1,20 +1,24 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ViewStyle, StyleSheet, View } from 'react-native';
 
 type Props = {
   children?: any;
   bordered?: boolean;
   topOnly?: boolean;
   top?: boolean;
+  style?: ViewStyle[];
 };
 
-export const Section: React.FC<Props> = ({ children, top = false, bordered = false, topOnly = false }) => (
-  <View
-    style={bordered ? [...(topOnly ? [styles.borderedTopSection] : top ? [styles.borderedTopSection, styles.borderedBottomSection] : [styles.borderedBottomSection]), styles.section] : styles.section}
-  >
-    {children}
-  </View>
-);
+export const Section: React.FC<Props> = ({ style = [], children, top = false, bordered = false, topOnly = false }) => {
+  const baseStyle = [...style, styles.section];
+  return (
+    <View
+      style={bordered ? [...baseStyle, ...(topOnly ? [styles.borderedTopSection] : top ? [styles.borderedTopSection, styles.borderedBottomSection] : [styles.borderedBottomSection])] : baseStyle}
+    >
+      {children}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   borderedTopSection: {
@@ -25,5 +29,5 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     borderBottomWidth: 1,
   },
-  section: { marginTop: 10, marginBottom: 10, paddingTop: 10, paddingBottom: 10 }
+  section: { paddingTop: 20, paddingBottom: 20 }
 });

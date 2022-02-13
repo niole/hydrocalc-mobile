@@ -63,7 +63,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   recipes = [],
   solutions = [],
 }) => {
-  const solutionPickerRef = React.useRef();
+  const [openSolutionPicker, setOpenSolutionPicker] = React.useState<boolean>(false);
   const [unit, selectUnit] = React.useState<SolutionInputMeasurement>(SolutionInputMeasurement.Cup);
   const { showActionSheetWithOptions } = useActionSheet();
   const [formState, setRecipe] = formHook<WipRecipe, Recipe>(getEmptyRecipe(), wipRecipe => ({
@@ -159,15 +159,18 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
         )}
         {editable && (
           <SolutionPicker
-            pickerRef={solutionPickerRef}
+            open={openSolutionPicker}
             solutions={solutions}
             solution={solution}
-            onChange={s => setRecipe({ ...wipRecipe, solution: s })}
+            onChange={s => {
+              setOpenSolutionPicker(false);
+              setRecipe({ ...wipRecipe, solution: s });
+            }}
           />)}
       <Section>
         <Subtitle>Instructions</Subtitle>
           {!recipeIsRenderable(wipRecipe) && (
-            <InfoBox onPress={() => solutionPickerRef.current?.focus()}>
+            <InfoBox onPress={() => setOpenSolutionPicker(true)}>
               Pick a solution to get started.
             </InfoBox>
           )}

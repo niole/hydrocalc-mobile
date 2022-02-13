@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { VolumeUnits, Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
+import { NPK, VolumeUnits, Solution, BucketSize, SolutionInputMeasurement, Recipe } from '../globalState';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { RECIPE_LIMIT } from '../constants/Limits';
 import { formHook } from '../hooks/formHook';
 import {
+  bucketSizeLabelText,
+  EditableText,
   InfoBox,
   Toast,
   Tabs,
@@ -139,75 +141,61 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
             onChange={s => setRecipe({ ...wipRecipe, solution: s })}
           />)}
       <Section>
-        <Tabs defaultKey="instructions">
-          <Tab title="Instructions" id="instructions">
-            {!recipeIsRenderable(wipRecipe) && (
-              <InfoBox onPress={() => solutionPickerRef.current?.focus()}>
-                Pick a solution to get started.
-              </InfoBox>
-            )}
-            <Doer before={wipRecipe} checker={recipeIsRenderable}>
-              {({ solution, ec, bucketSize }: ShowableRecipe) => (
-                <>
-                  <Section>
-                        <View style={{marginBottom: 16, marginLeft:10}}>
-                          <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates <Text style={styles.bold}><BucketSizeLabel fontSize={18} bucketSize={bucketSize} /></Text> of nutrient solution with an e.c. of <Text style={styles.bold}>{ec}</Text> millisiemens/cm and a N-P-K ratio of <Text style={styles.bold}>{solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>.</Text>
-                          <Annotation>Change npk, bucket size, and e.c. in the Recipe Inputs section.</Annotation>
-                        </View>
-                        <Subtitle>Instructions</Subtitle>
-                        <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
-                        <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
-                      <Section>
-                      {solution?.inputs.map(input => (
-                        <View key={input.solution.id} style={{ marginBottom: 3, marginLeft:20}}>
-                          <Text style={styles.readableText}>
-                            {getInputVolumeInstructions(
-                              unit,
-                              getGallonsFromSize(bucketSize),
-                              input.frac,
-                              ec,
-                              input.solution.tspsPerGallon1kEC
-                            )} of </Text><Text style={[styles.bold, styles.readableText]}>{input.solution.name}</Text>
-                        </View>
-                      ))}
-                      </Section>
-                      <SolutionInputMeasurementSelect onChange={selectUnit} />
-                  </Section>
-                </>
-              )}
-            </Doer>
-          </Tab>
-          <Tab title="Recipe Inputs" id="inputs">
-            {!recipeIsRenderable(wipRecipe) && (
-              <InfoBox onPress={() => solutionPickerRef.current?.focus()}>
-                Pick a solution to get started.
-              </InfoBox>
-            )}
-            <Doer before={wipRecipe} checker={recipeIsRenderable}>
-              {(showableRecipe: ShowableRecipe) => (
-                <>
-                  <LabelValue label="npk" value={<NpkLabel npk={showableRecipe.solution.targetNpk} />} />
-                  <LabelValue
-                    editable={true}
-                    label="ec (millisiemen/cm)"
-                    value={ec}
-                    onChangeNumber={newEc => setRecipe({...showableRecipe, ec: newEc })}
-                  />
-                  <LabelValue
-                    label="bucket size"
-                    componentValue={
-                      <BucketSizeLabel
-                        editable={true}
-                        bucketSize={bucketSize}
-                        onChange={(bucketSize: BucketSize) => setRecipe({...showableRecipe, bucketSize })}
-                      />
-                    }
-                  />
+        <Subtitle>Instructions</Subtitle>
+          {!recipeIsRenderable(wipRecipe) && (
+            <InfoBox onPress={() => solutionPickerRef.current?.focus()}>
+              Pick a solution to get started.
+            </InfoBox>
+          )}
+          <Doer before={wipRecipe} checker={recipeIsRenderable}>
+            {({ solution, ec, bucketSize }: ShowableRecipe) => (
+              <>
+                <Section>
+                      <View style={{marginBottom: 16, marginLeft:10, flexDirection: 'row', flexWrap: 'wrap' }}>
+                        <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates </Text>
+                        <EditableText initialText={bucketSizeLabelText(bucketSize)} style={[styles.bold, styles.readableText]} getText={bucketSizeLabelText} editable={true} onChange={bucketSize => setRecipe({ ...wipRecipe, bucketSize })}>{onChange => <BucketSizeLabel onChange={onChange} editable={true} fontSize={18} bucketSize={bucketSize} />}</EditableText>
+                        <Text style={[styles.readableText, {marginBottom: 3}]}> of nutrient solution with an e.c. of </Text>
+                          <EditableText
+                            initialText={ec.toString()}
+                            style={[styles.bold, styles.readableText]}
+                            editable={true}
+                            getText={x => `${x} millisiemens/cm`}
+                            onChange={(ec: number) => setRecipe({...wipRecipe, ec })}
+                          >
+                            {onChange => <LabelValue label="ec (millisiemens/cm)" value={ec} onChangeNumber={onChange} editable={true} />}
+                          </EditableText>
+                          <Text> and a N-P-K ratio of </Text>
+                          <EditableText
+                            initialText={`${solution.targetNpk.n}-${solution.targetNpk.p}-${solution.targetNpk.k}`}
+                            style={[styles.bold, styles.readableText]}
+                            editable={true}
+                            getText={(targetNpk: NPK) => `${targetNpk.n}-${targetNpk.p}-${targetNpk.k}`}
+                            onChange={(targetNpk: NPK) => setRecipe({...wipRecipe, solution: { ...solution, targetNpk } })}
+                          >
+                            {onChange => <NpkLabel npk={solution.targetNpk} editable={true} onChange={onChange} />}
+                          </EditableText>
+                      </View>
+                      <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
+                      <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
+                    <Section>
+                    {solution?.inputs.map(input => (
+                      <View key={input.solution.id} style={{ marginBottom: 3, marginLeft:20}}>
+                        <Text style={styles.readableText}>
+                          {getInputVolumeInstructions(
+                            unit,
+                            getGallonsFromSize(bucketSize),
+                            input.frac,
+                            ec,
+                            input.solution.tspsPerGallon1kEC
+                          )} of </Text><Text style={[styles.bold, styles.readableText]}>{input.solution.name}</Text>
+                      </View>
+                    ))}
+                    </Section>
+                    <SolutionInputMeasurementSelect onChange={selectUnit} />
+                </Section>
               </>
             )}
           </Doer>
-        </Tab>
-      </Tabs>
     </Section>
     {showRecipePicker(editable, recipes.length) && (
       <Section bordered={true} topOnly={true}>

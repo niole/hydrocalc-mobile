@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { TextInput, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import { VolumeUnits, BucketSize } from '../globalState';

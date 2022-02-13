@@ -33,7 +33,7 @@ export const LabelValue: React.FC<Props> = ({
 }) => {
   const containerStyle = [
     styles.container,
-    rowStyle ? styles.containerRow : styles.containerColumn,
+    rowStyle ? styles.containerRow : {},
     ...(editable ? [styles.editableContainer] : [])
   ];
   return (
@@ -51,7 +51,7 @@ export const LabelValue: React.FC<Props> = ({
           onChangeNumber={onChangeNumber}
         />
       ) : value !== undefined ? (
-        <Text style={styles.value}>{value}</Text>
+        <Text>{value}</Text>
       ) : !!componentValue ? componentValue : null}
     </View>
   );
@@ -61,9 +61,6 @@ const styles = StyleSheet.create({
   editableContainer: {
     borderColor: 'lightgrey',
     backgroundColor: '#f2f2f2',
-  },
-  value: {
-    flex: 1,
   },
   container: {
     justifyContent: 'space-between',
@@ -81,9 +78,5 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.small,
     fontWeight: 'bold',
     paddingRight: 5,
-    flex: 1,
   },
-  containerColumn: {
-    flex: 1,
-  }
 });

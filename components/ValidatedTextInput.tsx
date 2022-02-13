@@ -73,8 +73,8 @@ export const ValidatedTextInput: React.FC<Props> = ({
   }, [value]);
 
   return (
-    <View style={{ flex: 1, maxWidth: maxSize }}>
-      <View style={rowStyle ? [styles.inputGroup, styles.labelGroupRow] : styles.inputGroup}>
+    <View style={{ maxWidth: maxSize }}>
+      <View style={rowStyle ? [ styles.labelGroupRow] : undefined}>
         {label && <Text style={styles.label}>{`${label} `}</Text>}
         <TextInput
           multiline={multiline}
@@ -152,16 +152,11 @@ async function handleParseNumber(uncleanT: string): Promise<number> {
 };
 
 const styles = StyleSheet.create({
-  inputGroup: {
-    flex: 1,
-  },
   editingContainer: {
     fontSize: fontSizes.small,
-    flex: 1,
     color: 'black',
   },
   label: {
-    flex: 1,
     fontWeight: 'bold',
   },
   labelGroupRow: {

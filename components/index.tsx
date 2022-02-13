@@ -22,3 +22,4 @@ export * from './Doer';
 export * from './InfoBox';
 export * from './getThrottledHandler';
 export * from './Toast';
+export * from './EditableText';

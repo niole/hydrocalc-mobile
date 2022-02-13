@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal as ReactModal, StyleSheet, Text, Pressable, View } from 'react-native';
+import { ScrollView, Modal as ReactModal, StyleSheet, Text, Pressable, View } from 'react-native';
 import { RemoveButton } from './RemoveButton';
 import { CheckButton } from './CheckButton';
 
@@ -32,6 +32,12 @@ export function Modal({
     Trigger,
 }: Props) {
   const [modalVisible, setModalVisible] = React.useState(show || false);
+
+  React.useEffect(() => {
+    if (show !== undefined) {
+      setModalVisible(show);
+    }
+  }, [show]);
   const handleSubmit = () => {
     onSubmit ? onSubmit() : undefined;
     setModalVisible(false);
@@ -44,7 +50,7 @@ export function Modal({
   const triggerText = triggerLabel || <Text>Show Modal</Text>;
 
   return (
-    <View>
+    <>
       <ReactModal
         animationType="slide"
         transparent={true}
@@ -56,7 +62,7 @@ export function Modal({
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {title && <Text>{title}</Text>}
-            {children}
+              <View style={{flex:1}}><ScrollView>{children}</ScrollView></View>
             <View style={styles.actionBar}>
               <RemoveButton
                 onPress={handleCancel}
@@ -79,7 +85,7 @@ export function Modal({
       >
         {triggerText}
       </Pressable>}
-    </View>
+    </>
   );
 }
 

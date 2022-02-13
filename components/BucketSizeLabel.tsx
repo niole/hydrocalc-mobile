@@ -49,4 +49,7 @@ export const BucketSizeLabel: React.FC<BucketSizeProps> = ({
     {({ lwh }: BucketWithSize) => <Text style={fontSize ? { fontSize } : undefined} >{lwh.length} x {lwh.width} x {lwh.height} {pluralizeSizes(lwh.unit)}</Text>}
   </Doer>
 </>
-);
+  );
+
+  export const bucketSizeLabelText = ({ volume, lwh }: BucketSize) => !!volume ?
+  `${volume.total} ${pluralizeVolumes(volume.unit)}` : !!lwh ? `${lwh.length} x ${lwh.width} x ${lwh.height} ${pluralizeSizes(lwh.unit)}` : '';

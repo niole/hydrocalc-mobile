@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
 import {
+  EditableText,
   MoreDrawer,
   Minimizer,
   ValidatedTextInput,
@@ -29,18 +30,21 @@ export const EditableInputCard: React.FC<Props> = ({
   solutionInput,
 }) => {
   const [newValues, onChangeValues] = React.useState<SolutionInput>(solutionInput);
+
   React.useEffect(() => {
     if (!!newValues.name && !!newValues.npk && newValues.tspsPerGallon1kEC !== undefined && onChange) {
       onChange(newValues as SolutionInput);
     }
   }, [newValues.name, newValues.npk, newValues.brand, newValues.tspsPerGallon1kEC]);
+
+  const canEdit = editable && !newValues.brand;
   return (
-    <Minimizer showOverride={!newValues.brand}>
+    <Minimizer showOverride={canEdit}>
       {({ ChildMinimizer, Toggle }) => (
         <View>
           <View style={styles.titleBar}>
             <View style={{flex:7}}>
-              {editable && !newValues.brand ? (
+              {canEdit ? (
                 <LabelValue
                   label="input name"
                   editable={editable}
@@ -65,21 +69,49 @@ export const EditableInputCard: React.FC<Props> = ({
                 label="brand"
                 value={newValues.brand}
               />)}
-            <LabelValue
-              label="npk"
-              value={
-                <NpkLabel
-                  onChange={npk => onChangeValues({...newValues, npk })}
-                  editable={editable}
-                  npk={newValues.npk}
-                />
-              }
+              <LabelValue
+                label="npk"
+                value={
+                    <EditableText
+                      initialText={`${newValues.npk.n}-${newValues.npk.p}-${newValues.npk.k}`}
+                      editable={canEdit}
+                      getText={(npk: NPK) => `${npk.n}-${npk.p}-${npk.k}`}
+                      onChange={npk => onChangeValues({...newValues, npk })}
+                    >
+                        {onChange =>
+                          <LabelValue
+                            label="npk"
+                            value={
+                              <NpkLabel
+                                onChange={onChange}
+                                editable={true}
+                                npk={newValues.npk}
+                              />
+                            }
+                          />
+                        }
+                    </EditableText>
+                }
             />
             <LabelValue
-              editable={editable}
-              onChangeNumber={tspsPerGallon1kEC => onChangeValues({...newValues, tspsPerGallon1kEC})}
               label="tsps per gallon for 1k ec"
-              value={newValues.tspsPerGallon1kEC}
+              value={
+                <EditableText
+                  initialText={newValues.tspsPerGallon1kEC.toString()}
+                  editable={canEdit}
+                  getText={n => n.toString()}
+                  onChange={(tspsPerGallon1kEC: number) => onChangeValues({...newValues, tspsPerGallon1kEC })}
+                >
+                    {onChange =>
+                      <LabelValue
+                        label="tsps per gallon for 1k ec"
+                        onChangeNumber={tspsPerGallon1kEC => onChangeValues({...newValues, tspsPerGallon1kEC})}
+                        editable={true}
+                        value={newValues.tspsPerGallon1kEC}
+                      />
+                    }
+                </EditableText>
+              }
             />
         </ChildMinimizer>
         </View>

@@ -43,7 +43,7 @@ export function EditableText<D>({
     onChange && data ? onChange(data) : undefined;
   };
 
-  const t = <Text style={style.concat(styles.text)}>{text}</Text>;
+  const t = <Text style={editable ? style.concat(styles.editableText) : style.concat(styles.text)}>{text}</Text>;
   return (
     <>
       {editable ? <Pressable onPress={() => setOpen(!open)}>{t}</Pressable> : t}
@@ -54,6 +54,9 @@ export function EditableText<D>({
 
 const styles = StyleSheet.create({
   text: {
+    color: 'black',
+  },
+  editableText: {
     color: editableBlue,
     textDecorationLine: 'underline',
   }

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { Solution, SolutionInput } from '../globalState';
-import { Picker, PickerItem } from '../components';
+import { NpkLabel, Picker, PickerItem } from '../components';
 import { brandSolutionInputs } from '../constants/brands';
 import * as inputCalculator from '../recipe/inputCalculator';
 
@@ -26,6 +26,7 @@ export const SolutionInputPicker: React.FC<Props> = ({
       id: `${s.id}-calculated-input`,
       name: s.name,
       npk: s.targetNpk,
+      brand: undefined,
       tspsPerGallon1kEC: s.inputs.reduce((acc, s) => acc + (s.frac*s.solution.tspsPerGallon1kEC), 0)
     })),
     ...brandSolutionInputs
@@ -38,7 +39,19 @@ export const SolutionInputPicker: React.FC<Props> = ({
     >
       <PickerItem key="none" label={<Text>None selected</Text>} value={undefined} />
       <PickerItem key="custom" label={<Text>Custom input</Text>} value={CUSTOM_INPUT_VALUE} />
-      {allSolutionInputs.map(s => <PickerItem key={s.id} label={<Text>{s.name}</Text>} value={s.name}/>)}
+        {allSolutionInputs.map(s =>
+                               <PickerItem
+                                key={s.id}
+                                label={
+                                  <View>
+                                    <Text>{s.name}</Text>
+                                    {s.brand && <Text>{s.brand}</Text>}
+                                    <NpkLabel npk={s.npk} />
+                                  </View>
+                                }
+                                value={s.name}
+                                />
+                              )}
     </Picker>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, Modal as ReactModal, StyleSheet, Text, Pressable, View } from 'react-native';
+import { Title } from './Title';
 import { RemoveButton } from './RemoveButton';
 import { CheckButton } from './CheckButton';
 
@@ -50,31 +51,33 @@ export function Modal({
   const triggerText = triggerLabel || <Text>Show Modal</Text>;
 
   return (
-    <>
+    <View>
       <ReactModal
         animationType="slide"
-        transparent={true}
+        transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            {title && <Text>{title}</Text>}
-              <View style={{flex:1}}><ScrollView>{children}</ScrollView></View>
-            <View style={styles.actionBar}>
-              <RemoveButton
-                onPress={handleCancel}
-              >
-                {cancelLabel || <Text>cancel</Text>}
-              </RemoveButton>
-              <CheckButton
-                onPress={handleSubmit}
-              >
-                {submitLabel || <Text>submit</Text>}
-              </CheckButton>
-            </View>
+          {title && <Title>{title}</Title>}
+          <View style={[styles.modalView, {flex:1}]}>
+            <ScrollView>{children}</ScrollView>
+          </View>
+          <View style={styles.actionBar}>
+            <RemoveButton
+              size="big"
+              onPress={handleCancel}
+            >
+              {cancelLabel || <Text>cancel</Text>}
+            </RemoveButton>
+            <CheckButton
+              size="big"
+              onPress={handleSubmit}
+            >
+              {submitLabel || <Text>submit</Text>}
+            </CheckButton>
           </View>
         </View>
       </ReactModal>
@@ -85,35 +88,24 @@ export function Modal({
       >
         {triggerText}
       </Pressable>}
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   actionBar: {
-    marginTop: 22,
     flexDirection: 'row',
     justifyContent: "space-between",
   },
   centeredView: {
+    paddingTop: 40,
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
   },
   modalView: {
-    margin: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 40,
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
   },
   button: {
     borderRadius: 20,

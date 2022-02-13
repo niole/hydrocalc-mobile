@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Pressable, Text, View } from 'react-native';
 import fontSizes from '../constants/FontSizes';
+import { editableBlue } from '../constants/Colors';
 
 /**
  * I made some tabs bc for some reason things cost money in mobile
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   selected: {
-    borderBottomColor: 'rgb(0, 122, 255)',
+    borderBottomColor: editableBlue,
     borderBottomWidth: 3,
   },
   baseText: {

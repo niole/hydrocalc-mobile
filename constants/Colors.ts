@@ -1,5 +1,6 @@
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
+export const editableBlue = 'rgb(0, 122, 255)';
 
 export default {
   light: {

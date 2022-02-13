@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, TextStyle } from 'react-native';
 import { Modal } from './Modal';
-
+import { editableBlue } from '../constants/Colors';
 
 type Props<D> = {
   children: (onChange: (d: D) => void) => JSX.Element;
@@ -54,7 +54,7 @@ export function EditableText<D>({
 
 const styles = StyleSheet.create({
   text: {
-    color: 'blue',
+    color: editableBlue,
     textDecorationLine: 'underline',
   }
 });

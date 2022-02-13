@@ -5,11 +5,12 @@ type Props = {
   children?: any;
   bordered?: boolean;
   topOnly?: boolean;
+  top?: boolean;
 };
 
-export const Section: React.FC<Props> = ({ children, bordered = false, topOnly = false }) => (
+export const Section: React.FC<Props> = ({ children, top = false, bordered = false, topOnly = false }) => (
   <View
-    style={bordered ? [topOnly ? styles.borderedTopSection : styles.borderedBottomSection, styles.section] : styles.section}
+    style={bordered ? [...(topOnly ? [styles.borderedTopSection] : top ? [styles.borderedTopSection, styles.borderedBottomSection] : [styles.borderedBottomSection]), styles.section] : styles.section}
   >
     {children}
   </View>

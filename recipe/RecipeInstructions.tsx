@@ -89,7 +89,6 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
           onChange(formState.submittable);
         } else {
           const errorValues = Object.values(formState.validationState).filter(x => !!x);
-          console.log(formState.validationState);
           if (errorValues.length === 1 && formState.validationState.name !== undefined) {
             // just don't have name
             setShowTitleModal(true);
@@ -187,13 +186,13 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                           >
                             {onChange => <LabelValue label="ec (millisiemens/cm)" value={ec} onChangeNumber={onChange} editable={true} />}
                           </EditableText>
-                          <Text style={[styles.readableText, {marginBottom: 3}]}> and a N-P-K ratio of {solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>
+                          <Text style={[styles.readableText, {marginBottom: 3}]}> and a N-P-K ratio of {solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}.</Text>
                       </View>
-                      <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
-                      <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>
+                      <Text style={[styles.readableText, { marginBottom: 3, marginLeft:20}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
+                      <Text style={[styles.readableText, { marginBottom: 3, marginLeft:20}]}>2. Add the following nutrients:</Text>
                     <Section>
                     {solution?.inputs.map(input => (
-                      <View key={input.solution.id} style={{ marginBottom: 3, marginLeft:20}}>
+                      <View key={input.solution.id} style={{ marginBottom: 3, marginLeft:40, flexDirection: 'row', flexWrap: 'wrap'}}>
                         <Text style={styles.readableText}>
                           {getInputVolumeInstructions(
                             unit,

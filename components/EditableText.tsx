@@ -47,7 +47,7 @@ export function EditableText<D>({
   return (
     <>
       {editable ? <Pressable onPress={() => setOpen(!open)}>{t}</Pressable> : t}
-      <Modal show={open} onSubmit={handleSubmit}>{children(handleChange)}</Modal>
+      {open && <Modal show={open} onSubmit={handleSubmit}>{children(handleChange)}</Modal>}
     </>
   );
   }

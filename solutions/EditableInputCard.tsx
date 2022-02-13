@@ -71,7 +71,7 @@ export const EditableInputCard: React.FC<Props> = ({
               />)}
               <LabelValue
                 label="npk"
-                value={
+                componentValue={
                     <EditableText
                       initialText={`${newValues.npk.n}-${newValues.npk.p}-${newValues.npk.k}`}
                       editable={canEdit}
@@ -95,7 +95,7 @@ export const EditableInputCard: React.FC<Props> = ({
             />
             <LabelValue
               label="tsps per gallon for 1k ec"
-              value={
+              componentValue={
                 <EditableText
                   initialText={newValues.tspsPerGallon1kEC.toString()}
                   editable={canEdit}
@@ -105,7 +105,7 @@ export const EditableInputCard: React.FC<Props> = ({
                     {onChange =>
                       <LabelValue
                         label="tsps per gallon for 1k ec"
-                        onChangeNumber={tspsPerGallon1kEC => onChangeValues({...newValues, tspsPerGallon1kEC})}
+                        onChangeNumber={onChange}
                         editable={true}
                         value={newValues.tspsPerGallon1kEC}
                       />

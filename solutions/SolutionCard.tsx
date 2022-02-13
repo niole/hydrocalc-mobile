@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
 import { SolutionInput, FractionalInput, NPK, Solution } from '../globalState';
-import { Toast, Annotation, ValidatedTextInput, Title, Section, NpkLabel, LabelValue, Card } from '../components';
+import { EditableText, Toast, Annotation, ValidatedTextInput, Title, Section, NpkLabel, LabelValue, Card } from '../components';
 import { EditableInputCard } from './EditableInputCard';
 import { updateInputProportions } from '../recipe/inputCalculator';
 import { SolutionInputPicker } from './SolutionInputPicker';
@@ -103,28 +103,43 @@ export const SolutionCard: React.FC<Props> = ({
         action: handleEdit
       }]}
     >
-    <Section bordered={newSolution.inputs.length > 0}>
-        {editing && (
-            <SolutionInputPicker
-              onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
-              solutions={solutions}
-            />
-        )}
+    <Section>
         <LabelValue
           label="target npk"
-          value={
-            <NpkLabel
+          componentValue={
+            <EditableText
+              initialText={`${newSolution.targetNpk.n}-${newSolution.targetNpk.p}-${newSolution.targetNpk.k}`}
               editable={editing}
-              npk={newSolution.targetNpk}
+              getText={(npk: NPK) => `${npk.n}-${npk.p}-${npk.k}`}
               onChange={handleEditSolutionNpk}
-            />
+            >
+                {onChange =>
+                  <LabelValue
+                    label="target npk"
+                    value={
+                      <NpkLabel
+                        onChange={onChange}
+                        editable={true}
+                        npk={newSolution.targetNpk}
+                      />
+                    }
+                  />
+                }
+            </EditableText>
           }
         />
+        {editing && (
+          <SolutionInputPicker
+            onChange={handleUpdateSolutionInput(setNewSolution, newSolution)}
+            solutions={solutions}
+          />
+        )}
       </Section>
       {(newSolution.inputs || []).map((i, index) =>
         <Section
           key={i.solution.id}
           bordered={true}
+          top={index === 0}
         >
           <EditableInputCard
             editable={editing && !i.solution.brand}

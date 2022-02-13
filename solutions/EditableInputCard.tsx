@@ -2,8 +2,8 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SolutionInput, NPK } from '../globalState';
 import {
-  ConfirmationModal,
-  RemoveButton,
+  MoreDrawer,
+  Minimizer,
   ValidatedTextInput,
   Section,
   Title,
@@ -35,49 +35,56 @@ export const EditableInputCard: React.FC<Props> = ({
     }
   }, [newValues.name, newValues.npk, newValues.brand, newValues.tspsPerGallon1kEC]);
   return (
-    <View>
-      <View style={styles.titleBar}>
-        <View style={{flex:7}}>
-          {editable ? (
+    <Minimizer showOverride={!newValues.brand}>
+      {({ ChildMinimizer, Toggle }) => (
+        <View>
+          <View style={styles.titleBar}>
+            <View style={{flex:7}}>
+              {editable && !newValues.brand ? (
+                <LabelValue
+                  label="input name"
+                  editable={editable}
+                  multiline={true}
+                  value={newValues.name}
+                  onChange={name => onChangeValues({ ...newValues, name })}
+                />
+                ) : <Toggle><Title>{newValues.name || 'untitled'}</Title></Toggle>
+              }
+            </View>
+              {onRemove && (
+                <MoreDrawer
+                  options={[{ label: 'Cancel' }, { label: 'Remove', action: () => onRemove(solutionInput)}]}
+                  cancelButtonIndex={0}
+                  destructiveButtonIndex={1}
+                />
+              )}
+          </View>
+          <ChildMinimizer>
+            {!!newValues.brand && (
+              <LabelValue
+                label="brand"
+                value={newValues.brand}
+              />)}
             <LabelValue
-              label="input name"
-              editable={editable}
-              multiline={true}
-              value={newValues.name}
-              onChange={name => onChangeValues({ ...newValues, name })}
+              label="npk"
+              value={
+                <NpkLabel
+                  onChange={npk => onChangeValues({...newValues, npk })}
+                  editable={editable}
+                  npk={newValues.npk}
+                />
+              }
             />
-            ) : <Title>{newValues.name || 'untitled'}</Title>
-          }
+            <LabelValue
+              editable={editable}
+              onChangeNumber={tspsPerGallon1kEC => onChangeValues({...newValues, tspsPerGallon1kEC})}
+              label="tsps per gallon for 1k ec"
+              value={newValues.tspsPerGallon1kEC}
+            />
+        </ChildMinimizer>
         </View>
-          {onRemove && <View style={{flex:1}}><ConfirmationModal
-          onConfirm={() => onRemove!(solutionInput)}
-          Trigger={RemoveButton}
-        >
-          <Text>Are you sure you want to remove input, {newValues.name}?</Text>
-            </ConfirmationModal></View>}
-      </View>
-      {newValues.brand && (
-        <LabelValue
-          label="brand"
-          value={newValues.brand}
-        />)}
-      <LabelValue
-        label="npk"
-        value={
-          <NpkLabel
-            onChange={npk => onChangeValues({...newValues, npk })}
-            editable={editable}
-            npk={newValues.npk}
-          />
-        }
-      />
-      <LabelValue
-        editable={editable}
-        onChangeNumber={tspsPerGallon1kEC => onChangeValues({...newValues, tspsPerGallon1kEC})}
-        label="tsps per gallon for 1k ec"
-        value={newValues.tspsPerGallon1kEC}
-      />
-    </View>
+      )}
+    </Minimizer>
   );
 };
 

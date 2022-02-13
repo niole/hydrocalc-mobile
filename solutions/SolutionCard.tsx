@@ -127,7 +127,7 @@ export const SolutionCard: React.FC<Props> = ({
           bordered={true}
         >
           <EditableInputCard
-            editable={editing}
+            editable={editing && !i.solution.brand}
             key={i.solution.id}
             frac={i.frac}
             solutionInput={i.solution}

@@ -5,6 +5,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { RECIPE_LIMIT } from '../constants/Limits';
 import { formHook } from '../hooks/formHook';
 import {
+  Modal,
   bucketSizeLabelText,
   EditableText,
   InfoBox,
@@ -16,7 +17,6 @@ import {
   Subtitle,
   Title,
   LabelValue,
-  NpkLabel,
   BucketSizeLabel,
   MoreDrawer,
   Annotation,
@@ -58,7 +58,7 @@ type RecipeInstructionsProps = {
 export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   recipe,
   onChange,
-  showTitle = true,
+  showTitle = false,
   editable = false,
   recipes = [],
   solutions = [],
@@ -73,23 +73,33 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
     bucketSize: !wipRecipe.bucketSize ? { kind: 'error', message: 'Picka bucket size' } : undefined,
     ec: !wipRecipe.ec ? { kind: 'error', message: 'Set an ec' } : undefined,
   }));
-
+  const [showTitleModal, setShowTitleModal] = React.useState<boolean>(false);
+  const wipRecipe = formState.state;
+  const { name, ec, bucketSize, solution } = wipRecipe;
+  const isExistingRecipe = !!recipes.find(r => r.id === wipRecipe.id);
 
   React.useEffect(() => {
     setRecipe(recipe || getEmptyRecipe());
   }, [recipe]);
 
-  const onChangeValidation = (recipe: Recipe) => {
+  const onChangeValidation = (recipe: WipRecipe) => {
     if (onChange) {
       if (recipes.length < RECIPE_LIMIT) {
         if (formState.submittable) {
           onChange(formState.submittable);
         } else {
-          const errorMessage = Object.values(formState.validationState)
-          .map(x => x?.message)
-          .filter(x => !!x)
-          .join('. ');
-          Toast.error(`Looks like you missed some things: ${errorMessage}`);
+          const errorValues = Object.values(formState.validationState).filter(x => !!x);
+          console.log(formState.validationState);
+          if (errorValues.length === 1 && formState.validationState.name !== undefined) {
+            // just don't have name
+            setShowTitleModal(true);
+          } else {
+            // don't have lots of things
+            const errorMessage = errorValues
+            .map(x => x?.message)
+            .join('. ');
+            Toast.error(`Looks like you missed some things: ${errorMessage}`);
+          }
         }
       } else {
         Toast.error(
@@ -99,40 +109,53 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
     }
   };
 
-  const wipRecipe = formState.state;
-  const { name, ec, bucketSize, solution } = wipRecipe;
-  const isExistingRecipe = !!recipes.find(r => r.id === wipRecipe.id);
   return (
     <View>
-      {editable && <Title>{isExistingRecipe ? 'Edit Recipe' : 'Create a Recipe'}</Title>}
+      <Modal
+        show={showTitleModal}
+        onCancel={() => setShowTitleModal(false)}
+        onSubmit={() => {
+          setShowTitleModal(false);
+          onChangeValidation(wipRecipe);
+        }}
+      >
+          <LabelValue
+            editable={true}
+            label="title"
+            onChange={title => setRecipe({...wipRecipe, name: title })}
+          />
+      </Modal>
+      {editable && (
         <View style={styles.titleBar}>
-          {showTitle ? (
+          {isExistingRecipe ? <Title>Edit Recipe</Title> : <Title>Create a Recipe</Title>}
+            <MoreDrawer
+              options={[
+                { label: 'Cancel' },
+                {
+                  label: 'Clear',
+                  action: () => {
+                    setRecipe(getEmptyRecipe());
+                    onChange ? onChange(undefined) : null;
+                  }
+                },
+                {
+                  label: 'Save',
+                  action: () => onChangeValidation(wipRecipe),
+                },
+              ]}
+              cancelButtonIndex={0}
+              destructiveButtonIndex={1}
+            />
+        </View>
+      )}
+      {(showTitle || (editable && isExistingRecipe)) && (
             <EditableTitle
               onChange={name => setRecipe({...wipRecipe, name })}
               editable={editable}
             >
               {name}
             </EditableTitle>
-          ) : <></>}
-          {editable && <MoreDrawer
-            options={[
-              { label: 'Cancel' },
-              {
-                label: 'Clear',
-                action: () => {
-                  setRecipe(getEmptyRecipe());
-                  onChange ? onChange(undefined) : null;
-                }
-              },
-              {
-                label: 'Save',
-                action: () => onChangeValidation(wipRecipe as Recipe),
-              },
-            ]}
-            cancelButtonIndex={0}
-            destructiveButtonIndex={1}
-          />}
-        </View>
+        )}
         {editable && (
           <SolutionPicker
             pickerRef={solutionPickerRef}
@@ -156,7 +179,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                         <EditableText initialText={bucketSizeLabelText(bucketSize)} style={[styles.bold, styles.readableText]} getText={bucketSizeLabelText} editable={true} onChange={bucketSize => setRecipe({ ...wipRecipe, bucketSize })}>{onChange => <BucketSizeLabel onChange={onChange} editable={true} fontSize={18} bucketSize={bucketSize} />}</EditableText>
                         <Text style={[styles.readableText, {marginBottom: 3}]}> of nutrient solution with an e.c. of </Text>
                           <EditableText
-                            initialText={ec.toString()}
+                            initialText={`${ec} millisiemens/cm`}
                             style={[styles.bold, styles.readableText]}
                             editable={true}
                             getText={x => `${x} millisiemens/cm`}
@@ -164,16 +187,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
                           >
                             {onChange => <LabelValue label="ec (millisiemens/cm)" value={ec} onChangeNumber={onChange} editable={true} />}
                           </EditableText>
-                          <Text> and a N-P-K ratio of </Text>
-                          <EditableText
-                            initialText={`${solution.targetNpk.n}-${solution.targetNpk.p}-${solution.targetNpk.k}`}
-                            style={[styles.bold, styles.readableText]}
-                            editable={true}
-                            getText={(targetNpk: NPK) => `${targetNpk.n}-${targetNpk.p}-${targetNpk.k}`}
-                            onChange={(targetNpk: NPK) => setRecipe({...wipRecipe, solution: { ...solution, targetNpk } })}
-                          >
-                            {onChange => <NpkLabel npk={solution.targetNpk} editable={true} onChange={onChange} />}
-                          </EditableText>
+                          <Text style={[styles.readableText, {marginBottom: 3}]}> and a N-P-K ratio of {solution.targetNpk.n}-{solution.targetNpk.p}-{solution.targetNpk.k}</Text>
                       </View>
                       <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>1. Fill a bucket with <BucketSizeLabel fontSize={18} bucketSize={bucketSize} /> of water.</Text>
                       <Text style={[styles.readableText, { marginBottom: 3, marginLeft:10}]}>2. Add the following nutrients:</Text>

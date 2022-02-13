@@ -29,7 +29,6 @@ export const CalculatedRecipeView: React.FC<CalculatedRecipeViewProps> = ({
     <Card>
       <RecipeInstructions
         editable={true}
-        showTitle={true}
         recipe={defaultRecipe}
         solutions={solutions}
         recipes={recipes}

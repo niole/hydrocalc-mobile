@@ -54,7 +54,7 @@ export function EditableText<D>({
 
 const styles = StyleSheet.create({
   text: {
-    color: 'darkslategray',
+    color: 'blue',
     textDecorationLine: 'underline',
   }
 });

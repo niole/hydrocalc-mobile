@@ -14,27 +14,35 @@ export const NpkLabel: React.FC<Props> = ({
   onChange,
   npk = { n: 0, p: 0, k: 0 },
   editable = false
-}) => (
-  <View style={styles.container}>
-    <LabelValue
-      editable={editable}
-      value={npk.n}
-      onChangeNumber={onChange ? n  => onChange({ ...npk, n }) : undefined}
-    />
-    <Text style={styles.dash}>-</Text>
-    <LabelValue
-      editable={editable}
-      value={npk.p}
-      onChangeNumber={onChange ? p => onChange({ ...npk, p }) : undefined}
-    />
-    <Text style={styles.dash}>-</Text>
-    <LabelValue
-      editable={editable}
-      value={npk.k}
-      onChangeNumber={onChange ? k => onChange({ ...npk, k }) : undefined}
-    />
-  </View>
-);
+}) => {
+  const [wipNpk, setNpk] = React.useState<NPK>(npk);
+
+  React.useEffect(() => { onChange ? onChange(wipNpk) : undefined }, [wipNpk]);
+  React.useEffect(() => {
+    setNpk(npk);
+  }, [npk]);
+  return (
+    <View style={styles.container}>
+      <LabelValue
+        editable={editable}
+        value={npk.n}
+        onChangeNumber={onChange ? n  => setNpk({ ...wipNpk, n }) : undefined}
+      />
+      <Text style={styles.dash}>-</Text>
+      <LabelValue
+        editable={editable}
+        value={npk.p}
+        onChangeNumber={onChange ? p => setNpk({ ...wipNpk, p }) : undefined}
+      />
+      <Text style={styles.dash}>-</Text>
+      <LabelValue
+        editable={editable}
+        value={npk.k}
+        onChangeNumber={onChange ? k => setNpk({ ...wipNpk, k }) : undefined}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   dash: {

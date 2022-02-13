@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { Solution } from '../globalState';
-import { Picker, PickerItem } from '../components';
+import { NpkLabel, Picker, PickerItem } from '../components';
 import { brandSolutions } from '../constants/brands';
 
 /**
@@ -26,7 +26,18 @@ export const SolutionPicker: React.FC<Props> = ({ pickerRef, onChange, solution,
       selectedValue={solution?.name}
     >
         <PickerItem key="none" label={<Text>None selected</Text>} value={undefined} />
-        {allSolutions.map(s => <PickerItem key={s.id} label={<Text>{s.name}</Text>} value={s.name}/>)}
+          {allSolutions.map(s =>
+                            <PickerItem
+                              key={s.id}
+                              label={
+                                <View>
+                                  <Text>{s.name}</Text>
+                                  <NpkLabel npk={s.targetNpk} />
+                                </View>
+                              }
+                              value={s.name}
+                            />
+                           )}
     </Picker>
   );
 };

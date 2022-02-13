@@ -4,8 +4,9 @@ import { Modal } from './Modal';
 import { editableBlue } from '../constants/Colors';
 
 type Props<D> = {
+  editingTitle?: string;
   children: (onChange: (d: D) => void) => JSX.Element;
-  initialText: string;
+  initialState: D;
   editable?: boolean;
   style?: TextStyle[];
   openOverride?: boolean;
@@ -18,17 +19,18 @@ export function EditableText<D>({
     getText = () => '',
     style = [],
     editable,
-    initialText,
+    initialState,
     children,
     onChange,
+    editingTitle,
   }: Props<D>) {
   const [data, setData] = React.useState<D | undefined>();
-  const [text, setText] = React.useState<string>(initialText);
+  const [text, setText] = React.useState<string>(getText(initialState));
   const [open, setOpen] = React.useState<boolean>(openOverride);
 
   React.useEffect(() => {
-    setText(initialText);
-  }, [initialText]);
+    setText(getText(initialState));
+  }, [initialState]);
 
   React.useEffect(() => {
     setOpen(openOverride);
@@ -47,7 +49,7 @@ export function EditableText<D>({
   return (
     <>
       {editable ? <Pressable onPress={() => setOpen(!open)}>{t}</Pressable> : t}
-      {open && <Modal show={open} onSubmit={handleSubmit}>{children(handleChange)}</Modal>}
+      <Modal title={editingTitle} show={open} onSubmit={handleSubmit}>{children(handleChange)}</Modal>
     </>
   );
   }

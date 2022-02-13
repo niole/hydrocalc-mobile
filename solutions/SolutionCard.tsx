@@ -108,7 +108,8 @@ export const SolutionCard: React.FC<Props> = ({
           label="target npk"
           componentValue={
             <EditableText
-              initialText={`${newSolution.targetNpk.n}-${newSolution.targetNpk.p}-${newSolution.targetNpk.k}`}
+              editingTitle="Set the target npk ratio."
+              initialState={newSolution.targetNpk}
               editable={editing}
               getText={(npk: NPK) => `${npk.n}-${npk.p}-${npk.k}`}
               onChange={handleEditSolutionNpk}

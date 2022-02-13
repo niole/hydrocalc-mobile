@@ -9,6 +9,7 @@ export type ValidationResult = { message: string, kind: 'warning' | 'error' | 'i
 export type Validator = (t: string | number) => ValidationResult | undefined; // returns a message if it failed
 
 type Props = {
+  minWidth?: number;
   multiline?: boolean;
   label?: string;
   validation?: Validator;
@@ -16,7 +17,6 @@ type Props = {
   onChangeNumber?: (t: number) => void; // executes if valid
   onValidationFail?: (errorMessage: ValidationResult) => void; // lets you do something on validation fail
   placeholder?: string;
-  maxSize?: number;
   defaultValue?: string;
   value?: any;
   rowStyle?: boolean;
@@ -24,13 +24,13 @@ type Props = {
 };
 
 export const ValidatedTextInput: React.FC<Props> = ({
+  minWidth,
   label,
   placeholder,
   validation,
   onChangeText,
   onChangeNumber,
   onValidationFail,
-  maxSize,
   defaultValue,
   value,
   validateOnMount,
@@ -73,13 +73,13 @@ export const ValidatedTextInput: React.FC<Props> = ({
   }, [value]);
 
   return (
-    <View style={{ maxWidth: maxSize }}>
+    <View>
       <View style={rowStyle ? [ styles.labelGroupRow] : undefined}>
         {label && <Text style={styles.label}>{`${label} `}</Text>}
         <TextInput
           multiline={multiline}
           keyboardType={onChangeNumber ? 'numeric' : undefined}
-          style={styles.editingContainer}
+          style={minWidth ? [{ minWidth }, styles.editingContainer] : styles.editingContainer}
           textAlign={rowStyle ? 'right' : undefined}
           defaultValue={value !== undefined && value !== null ? `${value}` : undefined}
           placeholder={placeholder}

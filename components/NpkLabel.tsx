@@ -18,9 +18,8 @@ export const NpkLabel: React.FC<Props> = ({
   const [wipNpk, setNpk] = React.useState<NPK>(npk);
 
   React.useEffect(() => { onChange ? onChange(wipNpk) : undefined }, [wipNpk]);
-  React.useEffect(() => {
-    setNpk(npk);
-  }, [npk]);
+  React.useEffect(() => { setNpk(npk); }, [npk]);
+
   return (
     <View style={styles.container}>
       <LabelValue

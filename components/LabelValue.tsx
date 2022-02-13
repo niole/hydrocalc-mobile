@@ -5,6 +5,7 @@ import { Validator, ValidatedTextInput } from './ValidatedTextInput';
 
 
 type Props = {
+  minWidth?: number;
   label?: string;
   value?: React.ReactNode;
   componentValue?: React.ReactNode;
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export const LabelValue: React.FC<Props> = ({
+  minWidth,
   componentValue,
   label,
   value,
@@ -41,6 +43,7 @@ export const LabelValue: React.FC<Props> = ({
       {label && <Text style={styles.label}>{label}</Text>}
       {editable ? (
         <ValidatedTextInput
+          minWidth={minWidth}
           multiline={multiline}
           validateOnMount={validateOnMount}
           validation={validation}

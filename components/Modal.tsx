@@ -61,8 +61,8 @@ export function Modal({
         }}
       >
         <View style={styles.centeredView}>
-          {title && <Title>{title}</Title>}
           <View style={[styles.modalView, {flex:1}]}>
+            {title && <Title>{title}</Title>}
             <ScrollView>{children}</ScrollView>
           </View>
           <View style={styles.actionBar}>

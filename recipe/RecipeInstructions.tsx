@@ -111,6 +111,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
   return (
     <View>
       <Modal
+        title="Give your recipe a title"
         show={showTitleModal}
         onCancel={() => setShowTitleModal(false)}
         onSubmit={() => {
@@ -121,6 +122,7 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
           <LabelValue
             editable={true}
             label="title"
+            minWidth={200}
             onChange={title => setRecipe({...wipRecipe, name: title })}
           />
       </Modal>
@@ -174,11 +176,21 @@ export const RecipeInstructions: React.FC<RecipeInstructionsProps> = ({
               <>
                 <Section>
                       <View style={{marginBottom: 16, marginLeft:10, flexDirection: 'row', flexWrap: 'wrap' }}>
-                        <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates </Text>
-                        <EditableText initialText={bucketSizeLabelText(bucketSize)} style={[styles.bold, styles.readableText]} getText={bucketSizeLabelText} editable={true} onChange={bucketSize => setRecipe({ ...wipRecipe, bucketSize })}>{onChange => <BucketSizeLabel onChange={onChange} editable={true} fontSize={18} bucketSize={bucketSize} />}</EditableText>
+                      <Text style={[styles.readableText, {marginBottom: 3}]}>This recipe creates </Text>
+                        <EditableText
+                          editingTitle="Update the bucket size"
+                          initialState={bucketSize}
+                          style={[styles.bold, styles.readableText]}
+                          getText={bucketSizeLabelText}
+                          editable={true}
+                          onChange={bucketSize => setRecipe({ ...wipRecipe, bucketSize })}
+                        >
+                          {onChange => <BucketSizeLabel onChange={onChange} editable={true} fontSize={18} bucketSize={bucketSize} />}
+                        </EditableText>
                         <Text style={[styles.readableText, {marginBottom: 3}]}> of nutrient solution with an e.c. of </Text>
                           <EditableText
-                            initialText={`${ec} millisiemens/cm`}
+                            editingTitle="Update the e.c."
+                            initialState={ec}
                             style={[styles.bold, styles.readableText]}
                             editable={true}
                             getText={x => `${x} millisiemens/cm`}

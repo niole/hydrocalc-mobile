@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Button, Pressable, Text, View } from 'react-native';
+import { editableBlue } from '../constants/Colors';
 import { Title } from './Title';
 import { MoreDrawerOption, MoreDrawer } from './MoreDrawer';
 
@@ -52,21 +53,21 @@ export function Card({
     <View style={styles.card}>
       <View style={styles.titleBar}>
         {minimizeable && !!title ? (
-          <Button title={title} onPress={() => setMinimized(!minimized)} />
+          <Pressable style={{ flex: 7, justifyContent: 'center', backgroundColor: editableBlue, padding: 10, borderRadius: 5 }} onPress={() => setMinimized(!minimized)}>
+            <Text style={{ fontSize: 18, color: 'white'}}>{title}</Text>
+          </Pressable>
         ) : titleComponent}
-        <View style={styles.titleActions}>
-          {editable && (onRemove || actionOptions.length > 0) && (
-            <MoreDrawer
-              options={[
-                { label: 'Cancel' },
-                ...(onRemove ? [{ label: 'Remove', action: onRemove }] : []),
-                ...actionOptions,
-              ]}
-              cancelButtonIndex={0}
-              destructiveButtonIndex={onRemove ? 1 : undefined}
-            />
-          )}
-        </View>
+        {editable && (onRemove || actionOptions.length > 0) && (
+          <MoreDrawer
+            options={[
+              { label: 'Cancel' },
+              ...(onRemove ? [{ label: 'Remove', action: onRemove }] : []),
+              ...actionOptions,
+            ]}
+            cancelButtonIndex={0}
+            destructiveButtonIndex={onRemove ? 1 : undefined}
+          />
+        )}
       </View>
       {minimizeable ? (!minimized ? children : null) : children}
       <View style={styles.actionBar}>
@@ -81,11 +82,6 @@ export function Card({
 };
 
 const styles = StyleSheet.create({
-  titleActions: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    flexDirection: 'row',
-  },
   titleText: {
     flex: 6,
   },

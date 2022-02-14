@@ -1,5 +1,7 @@
 import { Solution, SolutionInput } from '../globalState/types';
 
+const GENERAL_HYDROPONICS_BRAND = 'General Hydroponics';
+
 const toSolution = (solutionInput: SolutionInput): Solution => ({
   id: `${solutionInput.id}-solution`,
   name: solutionInput.name,
@@ -16,22 +18,22 @@ const toSolution = (solutionInput: SolutionInput): Solution => ({
 const generalHydroponicsFloraSeries = [
   {
     id: 'FloraBloom',
-    brand: 'General Hydroponics',
-    name: 'General Hydroponics Flora Series: FloraBloom',
+    brand: GENERAL_HYDROPONICS_BRAND,
+    name: 'Flora Series: FloraBloom',
     npk: { n: 0, p: 5, k: 4 },
     tspsPerGallon1kEC: 1.95,
   },
   {
     id: 'FloraMicro',
-    brand: 'General Hydroponics',
-    name: 'General Hydroponics Flora Series: FloraMicro',
+    brand: GENERAL_HYDROPONICS_BRAND,
+    name: 'Flora Series: FloraMicro',
     npk: { n: 5, p: 0, k: 1 },
     tspsPerGallon1kEC: 1.95,
   },
   {
     id: 'FloraGro',
-    brand: 'General Hydroponics',
-    name: 'General Hydroponics Flora Series: FloraGro',
+    brand: GENERAL_HYDROPONICS_BRAND,
+    name: 'Flora Series: FloraGro',
     npk: { n: 2, p: 1, k: 6 },
     tspsPerGallon1kEC: 1.95,
   },
@@ -40,8 +42,8 @@ const generalHydroponicsFloraSeries = [
 const generalHydroponicsMaxiSeries = [
   {
     id: 'MaxiGro',
-    name: 'General Hydroponics Maxi Series: MaxiGro',
-    brand: 'General Hydroponics',
+    name: 'Maxi Series: MaxiGro',
+    brand: GENERAL_HYDROPONICS_BRAND,
     npk: { n: 2, p: 1, k: 3 },
     tspsPerGallon1kEC: 0.54,
   },

@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { Pressable, Button, Linking, View, Text } from 'react-native';
 import { Solution, SolutionInput } from '../globalState';
 import { NpkLabel, Picker, PickerItem } from '../components';
 import { brandSolutionInputs } from '../constants/brands';
 import * as inputCalculator from '../recipe/inputCalculator';
+import { SolutionListItem } from './SolutionListItem';
 
 const CUSTOM_INPUT_VALUE = 'custom';
 
@@ -37,18 +38,12 @@ export const SolutionInputPicker: React.FC<Props> = ({
       onValueChange={onChange ? handleSetSolutionInput(onChange, allSolutionInputs) : undefined}
       selectedValue={solutionInput?.name}
     >
-      <PickerItem key="none" label={<Text>None selected</Text>} value={undefined} />
-      <PickerItem key="custom" label={<Text>Custom input</Text>} value={CUSTOM_INPUT_VALUE} />
+      <PickerItem key="none" label={<Text  style={{ fontSize: 18 }}>None selected</Text>} value={undefined} />
+      <PickerItem key="custom" label={<Text style={{ fontSize: 18 }}>Custom input</Text>} value={CUSTOM_INPUT_VALUE} />
         {allSolutionInputs.map(s =>
                                <PickerItem
                                 key={s.id}
-                                label={
-                                  <View>
-                                    <Text>{s.name}</Text>
-                                    {s.brand && <Text>{s.brand}</Text>}
-                                    <NpkLabel npk={s.npk} />
-                                  </View>
-                                }
+                                label={<SolutionListItem name={s.name} brand={s.brand} npk={s.npk} />}
                                 value={s.name}
                                 />
                               )}

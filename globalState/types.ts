@@ -31,10 +31,17 @@ export type Recipe = {
 
 export type NPK = { n: number, p: number, k: number };
 
+export type Brand = {
+  name: string;
+  site: string;
+  imageUrl?: string;
+  referralLinks: string[];
+};
+
 export type SolutionInput = {
   id: string;
   name: string;
-  brand?: string;
+  brand?: Brand;
   npk: NPK;
   tspsPerGallon1kEC: number;
 };
@@ -49,6 +56,7 @@ export type Solution = {
   name: string;
   inputs: FractionalInput[];
   targetNpk: NPK;
+  brand?: Brand;
 };
 
 export type GlobalState = {

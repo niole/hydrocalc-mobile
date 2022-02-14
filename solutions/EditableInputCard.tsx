@@ -67,7 +67,7 @@ export const EditableInputCard: React.FC<Props> = ({
             {!!newValues.brand && (
               <LabelValue
                 label="brand"
-                value={newValues.brand}
+                value={newValues.brand.name}
               />)}
               <LabelValue
                 label="npk"

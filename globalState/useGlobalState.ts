@@ -11,7 +11,6 @@ const getId = () => `${Math.random()}`;
 const bloominput = {
     id: getId(),
     name: 'bloom',
-    brand: 'general hydroponics',
     npk: { n: 0, p: 5, k: 4 },
     ec: 19.990,
 };
@@ -19,7 +18,6 @@ const bloominput = {
 const microinput = {
     id: getId(),
     name: 'micro',
-    brand: 'general hydroponics',
     npk: { n: 5, p: 0, k: 1 },
     ec: 19.990
 };
@@ -38,7 +36,6 @@ const _213Solution = {
     solution: {
     id: getId(),
     name: 'green',
-    brand: 'general hydroponics',
     npk: { n: 2, p: 1, k: 6 },
     ec: 19.990
   }}],

@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { Solution } from '../globalState';
 import { NpkLabel, Picker, PickerItem } from '../components';
 import { brandSolutions } from '../constants/brands';
+import { SolutionListItem } from './SolutionListItem';
 
 /**
  * Preloaded with brands
@@ -29,12 +30,7 @@ export const SolutionPicker: React.FC<Props> = ({ pickerRef, onChange, solution,
           {allSolutions.map(s =>
                             <PickerItem
                               key={s.id}
-                              label={
-                                <View>
-                                  <Text>{s.name}</Text>
-                                  <NpkLabel npk={s.targetNpk} />
-                                </View>
-                              }
+                              label={<SolutionListItem name={s.name} brand={s.brand} npk={s.targetNpk} />}
                               value={s.name}
                             />
                            )}

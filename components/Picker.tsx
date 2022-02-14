@@ -12,7 +12,8 @@ type Props = {
   onValueChange?: (s?: string | number) => void;
   children?: any;
   label?: string;
-  openOverride?: boolean
+  openOverride?: boolean;
+  showSelected?: boolean;
 };
 
 type PickerProps = {
@@ -27,7 +28,7 @@ export const PickerItem: React.FC<PickerProps> = ({ label, value, _onPress, sele
   </Section>
 );
 
-export const Picker: React.FC<Props> = ({ openOverride = false, label, selectedValue, onValueChange, children }) => {
+export const Picker: React.FC<Props> = ({ showSelected = false, openOverride = false, label, selectedValue, onValueChange, children }) => {
   const [open, setOpen] = React.useState<boolean>(openOverride);
   const [selection, setSelection] = React.useState<string | number | undefined>(selectedValue);
   const [selectionLabel, setSelectionLabel] = React.useState<React.ReactNode | undefined>(React.Children.map(children, c => ({ value: c.props.value, label: c.props.label })).find((c: any) => c.value === selectedValue)?.label);
@@ -44,13 +45,14 @@ export const Picker: React.FC<Props> = ({ openOverride = false, label, selectedV
 
   }, [selectedValue]);
 
+  const annotation = <Annotation>{label}</Annotation>;
   return (
     <View style={styles.container}>
       <Pressable onPress={() => setOpen(!open)}>
-        {label && <Annotation>{label}</Annotation>}
+        {label && showSelected && annotation}
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <AddButton onPress={() => setOpen(!open)} />
-          {selectionLabel}
+          {showSelected ? selectionLabel : annotation}
         </View>
       </Pressable>
       <Modal

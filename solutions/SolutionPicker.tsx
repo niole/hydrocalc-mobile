@@ -21,6 +21,7 @@ export const SolutionPicker: React.FC<Props> = ({ pickerRef, onChange, solution,
   const allSolutions = [...solutions, ...brandSolutions];
   return (
     <Picker
+      showSelected={true}
       openOverride={open}
       label="Pick a solution"
       onValueChange={onChange ? handleSetSolution(onChange, allSolutions) : undefined}

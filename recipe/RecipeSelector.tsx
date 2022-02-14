@@ -26,8 +26,8 @@ export const RecipeSelector: React.FC<Props> = ({ selectedRecipeId, recipes, onC
   }, [selectedRecipeId]);
 
   return (
-    <Picker label="recipe" selectedValue={selectedRecipeId} onValueChange={selectRecipe(handleSetRecipe, recipes)}>
-      <PickerItem key="pick" label={<Text>None selected</Text>} value="" />
+    <Picker label="Pick a recipe to edit" showSelected={true} selectedValue={selectedRecipeId} onValueChange={selectRecipe(handleSetRecipe, recipes)}>
+      <PickerItem key="pick" label={<Text>None selected</Text>} value={undefined} />
       {recipes.map(r => <PickerItem key={r.id} label={<Text>{r.name}</Text>} value={r.id} />)}
     </Picker>
   );

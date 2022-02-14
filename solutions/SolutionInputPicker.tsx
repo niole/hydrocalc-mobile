@@ -34,7 +34,7 @@ export const SolutionInputPicker: React.FC<Props> = ({
   ];
   return (
     <Picker
-      showSelected={true}
+      showSelected={false}
       label="Add a solution input"
       onValueChange={onChange ? handleSetSolutionInput(onChange, allSolutionInputs) : undefined}
       selectedValue={solutionInput?.name}
